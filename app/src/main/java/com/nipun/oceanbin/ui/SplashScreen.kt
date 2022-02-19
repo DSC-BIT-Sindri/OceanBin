@@ -159,9 +159,11 @@ fun SetupViewPager(
                     onClick =
                     {
                         coroutineScope.launch {
-                            pagerState.animateScrollToPage(
-                                page = pagerState.currentPage - 1
-                            )
+                            if (!pagerState.isScrollInProgress) {
+                                pagerState.scrollToPage(
+                                    page = pagerState.currentPage - 1
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterStart)
@@ -174,9 +176,11 @@ fun SetupViewPager(
                     onClick =
                     {
                         coroutineScope.launch {
-                            pagerState.animateScrollToPage(
-                                page = pagerState.currentPage + 1
-                            )
+                            if(!pagerState.isScrollInProgress) {
+                                pagerState.scrollToPage(
+                                    page = pagerState.currentPage + 1
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterEnd)

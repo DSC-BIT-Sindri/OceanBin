@@ -2,7 +2,9 @@ package com.nipun.oceanbin.core
 
 import android.content.Context
 
-
+/*
+ * Class for managing shared preferences
+ */
 class PreferenceManager(private val context : Context) {
     companion object{
         const val IS_INSTALLED = "is_installed"

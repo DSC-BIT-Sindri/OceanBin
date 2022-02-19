@@ -29,12 +29,20 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val mainViewModel: MainViewModel = hiltViewModel()
                     val isInstalled = mainViewModel.isInstalled.value
+
+                    /* This nav controller is main screen navigator,
+                     * We can use this to navigate like another activity in xml project
+                     */
                     val navController = rememberNavController()
+                    // Main Screen Nav Host
                     NavHost(
                         navController = navController,
+                        // If app is just installed our splash screen will be shown else our main content will gonna shown.
                         startDestination = if(isInstalled)Screen.SplashScreen.route else Screen.HomeScreen.route
                     ) {
                         composable(route = Screen.SplashScreen.route) {
+
+                            // Splash screen
                             SplashViewPager(navController = navController,mainViewModel)
                         }
                         composable(route = Screen.HomeScreen.route){

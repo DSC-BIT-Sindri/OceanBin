@@ -48,6 +48,8 @@ fun SplashViewPager(
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
+
+        // These points are the coordinate where 0,0 is our screens top left corner.
         val point1 = Offset(0f, height * 0.3f)
         val point2 = Offset(0.1f * width, height * 0.14f)
         val point3 = Offset(0.55f * width, height * 0.19f)
@@ -60,6 +62,7 @@ fun SplashViewPager(
         val point9 = Offset(0.1f, height * 1f)
         val point10 = Offset(0f, height * 1f)
 
+        // With the help of above coordinate we can draw a closed path
         val lightColorPath = Path().apply {
             moveTo(point1.x, point1.y)
             standardQuadFromTo(point1, point2)
@@ -82,9 +85,16 @@ fun SplashViewPager(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            // This composable function is responsible for showing splash screen
             SetupViewPager(
                 modifier = Modifier.fillMaxSize()
             ){
+                /*
+                 * This lambda block will execute when user clicked continue.
+                 * When all page of view pager is checked and user clicked continue we set
+                 * a preference that our app is visited first time buy simply put a boolean value
+                 * in splash screen.
+                 */
                 mainViewModel.setSplashViewed()
                 navController.navigate(Screen.HomeScreen.route){
                     popUpTo(Screen.SplashScreen.route){
@@ -102,12 +112,16 @@ fun SetupViewPager(
     modifier: Modifier = Modifier,
     onContinueClick : () -> Unit
 ) {
+
+    // Details of view pager
     val pagerState = rememberPagerState(
         pageCount = 4,
         initialOffscreenLimit = 2,
         infiniteLoop = false,
         initialPage = 0
     )
+
+    // A global coroutine for performing async task in composable function
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = modifier) {
         HorizontalPager(
@@ -131,6 +145,10 @@ fun SetupViewPager(
                 }
             }
         }
+        /* If pager current page index is not equal to 3, i.e pager is not in last index
+         * We can show skip button but when pager reached last index, if block will not execute
+         * And skip button will be hide automatically.
+         */
         if (pagerState.currentPage != 3) {
             Button(
                 onClick =
@@ -188,6 +206,8 @@ fun SetupViewPager(
                     Text(text = "NEXT")
                 }
             }
+
+            // This composable function is responsible to show dot indicator
             Dots(
                 dotCount = 4, currentSelect = pagerState.currentPage,
                 modifier = Modifier

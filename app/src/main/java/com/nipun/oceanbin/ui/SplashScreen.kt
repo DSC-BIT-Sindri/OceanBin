@@ -21,6 +21,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -28,14 +29,10 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.getAppSplashPath
+import com.nipun.oceanbin.ui.component.FirstSlide
 import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-@Composable
-fun Test() {
-    Text(text = "Ok")
-}
 
 @Composable
 fun SplashViewPager(
@@ -53,7 +50,7 @@ fun SplashViewPager(
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(0.77f)
-            ,
+                .zIndex(-1f),
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center
         )
@@ -104,19 +101,27 @@ fun SetupViewPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { index ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "${index + 1} page",
-                    style = MaterialTheme.typography.h3
+            if(index == 0){
+                FirstSlide(
+                    modifier = Modifier
+                        .padding(BigSpacing)
+                        .fillMaxSize()
                 )
-                if (pagerState.currentPage == 3) {
-                    Spacer(modifier = Modifier.size(MediumSpacing))
-                    Button(onClick = { onContinueClick() }) {
-                        Text(text = "Continue", style = MaterialTheme.typography.body2)
+            }else {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "${index + 1} page",
+                        style = MaterialTheme.typography.h3
+                    )
+                    if (pagerState.currentPage == 3) {
+                        Spacer(modifier = Modifier.size(MediumSpacing))
+                        Button(onClick = { onContinueClick() }) {
+                            Text(text = "Continue", style = MaterialTheme.typography.body2)
+                        }
                     }
                 }
             }
@@ -240,7 +245,7 @@ fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(0.77f)
-            ,
+                .zIndex(-1f),
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center
         )
@@ -284,7 +289,7 @@ fun SplashScreen(
         }
     }
     LaunchedEffect(key1 = isInstalled) {
-        delay(800L)
+        delay(1200L)
         if (isInstalled) {
             navController.navigate(Screen.SplashViewPager.route) {
                 popUpTo(Screen.SplashScreen.route) {

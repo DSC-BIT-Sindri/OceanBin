@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -46,16 +47,16 @@ fun SplashViewPager(
             .fillMaxSize()
             .background(LightBg)
     ) {
-        val width = constraints.maxWidth
-        val height = constraints.maxHeight
-
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPath(
-                getAppSplashPath(
-                    width, height
-                ), color = LightBgShade
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.ic_viewpager_bg),
+            contentDescription = "Background",
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.77f)
+            ,
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -233,11 +234,16 @@ fun SplashScreen(
             .fillMaxSize()
             .background(color = LightBg)
     ) {
-        val width = constraints.maxWidth
-        val height = constraints.maxHeight
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPath(getAppSplashPath(width, height), color = SplashPathColor)
-        }
+        Image(
+            painter = painterResource(id = R.drawable.ic_splash_screen),
+            contentDescription = "Background",
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.77f)
+            ,
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -260,7 +266,7 @@ fun SplashScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = SplashTextSize
                         )
-                    ){
+                    ) {
                         append("OCEAN")
                     }
                     withStyle(
@@ -270,7 +276,7 @@ fun SplashScreen(
                             fontWeight = FontWeight.Normal,
                             fontSize = SplashTextSize
                         )
-                    ){
+                    ) {
                         append("BIN")
                     }
                 }

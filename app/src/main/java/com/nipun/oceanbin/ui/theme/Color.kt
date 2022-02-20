@@ -8,4 +8,6 @@ val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 
 val LightBg = Color(0xFF1BA5DE)
+val SplashPathColor = Color(0x80C5E8F7)
 val LightBgShade = Color(0xFF0DA0DF)
+val DarkBlue = Color(0xFF184895)

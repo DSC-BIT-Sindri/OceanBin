@@ -1,10 +1,7 @@
 package com.nipun.oceanbin.ui
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -15,20 +12,23 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.nipun.oceanbin.core.standardQuadFromTo
-import com.nipun.oceanbin.ui.theme.LightBg
-import com.nipun.oceanbin.ui.theme.LightBgShade
-import com.nipun.oceanbin.ui.theme.MediumSpacing
-import com.nipun.oceanbin.ui.theme.Screen
+import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.getAppSplashPath
+import com.nipun.oceanbin.ui.theme.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,37 +49,12 @@ fun SplashViewPager(
         val width = constraints.maxWidth
         val height = constraints.maxHeight
 
-        // These points are the coordinate where 0,0 is our screens top left corner.
-        val point1 = Offset(0f, height * 0.3f)
-        val point2 = Offset(0.1f * width, height * 0.14f)
-        val point3 = Offset(0.55f * width, height * 0.19f)
-        val point4 = Offset(1.1f * width, height * 0.02f)
-        val point5 = Offset(1.15f * width, height * 0.5f)
-        val point5a = Offset(1.25f * width, height * 0.7f)
-        val point6 = Offset(0.9f * width, height * 0.8f)
-        val point7 = Offset(0.7f * width, height * 0.97f)
-        val point8 = Offset(0.25f * width, height * 0.9f)
-        val point9 = Offset(0.1f, height * 1f)
-        val point10 = Offset(0f, height * 1f)
-
-        // With the help of above coordinate we can draw a closed path
-        val lightColorPath = Path().apply {
-            moveTo(point1.x, point1.y)
-            standardQuadFromTo(point1, point2)
-            standardQuadFromTo(point2, point3)
-            standardQuadFromTo(point3, point4)
-            standardQuadFromTo(point4, point5)
-            lineTo(point5a.x,point5a.y)
-            standardQuadFromTo(point5a, point6)
-            standardQuadFromTo(point6, point7)
-            standardQuadFromTo(point7, point8)
-            standardQuadFromTo(point8, point9)
-            lineTo(point10.x, point10.y)
-            close()
-        }
-
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPath(lightColorPath, color = LightBgShade)
+            drawPath(
+                getAppSplashPath(
+                    width, height
+                ), color = LightBgShade
+            )
         }
         Box(
             modifier = Modifier
@@ -88,7 +63,7 @@ fun SplashViewPager(
             // This composable function is responsible for showing splash screen
             SetupViewPager(
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 /*
                  * This lambda block will execute when user clicked continue.
                  * When all page of view pager is checked and user clicked continue we set
@@ -96,8 +71,8 @@ fun SplashViewPager(
                  * in splash screen.
                  */
                 mainViewModel.setSplashViewed()
-                navController.navigate(Screen.HomeScreen.route){
-                    popUpTo(Screen.SplashScreen.route){
+                navController.navigate(Screen.HomeScreen.route) {
+                    popUpTo(Screen.SplashViewPager.route) {
                         inclusive = true
                     }
                 }
@@ -110,7 +85,7 @@ fun SplashViewPager(
 @Composable
 fun SetupViewPager(
     modifier: Modifier = Modifier,
-    onContinueClick : () -> Unit
+    onContinueClick: () -> Unit
 ) {
 
     // Details of view pager
@@ -137,10 +112,10 @@ fun SetupViewPager(
                     text = "${index + 1} page",
                     style = MaterialTheme.typography.h3
                 )
-                if(pagerState.currentPage == 3){
+                if (pagerState.currentPage == 3) {
                     Spacer(modifier = Modifier.size(MediumSpacing))
                     Button(onClick = { onContinueClick() }) {
-                        Text(text = "Continue",style = MaterialTheme.typography.body2)
+                        Text(text = "Continue", style = MaterialTheme.typography.body2)
                     }
                 }
             }
@@ -194,7 +169,7 @@ fun SetupViewPager(
                     onClick =
                     {
                         coroutineScope.launch {
-                            if(!pagerState.isScrollInProgress) {
+                            if (!pagerState.isScrollInProgress) {
                                 pagerState.scrollToPage(
                                     page = pagerState.currentPage + 1
                                 )
@@ -243,6 +218,79 @@ fun Dots(
                 elevation = 1.dp
             ) {}
             Spacer(modifier = Modifier.width(15.dp))
+        }
+    }
+}
+
+@Composable
+fun SplashScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel()
+) {
+    val isInstalled = mainViewModel.isInstalled.value
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = LightBg)
+    ) {
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            drawPath(getAppSplashPath(width, height), color = SplashPathColor)
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.mipmap.ic_launcher_adaptive_fore),
+                contentDescription = "logo",
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier.size(LogoSplashSize)
+            )
+            Spacer(modifier = Modifier.size(SmallSpacing))
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = DarkBlue,
+                            fontFamily = RobotoFamily,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = SplashTextSize
+                        )
+                    ){
+                        append("OCEAN")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            color = LightBg,
+                            fontFamily = RobotoFamily,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = SplashTextSize
+                        )
+                    ){
+                        append("BIN")
+                    }
+                }
+            )
+        }
+    }
+    LaunchedEffect(key1 = isInstalled) {
+        delay(800L)
+        if (isInstalled) {
+            navController.navigate(Screen.SplashViewPager.route) {
+                popUpTo(Screen.SplashScreen.route) {
+                    inclusive = true
+                }
+            }
+        } else {
+            navController.navigate(Screen.HomeScreen.route) {
+                popUpTo(Screen.SplashScreen.route) {
+                    inclusive = true
+                }
+            }
         }
     }
 }

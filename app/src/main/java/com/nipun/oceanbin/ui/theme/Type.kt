@@ -24,11 +24,17 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
+    h2 = TextStyle(
+        fontFamily = RobotoFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        color = Color.Black
+    ),
     h3 = TextStyle(
         fontFamily = RobotoFamily,
         fontWeight = FontWeight.Normal,
         fontSize = MediumTextSize,
-        color = Color.White
+        color = Color.Black
     )
     /* Other default text styles to override
     button = TextStyle(

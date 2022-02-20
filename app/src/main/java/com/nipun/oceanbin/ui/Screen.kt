@@ -1,4 +1,4 @@
-package com.nipun.oceanbin.ui.theme
+package com.nipun.oceanbin.ui
 
 /*
  * This sealed class is a special class where we define all

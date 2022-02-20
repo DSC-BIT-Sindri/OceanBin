@@ -1,4 +1,4 @@
-package com.nipun.oceanbin.ui
+package com.nipun.oceanbin.firsttime_display
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

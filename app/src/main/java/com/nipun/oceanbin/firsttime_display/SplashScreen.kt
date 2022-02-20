@@ -1,18 +1,17 @@
-package com.nipun.oceanbin.ui
+package com.nipun.oceanbin.firsttime_display
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -28,8 +27,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.nipun.oceanbin.R
-import com.nipun.oceanbin.core.getAppSplashPath
-import com.nipun.oceanbin.ui.component.FirstSlide
+import com.nipun.oceanbin.firsttime_display.component.FirstSlide
+import com.nipun.oceanbin.firsttime_display.component.FourthSlide
+import com.nipun.oceanbin.firsttime_display.component.SecondSlide
+import com.nipun.oceanbin.firsttime_display.component.ThirdSlide
+import com.nipun.oceanbin.ui.Screen
 import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -101,27 +103,33 @@ fun SetupViewPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
         ) { index ->
-            if(index == 0){
-                FirstSlide(
-                    modifier = Modifier
-                        .padding(BigSpacing)
-                        .fillMaxSize()
-                )
-            }else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "${index + 1} page",
-                        style = MaterialTheme.typography.h3
+            when (index) {
+                0 -> {
+                    FirstSlide(
+                        modifier = Modifier
+                            .padding(BigSpacing)
+                            .fillMaxSize()
                     )
-                    if (pagerState.currentPage == 3) {
-                        Spacer(modifier = Modifier.size(MediumSpacing))
-                        Button(onClick = { onContinueClick() }) {
-                            Text(text = "Continue", style = MaterialTheme.typography.body2)
-                        }
+                }
+                1 -> {
+                    SecondSlide(
+                        modifier = Modifier
+                            .padding(BigSpacing)
+                            .fillMaxSize()
+                    )
+                }
+                2 -> {
+                    ThirdSlide(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                3 -> {
+                    FourthSlide(
+                        modifier = Modifier
+                            .padding(BigSpacing)
+                            .fillMaxSize()
+                    ) {
+                        onContinueClick()
                     }
                 }
             }
@@ -131,61 +139,67 @@ fun SetupViewPager(
          * And skip button will be hide automatically.
          */
         if (pagerState.currentPage != 3) {
-            Button(
-                onClick =
-                {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(
-                            page = 3
-                        )
-                    }
-                },
+            Text(
+                text = "skip",
+                style = MaterialTheme.typography.h3,
                 modifier = Modifier
-                    .padding(10.dp)
                     .align(Alignment.TopEnd)
-            ) {
-                Text(text = "SKIP")
-            }
+                    .padding(end = SmallSpacing)
+                    .clickable {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(
+                                page = 3
+                            )
+                        }
+                    },
+                color = Color.White
+            )
         }
         Box(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(MediumSpacing)
                 .fillMaxWidth()
+                .height(40.dp)
                 .align(Alignment.BottomCenter),
         ) {
             if (pagerState.currentPage != 0) {
-                Button(
-                    onClick =
-                    {
-                        coroutineScope.launch {
-                            if (!pagerState.isScrollInProgress) {
-                                pagerState.scrollToPage(
-                                    page = pagerState.currentPage - 1
-                                )
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .size(IconSize)
+                        .clickable {
+                            coroutineScope.launch {
+                                if (!pagerState.isScrollInProgress) {
+                                    pagerState.scrollToPage(
+                                        page = pagerState.currentPage - 1
+                                    )
+                                }
                             }
                         }
-                    },
-                    modifier = Modifier.align(Alignment.CenterStart)
-                ) {
-                    Text(text = "PREV")
-                }
+                        .rotate(180f),
+                    painter = painterResource(id = R.drawable.ic_next),
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
             }
             if (pagerState.currentPage != 3) {
-                Button(
-                    onClick =
-                    {
-                        coroutineScope.launch {
-                            if (!pagerState.isScrollInProgress) {
-                                pagerState.scrollToPage(
-                                    page = pagerState.currentPage + 1
-                                )
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .size(IconSize)
+                        .clickable {
+                            coroutineScope.launch {
+                                if (!pagerState.isScrollInProgress) {
+                                    pagerState.scrollToPage(
+                                        page = pagerState.currentPage + 1
+                                    )
+                                }
                             }
-                        }
-                    },
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                ) {
-                    Text(text = "NEXT")
-                }
+                        },
+                    painter = painterResource(id = R.drawable.ic_next),
+                    contentDescription = "Next",
+                    tint = Color.White
+                )
             }
 
             // This composable function is responsible to show dot indicator
@@ -218,12 +232,13 @@ fun Dots(
         for (i in 0 until dotCount) {
             Surface(
                 modifier = Modifier
-                    .size(12.dp),
+                    .size(SmallSpacing)
+                    .alpha(if (i == currentSelect) 0.7f else 1f),
                 shape = CircleShape,
                 color = if (i == currentSelect) Color.Gray else Color.White,
-                elevation = 1.dp
+                elevation = (-1).dp
             ) {}
-            Spacer(modifier = Modifier.width(15.dp))
+            Spacer(modifier = Modifier.width(MediumSpacing))
         }
     }
 }

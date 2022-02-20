@@ -8,14 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.feature_oceanbin.presentation.screens.HomeScreen
-import com.nipun.oceanbin.ui.theme.Screen
+import com.nipun.oceanbin.firsttime_display.MainViewModel
+import com.nipun.oceanbin.firsttime_display.SplashScreen
+import com.nipun.oceanbin.firsttime_display.SplashViewPager
 import com.nipun.oceanbin.ui.theme.SplashScreenTutTheme
 import dagger.hilt.android.AndroidEntryPoint
 

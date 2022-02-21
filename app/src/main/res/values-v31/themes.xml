@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="Theme.SplashScreenTut" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/light_bg</item>
+<!--        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+    </style>
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/light_bg</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_bg</item>
         <item name="postSplashScreenTheme">@style/Theme.SplashScreenTut</item>
+        <item name="android:statusBarColor">@color/light_bg</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 </resources>

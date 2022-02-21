@@ -27,6 +27,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.noRippleClickable
 import com.nipun.oceanbin.firsttime_display.component.FirstSlide
 import com.nipun.oceanbin.firsttime_display.component.FourthSlide
 import com.nipun.oceanbin.firsttime_display.component.SecondSlide
@@ -145,7 +146,7 @@ fun SetupViewPager(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = SmallSpacing)
-                    .clickable {
+                    .noRippleClickable {
                         coroutineScope.launch {
                             pagerState.scrollToPage(
                                 page = 3
@@ -167,7 +168,7 @@ fun SetupViewPager(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .size(IconSize)
-                        .clickable {
+                        .noRippleClickable {
                             coroutineScope.launch {
                                 if (!pagerState.isScrollInProgress) {
                                     pagerState.scrollToPage(
@@ -187,7 +188,7 @@ fun SetupViewPager(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .size(IconSize)
-                        .clickable {
+                        .noRippleClickable {
                             coroutineScope.launch {
                                 if (!pagerState.isScrollInProgress) {
                                     pagerState.scrollToPage(
@@ -208,7 +209,15 @@ fun SetupViewPager(
                 modifier = Modifier
                     .fillMaxWidth(0.45f)
                     .align(Alignment.Center)
-            )
+            ){ index ->
+                coroutineScope.launch {
+                    if (!pagerState.isScrollInProgress) {
+                        pagerState.scrollToPage(
+                            page = index
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -217,7 +226,8 @@ fun SetupViewPager(
 fun Dots(
     modifier: Modifier = Modifier,
     dotCount: Int,
-    currentSelect: Int
+    currentSelect: Int,
+    onDotClick : (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
     LaunchedEffect(key1 = scrollState) {
@@ -233,7 +243,10 @@ fun Dots(
             Surface(
                 modifier = Modifier
                     .size(SmallSpacing)
-                    .alpha(if (i == currentSelect) 0.7f else 1f),
+                    .alpha(if (i == currentSelect) 0.7f else 1f)
+                    .noRippleClickable {
+                               onDotClick(i)
+                    },
                 shape = CircleShape,
                 color = if (i == currentSelect) Color.Gray else Color.White,
                 elevation = (-1).dp
@@ -303,7 +316,7 @@ fun SplashScreen(
             )
         }
     }
-    LaunchedEffect(key1 = isInstalled) {
+    LaunchedEffect(key1 = true) {
         delay(1200L)
         if (isInstalled) {
             navController.navigate(Screen.SplashViewPager.route) {

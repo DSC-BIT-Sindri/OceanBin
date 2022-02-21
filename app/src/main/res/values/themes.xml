@@ -5,11 +5,14 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/light_bg</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+<!--        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/light_bg</item>
         <item name="postSplashScreenTheme">@style/Theme.SplashScreenTut</item>
+        <item name="android:statusBarColor">@color/light_bg</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 </resources>

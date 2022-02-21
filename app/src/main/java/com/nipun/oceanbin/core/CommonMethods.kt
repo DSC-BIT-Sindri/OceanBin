@@ -1,5 +1,10 @@
 package com.nipun.oceanbin.core
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import kotlin.math.abs
@@ -46,5 +51,12 @@ fun getAppSplashPath(width :Int,height : Int) : Path{
         standardQuadFromTo(point8, point9)
         lineTo(point10.x, point10.y)
         close()
+    }
+}
+
+inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+    clickable(indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
     }
 }

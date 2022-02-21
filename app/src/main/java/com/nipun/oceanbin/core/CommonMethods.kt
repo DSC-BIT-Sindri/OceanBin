@@ -23,6 +23,26 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
     )
 }
 
+fun getMainScreenCurve(width: Int,height: Int) : Path{
+    val point1 = Offset(-80f,height*0.07f)
+    val point2 = Offset(width*.2f,height*0.09f)
+    val point3 = Offset(width * .5f,height * 0.001f)
+    val point4 = Offset(width * 0.8f,height * 0.09f )
+    val point5 = Offset(width*1.2f+50f,height*0.05f)
+    val point6 = Offset(width*1.2f +50f,height *1.2f + 100f)
+    val point7 = Offset(-80f,height *1.2f + 100f)
+
+    return Path().apply {
+        moveTo(point1.x,point1.y)
+        standardQuadFromTo(point1,point2)
+        standardQuadFromTo(point2,point3)
+        standardQuadFromTo(point3,point4)
+        standardQuadFromTo(point4,point5)
+        lineTo(point6.x,point6.y)
+        lineTo(point7.x,point7.y)
+        close()
+    }
+}
 fun getAppSplashPath(width :Int,height : Int) : Path{
     // These points are the coordinate where 0,0 is our screens top left corner.
     val point1 = Offset(0f, height * 0.3f)

@@ -24,6 +24,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
+    h1 = TextStyle(
+        fontFamily = RobotoFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 36.sp,
+        color = Color.White
+    ),
     h2 = TextStyle(
         fontFamily = RobotoFamily,
         fontWeight = FontWeight.Bold,

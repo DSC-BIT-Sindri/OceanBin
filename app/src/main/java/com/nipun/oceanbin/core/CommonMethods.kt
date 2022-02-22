@@ -1,12 +1,34 @@
 package com.nipun.oceanbin.core
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
+import com.nipun.oceanbin.R
+import com.nipun.oceanbin.ui.theme.BigSpacing
+import com.nipun.oceanbin.ui.theme.IconSize
+import com.nipun.oceanbin.ui.theme.MediumTextSize
+import com.nipun.oceanbin.ui.theme.RobotoFamily
 import kotlin.math.abs
 
 
@@ -23,27 +45,28 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
     )
 }
 
-fun getMainScreenCurve(width: Int,height: Int) : Path{
-    val point1 = Offset(-80f,height*0.07f)
-    val point2 = Offset(width*.2f,height*0.09f)
-    val point3 = Offset(width * .5f,height * 0.001f)
-    val point4 = Offset(width * 0.8f,height * 0.09f )
-    val point5 = Offset(width*1.2f+50f,height*0.05f)
-    val point6 = Offset(width*1.2f +50f,height *1.2f + 100f)
-    val point7 = Offset(-80f,height *1.2f + 100f)
+fun getMainScreenCurve(width: Int, height: Int): Path {
+    val point1 = Offset(-80f, height * 0.07f)
+    val point2 = Offset(width * .2f, height * 0.09f)
+    val point3 = Offset(width * .5f, height * 0.001f)
+    val point4 = Offset(width * 0.8f, height * 0.09f)
+    val point5 = Offset(width * 1.2f + 50f, height * 0.05f)
+    val point6 = Offset(width * 1.2f + 50f, height * 1.2f + 100f)
+    val point7 = Offset(-80f, height * 1.2f + 100f)
 
     return Path().apply {
-        moveTo(point1.x,point1.y)
-        standardQuadFromTo(point1,point2)
-        standardQuadFromTo(point2,point3)
-        standardQuadFromTo(point3,point4)
-        standardQuadFromTo(point4,point5)
-        lineTo(point6.x,point6.y)
-        lineTo(point7.x,point7.y)
+        moveTo(point1.x, point1.y)
+        standardQuadFromTo(point1, point2)
+        standardQuadFromTo(point2, point3)
+        standardQuadFromTo(point3, point4)
+        standardQuadFromTo(point4, point5)
+        lineTo(point6.x, point6.y)
+        lineTo(point7.x, point7.y)
         close()
     }
 }
-fun getAppSplashPath(width :Int,height : Int) : Path{
+
+fun getAppSplashPath(width: Int, height: Int): Path {
     // These points are the coordinate where 0,0 is our screens top left corner.
     val point1 = Offset(0f, height * 0.3f)
     val point2 = Offset(0.1f * width, height * 0.14f)
@@ -74,7 +97,7 @@ fun getAppSplashPath(width :Int,height : Int) : Path{
     }
 }
 
-inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
         onClick()

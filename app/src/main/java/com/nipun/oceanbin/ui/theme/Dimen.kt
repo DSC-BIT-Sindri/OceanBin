@@ -12,6 +12,8 @@ val IconSize = 35.dp
 val CurveHeight = 100.dp
 val LogoSplashSize = 200.dp
 
+val DrawerHeight = 50.dp
+
 val BigStroke = 2.dp
 val MediumStroke = 1.dp
 val SmallStroke = 0.5.dp

@@ -1,6 +1,5 @@
 package com.nipun.oceanbin.firsttime_display
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -72,7 +71,7 @@ fun SplashViewPager(
                  * in splash screen.
                  */
                 mainViewModel.setSplashViewed()
-                navController.navigate(Screen.HomeScreen.route) {
+                navController.navigate(Screen.BottomScreen.route) {
                     popUpTo(Screen.SplashViewPager.route) {
                         inclusive = true
                     }
@@ -325,7 +324,7 @@ fun SplashScreen(
                 }
             }
         } else {
-            navController.navigate(Screen.HomeScreen.route) {
+            navController.navigate(Screen.BottomScreen.route) {
                 popUpTo(Screen.SplashScreen.route) {
                     inclusive = true
                 }

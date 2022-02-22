@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.feature_oceanbin.presentation.BottomScreen
 import com.nipun.oceanbin.feature_oceanbin.presentation.screens.HomeScreen
 import com.nipun.oceanbin.firsttime_display.MainViewModel
 import com.nipun.oceanbin.firsttime_display.SplashScreen
@@ -49,8 +50,8 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.SplashViewPager.route){
                             SplashViewPager(navController = navController,mainViewModel = mainViewModel)
                         }
-                        composable(route = Screen.HomeScreen.route){
-                            HomeScreen(navController = navController)
+                        composable(route = Screen.BottomScreen.route){
+                            BottomScreen(navController = navController)
                         }
                     }
                 }

@@ -1,6 +1,9 @@
 package com.nipun.oceanbin.feature_oceanbin.presentation.screens
 
+import android.util.Log
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -9,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +28,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.nipun.oceanbin.core.getMainScreenCurve
 import com.nipun.oceanbin.ui.theme.*
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -32,15 +37,19 @@ fun HomeScreen(
 ) {
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val height = constraints.maxHeight
-        val minOffSet = height * 0.15f
-        val maxOffset = height * 0.67f
-        var offsetY by remember { mutableStateOf(minOffSet) }
+        val minOffSet = height * 0.1f
+        val maxOffset = height * 0.77f
+        val scrollOffset = 20f
+        val offSetYAnimate = remember {
+            Animatable(minOffSet)
+        }
+        val coroutineScope = rememberCoroutineScope()
         Column(
             modifier = Modifier
                 .background(LightBg)
                 .padding(MediumSpacing)
                 .fillMaxWidth()
-                .fillMaxHeight(0.77f),
+                .fillMaxHeight(0.87f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -80,7 +89,25 @@ fun HomeScreen(
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, _, _ ->
                         val y = pan.y
-                        offsetY += y
+                        coroutineScope.launch {
+                            if (y >= scrollOffset) {
+                                offSetYAnimate.animateTo(
+                                    targetValue = maxOffset,
+                                    animationSpec = tween(
+                                        durationMillis = 500,
+                                        delayMillis = 0
+                                    )
+                                )
+                            } else if (y <= -scrollOffset) {
+                                offSetYAnimate.animateTo(
+                                    targetValue = minOffSet,
+                                    animationSpec = tween(
+                                        durationMillis = 500,
+                                        delayMillis = 0
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
                 .offset {
@@ -88,7 +115,7 @@ fun HomeScreen(
                         0,
                         minOf(
                             maxOffset.roundToInt(),
-                            maxOf(minOffSet.roundToInt(), offsetY.roundToInt())
+                            maxOf(minOffSet.roundToInt(), offSetYAnimate.value.roundToInt())
                         )
                     )
                 }
@@ -130,7 +157,9 @@ fun BoxContents(
         ) {
             LazyColumn(
                 contentPadding = PaddingValues(SmallSpacing),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.89f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(100) {
@@ -139,7 +168,11 @@ fun BoxContents(
                         style = MaterialTheme.typography.body1
                     )
                 }
+                item { 
+                    Spacer(modifier = Modifier.size(DrawerHeight))
+                }
             }
+            Spacer(modifier = Modifier.fillMaxHeight())
         }
     }
 }

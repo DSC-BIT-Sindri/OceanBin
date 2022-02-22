@@ -12,8 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nipun.oceanbin.R
-import com.nipun.oceanbin.feature_oceanbin.presentation.BottomScreen
-import com.nipun.oceanbin.feature_oceanbin.presentation.screens.HomeScreen
+import com.nipun.oceanbin.feature_oceanbin.BottomScreen
 import com.nipun.oceanbin.firsttime_display.MainViewModel
 import com.nipun.oceanbin.firsttime_display.SplashScreen
 import com.nipun.oceanbin.firsttime_display.SplashViewPager

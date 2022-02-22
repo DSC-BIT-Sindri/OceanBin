@@ -1,21 +1,23 @@
-package com.nipun.oceanbin.feature_oceanbin.presentation
+package com.nipun.oceanbin.feature_oceanbin
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.nipun.oceanbin.feature_oceanbin.presentation.screens.HomeScreen
-import com.nipun.oceanbin.feature_oceanbin.presentation.screens.ProfileScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation.WeatherScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.ProfileScreen
 import com.nipun.oceanbin.ui.theme.*
 
 @Composable
@@ -52,9 +54,19 @@ fun BottomScreen(
             composable(BottomScreens.HomeScreen.route) {
                 HomeScreen(navController = navController)
             }
+            composable(BottomScreens.NewsScreen.route){
+                NewsScreen(navController = navController)
+            }
+            composable(BottomScreens.MapScreen.route){
+                MapScreen(navController = navController)
+            }
+            composable(BottomScreens.WeatherScreen.route){
+                WeatherScreen(navController = navController)
+            }
             composable(BottomScreens.ProfileScreen.route) {
                 ProfileScreen(navController = navController)
             }
+
         }
     }
 }
@@ -71,17 +83,18 @@ fun BottomBar(
         elevation = SmallSpacing
     ) {
         bottomItems.forEach { screen ->
+        val selected = currentRoute?.let { it == screen.route } == true
             BottomNavigationItem(
                 icon = {
                     Icon(
                         painter = painterResource(id = screen.id),
                         contentDescription = screen.name,
                         modifier = Modifier
-                            .size(IconSize)
+                            .size(if(selected) 45.dp else IconSize)
                             .padding(ExtraSmallSpacing),
                     )
                 },
-                selected = currentRoute?.let { it == screen.route } == true,
+                selected = selected,
                 onClick = { onClick(screen.route) },
                 selectedContentColor = LightBg,
                 unselectedContentColor = Color.Gray

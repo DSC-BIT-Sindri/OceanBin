@@ -1,4 +1,4 @@
-package com.nipun.oceanbin.feature_oceanbin.presentation.screens
+package com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun ProfileScreen(
+fun WeatherScreen(
     navController: NavController
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Profile Screen", style = MaterialTheme.typography.h3)
+        Text(text = "Weather Screen", style = MaterialTheme.typography.h3)
     }
 }

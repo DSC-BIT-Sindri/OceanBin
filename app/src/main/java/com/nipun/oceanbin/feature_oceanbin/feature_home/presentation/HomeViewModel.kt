@@ -45,8 +45,8 @@ class HomeViewModel @Inject constructor(
         _shouldShowRational.value = false
     }
 
-    fun setHasPermission() {
-        preferenceManager.saveBoolean(Constant.Has_Location, true)
+    fun setHasPermission(value : Boolean = true) {
+        preferenceManager.saveBoolean(Constant.Has_Location, value)
     }
 
     fun setCount() {

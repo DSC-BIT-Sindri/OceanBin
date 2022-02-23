@@ -1,7 +1,6 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation
 
 import android.Manifest
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,7 +33,7 @@ fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val shouldShowRational = homeViewModel.shouldShowRational.value
+    val showPermissionDialogue = homeViewModel.shouldShowRational.value
     val permissionState = rememberMultiplePermissionsState(
         permissions = listOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -46,36 +44,43 @@ fun HomeScreen(
         homeViewModel.setHasPermission()
         HomeScreenContent(navController = navController, homeViewModel)
     } else {
-        if (shouldShowRational) {
+        if (homeViewModel.shouldShowRational.value) {
             PermissionsRequired(
                 multiplePermissionsState = permissionState,
                 permissionsNotGrantedContent = {
-                    if (!homeViewModel.isFirstTimeOver.value) {
+                    if (showPermissionDialogue && !permissionState.shouldShowRationale) {
                         ShowPermissionDialogue(onYesClick = {
                             permissionState.launchMultiplePermissionRequest()
-                            homeViewModel.setFirstTimeOver()
                         },
                             onCancelClick = {
                                 homeViewModel.setPermanentlyDenied()
                             })
-                    } else {
+                    } else if (permissionState.shouldShowRationale) {
                         PermissionPermanentlyDenied(onOpenSettingsClick = {
                             permissionState.launchMultiplePermissionRequest()
                         }, onCancelClick = {
                             homeViewModel.setPermanentlyDenied()
                         })
+                    } else {
+                        homeViewModel.setHasPermission(false)
+                        homeViewModel.setCount()
+                        HomeScreenContent(navController = navController, homeViewModel)
                     }
                 },
                 permissionsNotAvailableContent = {
                     homeViewModel.setPermanentlyDenied()
+                    homeViewModel.setHasPermission(false)
+                    homeViewModel.setCount()
                     HomeScreenContent(navController = navController, homeViewModel)
                 }) {
+                homeViewModel.setPermanentlyDenied()
                 homeViewModel.setHasPermission()
                 HomeScreenContent(navController = navController, homeViewModel)
             }
-        } else {
+        }else{
+            homeViewModel.setHasPermission(false)
             homeViewModel.setCount()
-            HomeScreenContent(navController = navController, homeViewModel)
+            HomeScreenContent(navController = navController,homeViewModel)
         }
     }
 }

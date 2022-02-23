@@ -85,6 +85,9 @@ dependencies {
     implementation "androidx.room:room-runtime:2.4.1"
     kapt "androidx.room:room-compiler:2.4.1"
 
+    // Permission Library
+    implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
+
 
     // Animation Navigation
     implementation "com.google.accompanist:accompanist-navigation-animation:0.21.4-beta"

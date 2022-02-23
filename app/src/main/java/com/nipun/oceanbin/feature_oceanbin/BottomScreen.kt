@@ -1,31 +1,60 @@
 package com.nipun.oceanbin.feature_oceanbin
 
+import android.Manifest
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation.WeatherScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.ProfileScreen
 import com.nipun.oceanbin.ui.theme.*
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun BottomScreen(
-    navController: NavController
+    navController: NavController,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val bottomNavController = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
     Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(it) { data ->
+                Snackbar(
+                    modifier = Modifier
+                        .padding(SmallSpacing)
+                        .fillMaxWidth(),
+                    elevation = ExtraSmallSpacing,
+                    backgroundColor = MaterialTheme.colors.background,
+                    shape = RoundedCornerShape(SmallSpacing),
+                    contentColor = Color.Black,
+                    snackbarData = data
+                )
+            }
+        },
         modifier = Modifier
             .fillMaxSize(),
         bottomBar = {
@@ -42,7 +71,6 @@ fun BottomScreen(
                         saveState = true
                     }
                     launchSingleTop = true
-                    restoreState = true
                 }
             }
         }
@@ -90,7 +118,7 @@ fun BottomBar(
                         painter = painterResource(id = screen.id),
                         contentDescription = screen.name,
                         modifier = Modifier
-                            .size(if(selected) 45.dp else IconSize)
+                            .size(if (selected) 45.dp else IconSize)
                             .padding(ExtraSmallSpacing),
                     )
                 },

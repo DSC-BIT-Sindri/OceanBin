@@ -1,34 +1,16 @@
 package com.nipun.oceanbin.core
 
-import androidx.compose.foundation.Image
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.sp
-import com.nipun.oceanbin.R
-import com.nipun.oceanbin.ui.theme.BigSpacing
-import com.nipun.oceanbin.ui.theme.IconSize
-import com.nipun.oceanbin.ui.theme.MediumTextSize
-import com.nipun.oceanbin.ui.theme.RobotoFamily
 import kotlin.math.abs
 
 
@@ -95,6 +77,15 @@ fun getAppSplashPath(width: Int, height: Int): Path {
         lineTo(point10.x, point10.y)
         close()
     }
+}
+
+fun Context.openSettings() {
+
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    val uri = Uri.fromParts("package",packageName,null)
+    intent.data = uri
+    startActivity(intent)
 }
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {

@@ -1,6 +1,7 @@
 package com.nipun.oceanbin.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -12,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.Constant
+import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.feature_oceanbin.BottomScreen
 import com.nipun.oceanbin.firsttime_display.MainViewModel
 import com.nipun.oceanbin.firsttime_display.SplashScreen

@@ -34,6 +34,7 @@ data class WeatherModel(
         return (currentTime>(timeStamp+1800000))
     }
     fun getIconUrl() : String{
-        return "https://openweathermap.org/img/wn/$iconId@2x.png"
+//        return "https://openweathermap.org/img/wn/$iconId@2x.png"
+        return "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${iconId}.svg"
     }
 }

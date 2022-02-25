@@ -6,6 +6,6 @@ data class HourlyDataModel(
 ){
     fun isCallApi() : Boolean{
         val currentTime = System.currentTimeMillis()
-        return (currentTime>(timeStamp+86400000))
+        return (currentTime>(timeStamp+7200000))
     }
 }

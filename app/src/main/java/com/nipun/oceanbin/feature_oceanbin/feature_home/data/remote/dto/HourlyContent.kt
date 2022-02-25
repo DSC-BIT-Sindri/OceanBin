@@ -15,7 +15,8 @@ data class HourlyContent(
 ){
     fun toHourlyModel(): HourlyModel {
         return HourlyModel(
-            iconId = "https://openweathermap.org/img/wn/${weather[0].icon}@2x.png",
+//            iconId = "https://openweathermap.org/img/wn/${weather[0].icon}@2x.png",
+            iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg",
             temp = (main.feels_like-273.15).toInt(),
             time = dt_txt.substring(11,16)
         )

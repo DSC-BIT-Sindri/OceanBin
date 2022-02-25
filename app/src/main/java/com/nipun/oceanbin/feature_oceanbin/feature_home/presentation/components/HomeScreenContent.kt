@@ -1,6 +1,5 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -11,10 +10,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nipun.oceanbin.core.Constant
@@ -24,7 +21,6 @@ import com.nipun.oceanbin.ui.theme.LightBg
 import com.nipun.oceanbin.ui.theme.MainBg
 import com.nipun.oceanbin.ui.theme.MediumSpacing
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreenContent(
@@ -35,7 +31,7 @@ fun HomeScreenContent(
         homeViewModel.setCount()
         EnableLocationBySetting()
     }
-    val minOffSet = 0.167f
+    val minOffSet = 0.13f
     val maxOffset = 0.9f
     val scrollOffset = 20f
     var sizeState by remember {
@@ -49,6 +45,9 @@ fun HomeScreenContent(
         )
     )
     val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true){
+        sizeState = 0.25f
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

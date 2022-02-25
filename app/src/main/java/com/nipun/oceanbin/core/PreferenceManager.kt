@@ -1,6 +1,8 @@
 package com.nipun.oceanbin.core
 
 import android.content.Context
+import com.google.gson.Gson
+import com.nipun.oceanbin.feature_oceanbin.feature_home.local.WeatherModel
 
 /*
  * Class for managing shared preferences
@@ -34,6 +36,25 @@ class PreferenceManager(private val context: Context) {
         return sharedPreference.getInt(
             key, default
         )
+    }
+
+    fun saveWeather(key: String = Constant.WEATHER_KEY, value: WeatherModel) {
+        with(sharedPreference.edit()) {
+            val gson = Gson()
+            putString(key, gson.toJson(value))
+            commit()
+        }
+    }
+
+    fun getWeather(key: String = Constant.WEATHER_KEY): WeatherModel {
+        val gson = Gson()
+        val str = sharedPreference.getString(key, "")
+        try {
+            if (str.isNullOrEmpty()) return WeatherModel()
+            return gson.fromJson(str, WeatherModel::class.java)
+        } catch (e: Exception) {
+            return WeatherModel()
+        }
     }
 }
 

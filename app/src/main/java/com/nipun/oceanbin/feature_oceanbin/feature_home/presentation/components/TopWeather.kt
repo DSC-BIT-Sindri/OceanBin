@@ -30,7 +30,8 @@ fun TopWeather(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val weatherInfo = homeViewModel.weatherState.value
+    val weatherState = homeViewModel.weatherState.value
+    val weatherInfo = weatherState.data
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.size(SmallSpacing))
         LogoWithText(

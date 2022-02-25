@@ -9,9 +9,12 @@ import java.time.format.FormatStyle
 import java.util.*
 
 data class WeatherModel(
-    val location: String = "Bariatu, Ranchi",
-    val temperature: Int = 25,
-    val weather: String = "Shiny Day",
+    var location: String = "Bariatu, Ranchi",
+    var temperature: Int = 25,
+    var weather: String = "Shiny Day",
+    var timeStamp : Long = 0L,
+    var lon : Double = 0.0,
+    var lat : Double = 0.0
 ) {
 
     fun getCurrentDate(): String {
@@ -26,5 +29,16 @@ data class WeatherModel(
         } else {
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         }
+    }
+
+    fun isCallApi(longitude : Double,latitude : Double) : Boolean{
+        val currentTime = System.currentTimeMillis()
+        if(currentTime<(timeStamp+3600000)){
+            return false
+        }
+        if(latitude in lat-2 .. lat+2 && longitude in lon-2 .. lon+2){
+            return false
+        }
+        return true
     }
 }

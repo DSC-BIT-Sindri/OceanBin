@@ -1,6 +1,7 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation
 
 import android.Manifest
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,7 @@ fun HomeScreen(
     )
     if (permissionState.allPermissionsGranted) {
         homeViewModel.setHasPermission()
+        homeViewModel.getLocation()
         HomeScreenContent(navController = navController, homeViewModel)
     } else {
         if (homeViewModel.shouldShowRational.value) {
@@ -58,6 +60,7 @@ fun HomeScreen(
                     } else if (permissionState.shouldShowRationale) {
                         PermissionPermanentlyDenied(onOpenSettingsClick = {
                             permissionState.launchMultiplePermissionRequest()
+                            homeViewModel.setPermanentlyDenied()
                         }, onCancelClick = {
                             homeViewModel.setPermanentlyDenied()
                         })
@@ -73,11 +76,9 @@ fun HomeScreen(
                     homeViewModel.setCount()
                     HomeScreenContent(navController = navController, homeViewModel)
                 }) {
-                homeViewModel.setPermanentlyDenied()
-                homeViewModel.setHasPermission()
-                HomeScreenContent(navController = navController, homeViewModel)
             }
         }else{
+            Log.e("NipunL","Set not show rational")
             homeViewModel.setHasPermission(false)
             homeViewModel.setCount()
             HomeScreenContent(navController = navController,homeViewModel)

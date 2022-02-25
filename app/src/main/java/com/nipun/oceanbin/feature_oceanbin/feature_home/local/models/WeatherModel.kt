@@ -1,7 +1,6 @@
-package com.nipun.oceanbin.feature_oceanbin.feature_home.local
+package com.nipun.oceanbin.feature_oceanbin.feature_home.local.models
 
 import android.os.Build
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -13,8 +12,7 @@ data class WeatherModel(
     var temperature: Int = 25,
     var weather: String = "Shiny Day",
     var timeStamp : Long = 0L,
-    var lon : Double = 0.0,
-    var lat : Double = 0.0
+    var iconId : String = ""
 ) {
 
     fun getCurrentDate(): String {
@@ -31,14 +29,11 @@ data class WeatherModel(
         }
     }
 
-    fun isCallApi(longitude : Double,latitude : Double) : Boolean{
+    fun isCallApi() : Boolean{
         val currentTime = System.currentTimeMillis()
-        if(currentTime<(timeStamp+3600000)){
-            return false
-        }
-        if(latitude in lat-2 .. lat+2 && longitude in lon-2 .. lon+2){
-            return false
-        }
-        return true
+        return (currentTime>(timeStamp+1800000))
+    }
+    fun getIconUrl() : String{
+        return "https://openweathermap.org/img/wn/$iconId@2x.png"
     }
 }

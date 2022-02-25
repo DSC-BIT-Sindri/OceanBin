@@ -67,6 +67,7 @@ fun HomeScreen(
                     } else {
                         homeViewModel.setHasPermission(false)
                         homeViewModel.setCount()
+                        homeViewModel.getLocation()
                         HomeScreenContent(navController = navController, homeViewModel)
                     }
                 },

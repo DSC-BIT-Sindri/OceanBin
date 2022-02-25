@@ -9,6 +9,7 @@ val Teal200 = Color(0xFF03DAC5)
 
 val LightBg = Color(0xFF1BA5DE)
 val MainBg = Color(0xFFFAFAFA)
+val WeatherCardBg = Color(0xFFC6E9F7)
 val SplashPathColor = Color(0x80C5E8F7)
 val LightBgShade = Color(0xFF0DA0DF)
 val DarkBlue = Color(0xFF184895)

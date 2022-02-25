@@ -1,6 +1,7 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
@@ -8,10 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -37,65 +35,58 @@ fun HomeScreenContent(
         homeViewModel.setCount()
         EnableLocationBySetting()
     }
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-        val height = constraints.maxHeight
-        val minOffSet = height * 0.16f
-        val maxOffset = height * 0.77f
-        val scrollOffset = 20f
-        val offSetYAnimate = remember {
-            Animatable(minOffSet)
-        }
-        val coroutineScope = rememberCoroutineScope()
+    val minOffSet = 0.167f
+    val maxOffset = 0.9f
+    val scrollOffset = 20f
+    var sizeState by remember {
+        mutableStateOf(minOffSet)
+    }
+    val size by animateFloatAsState(
+        targetValue = sizeState,
+        tween(
+            durationMillis = 500,
+            delayMillis = 0
+        )
+    )
+    val coroutineScope = rememberCoroutineScope()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTransformGestures { _, pan, _, _ ->
+                    val y = pan.y
+                    coroutineScope.launch {
+                        if (y >= scrollOffset) {
+                            sizeState = maxOffset
+                        } else if (y <= -scrollOffset) {
+                            sizeState = minOffSet
+                        }
+                    }
+                }
+            }
+    ) {
         TopWeather(
             modifier = Modifier
                 .background(LightBg)
-                .padding(MediumSpacing)
+                .padding(
+                    start = MediumSpacing,
+                    end = MediumSpacing,
+                    top = MediumSpacing
+                )
                 .fillMaxWidth()
-                .fillMaxHeight(0.87f),
+                .fillMaxHeight(size),
             homeViewModel = homeViewModel
         )
         Box(
             modifier = Modifier
-                .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, _, _ ->
-                        val y = pan.y
-                        coroutineScope.launch {
-                            if (y >= scrollOffset) {
-                                offSetYAnimate.animateTo(
-                                    targetValue = maxOffset,
-                                    animationSpec = tween(
-                                        durationMillis = 500,
-                                        delayMillis = 0
-                                    )
-                                )
-                            } else if (y <= -scrollOffset) {
-                                offSetYAnimate.animateTo(
-                                    targetValue = minOffSet,
-                                    animationSpec = tween(
-                                        durationMillis = 500,
-                                        delayMillis = 0
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-                .offset {
-                    IntOffset(
-                        0,
-                        minOf(
-                            maxOffset.roundToInt(),
-                            maxOf(minOffSet.roundToInt(), offSetYAnimate.value.roundToInt())
-                        )
-                    )
-                }
                 .fillMaxSize()
-                .background(Color.Transparent)
-        ) {
+                .background(LightBg)
+        ){
             BoxContents(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 homeViewModel = homeViewModel,
-                navController = navController
+                navController = navController,
             )
         }
     }
@@ -107,7 +98,7 @@ fun EnableLocationBySetting() {
     val openDialogue = remember {
         mutableStateOf(true)
     }
-    if(openDialogue.value) {
+    if (openDialogue.value) {
         AlertDialog(
             onDismissRequest = { openDialogue.value = false },
             title = {

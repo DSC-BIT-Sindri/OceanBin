@@ -2,7 +2,8 @@ package com.nipun.oceanbin.core
 
 import android.content.Context
 import com.google.gson.Gson
-import com.nipun.oceanbin.feature_oceanbin.feature_home.local.WeatherModel
+import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.HourlyDataModel
+import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.WeatherModel
 
 /*
  * Class for managing shared preferences
@@ -10,6 +11,7 @@ import com.nipun.oceanbin.feature_oceanbin.feature_home.local.WeatherModel
 class PreferenceManager(private val context: Context) {
     companion object {
         const val IS_INSTALLED = "is_installed"
+        const val HOURLY_KEY = "hourly_key"
     }
 
     private val sharedPreference = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
@@ -54,6 +56,27 @@ class PreferenceManager(private val context: Context) {
             return gson.fromJson(str, WeatherModel::class.java)
         } catch (e: Exception) {
             return WeatherModel()
+        }
+    }
+
+    fun saveHourlyUpdate(key: String = HOURLY_KEY,value: HourlyDataModel){
+        with(sharedPreference.edit()){
+            val gson = Gson()
+            putString(key, gson.toJson(value))
+            commit()
+        }
+    }
+
+    fun getHourlyUpdate(key: String = HOURLY_KEY) : HourlyDataModel {
+        val gson = Gson()
+        val str = sharedPreference.getString(key, "")
+        try {
+            if (str.isNullOrEmpty()) return HourlyDataModel(
+                emptyList()
+            )
+            return gson.fromJson(str, HourlyDataModel::class.java)
+        } catch (e: Exception) {
+            return HourlyDataModel(emptyList())
         }
     }
 }

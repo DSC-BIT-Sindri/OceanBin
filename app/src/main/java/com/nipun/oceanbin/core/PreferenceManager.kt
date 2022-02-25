@@ -1,9 +1,13 @@
 package com.nipun.oceanbin.core
 
 import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import com.google.gson.Gson
+import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto.WeatherDto
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.HourlyDataModel
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.WeatherModel
+import java.util.*
 
 /*
  * Class for managing shared preferences
@@ -40,7 +44,7 @@ class PreferenceManager(private val context: Context) {
         )
     }
 
-    fun saveWeather(key: String = Constant.WEATHER_KEY, value: WeatherModel) {
+    fun saveWeather(key: String = Constant.WEATHER_KEY, value: WeatherDto) {
         with(sharedPreference.edit()) {
             val gson = Gson()
             putString(key, gson.toJson(value))
@@ -48,14 +52,14 @@ class PreferenceManager(private val context: Context) {
         }
     }
 
-    fun getWeather(key: String = Constant.WEATHER_KEY): WeatherModel {
+    fun getWeather(key: String = Constant.WEATHER_KEY): WeatherDto? {
         val gson = Gson()
         val str = sharedPreference.getString(key, "")
         try {
-            if (str.isNullOrEmpty()) return WeatherModel()
-            return gson.fromJson(str, WeatherModel::class.java)
+            if (str.isNullOrEmpty()) return null
+            return gson.fromJson(str, WeatherDto::class.java)
         } catch (e: Exception) {
-            return WeatherModel()
+            return null
         }
     }
 
@@ -77,6 +81,23 @@ class PreferenceManager(private val context: Context) {
             return gson.fromJson(str, HourlyDataModel::class.java)
         } catch (e: Exception) {
             return HourlyDataModel(emptyList())
+        }
+    }
+
+    fun getAddress(longitude: Double, latitude: Double): String {
+        val geoCoder = Geocoder(context, Locale.getDefault())
+        val addressList = geoCoder.getFromLocation(latitude, longitude, 1)
+        return if (addressList.isNullOrEmpty()) ""
+        else {
+            val address: Address = addressList[0]
+            var res = ""
+            for (i in 0 until address.maxAddressLineIndex) {
+                res += address.getAddressLine(i) + "\n"
+            }
+            res += address.locality.capitalize(Locale.getDefault()) + ", " + address.subAdminArea.capitalize(
+                Locale.getDefault()
+            )
+            res
         }
     }
 }

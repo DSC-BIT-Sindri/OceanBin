@@ -4,6 +4,7 @@ import java.io.Serializable
 
 data class HourlyModel(
     val iconId : String,
-    val temp : Int,
-    val time : String
-) : Serializable
+    val temp : Int
+) : Serializable{
+    var time : String = ""
+}

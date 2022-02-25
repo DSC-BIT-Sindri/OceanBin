@@ -11,10 +11,8 @@ data class WeatherModel(
     var location: String = "Bariatu, Ranchi",
     var temperature: Int = 25,
     var weather: String = "Shiny Day",
-    var timeStamp : Long = 0L,
     var iconId : String = ""
 ) {
-
     fun getCurrentDate(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val currentTime = LocalDateTime.now()
@@ -27,14 +25,5 @@ data class WeatherModel(
         } else {
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         }
-    }
-
-    fun isCallApi() : Boolean{
-        val currentTime = System.currentTimeMillis()
-        return (currentTime>(timeStamp+1800000))
-    }
-    fun getIconUrl() : String{
-//        return "https://openweathermap.org/img/wn/$iconId@2x.png"
-        return "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${iconId}.svg"
     }
 }

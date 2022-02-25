@@ -3,7 +3,9 @@ package com.nipun.oceanbin.core
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -11,6 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.abs
 
 
@@ -86,6 +94,11 @@ fun Context.openSettings() {
     val uri = Uri.fromParts("package",packageName,null)
     intent.data = uri
     startActivity(intent)
+}
+
+fun Int.getTimeInString(): String {
+    val sdf = SimpleDateFormat("HH:mm:ss dd MMMM yyyy",Locale.ENGLISH)
+    return sdf.format(this*1000L).substring(0,5)
 }
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {

@@ -59,7 +59,7 @@ fun TopWeather(
             CompositionLocalProvider(LocalImageLoader provides imageLoader ) {
                 Image(
                     painter = rememberImagePainter(
-                        data = weatherInfo.getIconUrl(),
+                        data = weatherInfo.iconId,
                         builder = {
                             transformations(CircleCropTransformation())
                             placeholder(R.drawable.ic_cloud_icon)

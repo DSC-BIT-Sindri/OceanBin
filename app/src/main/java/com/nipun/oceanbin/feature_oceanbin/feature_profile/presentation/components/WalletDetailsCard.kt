@@ -46,7 +46,8 @@ fun WalletDetailsCard(
                 Row() {
                     Image(
                         painter = painterResource(id = R.drawable.ic_coin),
-                        contentDescription = "Wallet Balance"
+                        contentDescription = "Wallet Balance",
+//                        modifier.size(5.dp)
                     )
                     Spacer(modifier = Modifier.size(MediumSpacing))
                     Text(
@@ -60,7 +61,8 @@ fun WalletDetailsCard(
                 Text(
                     text = "Rs. $balance",
                     fontFamily = RobotoFamily,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
                 )
             }
         }

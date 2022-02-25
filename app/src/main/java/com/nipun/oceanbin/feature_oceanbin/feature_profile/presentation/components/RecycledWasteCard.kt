@@ -119,7 +119,7 @@ fun LinearProgressBar(
                 drawLine(
                     color = color,
                     Offset(0f, 0f),
-                    Offset(percentage*size.width, 0f),
+                    Offset(curPercentage.value*size.width, 0f),
                     strokeWidth = stroke_Width
                 )
             }

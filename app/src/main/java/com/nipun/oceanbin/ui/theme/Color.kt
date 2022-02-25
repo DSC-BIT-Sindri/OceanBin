@@ -13,3 +13,8 @@ val SplashPathColor = Color(0x80C5E8F7)
 val LightBgShade = Color(0xFF0DA0DF)
 val DarkBlue = Color(0xFF184895)
 val ShadowColor = Color(0x80bfafb2)
+
+
+// added by me
+val LogoDarkBlue = Color(0xFF0C4D8D)
+val TopbarLightBlue = Color(0xFFC6E9F7)

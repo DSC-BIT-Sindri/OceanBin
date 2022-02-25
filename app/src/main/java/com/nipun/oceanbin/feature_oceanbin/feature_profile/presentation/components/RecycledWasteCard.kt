@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -19,9 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nipun.oceanbin.ui.theme.MediumSpacing
-import com.nipun.oceanbin.ui.theme.RobotoFamily
-import com.nipun.oceanbin.ui.theme.SmallSpacing
+import com.nipun.oceanbin.ui.theme.*
 
 @Composable
 fun RecycledWasteCard(
@@ -59,53 +58,94 @@ fun RecycledWasteCard(
                         color = Color.Gray
                     )
                 }
+
+                LinearProgressBar(
+                    value = 75,
+                    maxValue = 100,
+                    modifier = modifier
+                )
             }
         }
     }
 }
 
 // function to display the linear bar of Weight Recycled
-//@Composable
-//fun LinearProgressBar(
-//    value : Int,
-//    maxValue: Int,
-//    fontSize : TextUnit = 15.sp,
-//    color: Color = Color.Green,
-//    strokeWidth : Dp = 5.dp,
-//    animationDuration : Int = 1000,
-//    animationDelay : Int = 0,
-//    modifier: Modifier = Modifier
-//) {
-//    var percentage : Float = value.toFloat()/maxValue.toFloat() + 100
-//
-//    var animationPlayed by remember {
-//        mutableStateOf(false)
-//    }
-//
-//    var curPercentage = animateFloatAsState(
-//        targetValue = if(animationPlayed) percentage else 0f,
-//        animationSpec = tween(
-//            durationMillis = animationDuration,
-//            delayMillis = animationDelay
-//        )
-//    )
-//
-//    LaunchedEffect(key1 = true){
-//        animationPlayed = true
-//    }
-//
-//    Box(
-//        contentAlignment = Alignment.Center,
-//        modifier = modifier
-//    ) {
-//        Canvas(modifier = modifier.size(50.dp)){
-//            drawLine(
-//                color = color,
-//                0f,
-//                value.toFloat(),
-//                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-//            )
-//        }
-//    }
-//
-//}
+@Composable
+fun LinearProgressBar(
+    value : Int,
+    maxValue: Int,
+    fontSize : TextUnit = 15.sp,
+    color: Color = Color.Green,
+    stroke_Width : Float = 15f,
+    animationDuration : Int = 1000,
+    animationDelay : Int = 0,
+    modifier: Modifier = Modifier
+) {
+    var percentage : Float = value.toFloat()/maxValue.toFloat()
+
+    var animationPlayed by remember {
+        mutableStateOf(false)
+    }
+    var curPercentage = animateFloatAsState(
+        targetValue = if(animationPlayed) percentage else 0f,
+        animationSpec = tween(
+            durationMillis = animationDuration,
+            delayMillis = animationDelay
+        )
+    )
+    LaunchedEffect(key1 = true){
+        animationPlayed = true
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .padding(18.dp, 10.dp)
+    ) {
+        Column(
+            modifier = modifier,
+//                .padding(23.dp, 10.dp, 23.dp, 0.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Canvas(
+                modifier = modifier
+            ){
+                drawLine(
+                    color = TopbarLightBlue,
+                    Offset(0f, 0f),
+                    Offset(size.width, 0f),
+                    strokeWidth = stroke_Width
+                )
+                drawLine(
+                    color = color,
+                    Offset(0f, 0f),
+                    Offset(percentage*size.width, 0f),
+                    strokeWidth = stroke_Width
+                )
+            }
+            
+            Spacer(modifier = Modifier.size(ExtraSmallSpacing))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "0 Kg",
+                    fontFamily = RobotoFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+                Text(
+                    text = "$maxValue Kg",
+                    fontFamily = RobotoFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 10.sp,
+                    color = Color.Gray
+                )
+            }
+
+        }
+    }
+
+}

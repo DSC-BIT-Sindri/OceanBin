@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.maps.model.LatLng
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.WeatherApi
@@ -57,6 +58,7 @@ class LocationRepositoryImpl(
             val latitude = location?.latitude ?: 0.0
             if (data == null || data.isCallApi()) {
                 try {
+                    prefManager.saveCurrentLocation(value = LatLng(latitude, longitude))
                     val weatherDto = api.getWeather(latitude, longitude).apply {
                         timeStamp = System.currentTimeMillis()
                     }
@@ -67,7 +69,6 @@ class LocationRepositoryImpl(
                         )
                     )
                 } catch (e: HttpException) {
-                    Log.e("NipunL", "WeatherInfo -> ${e.message.toString()}")
                     emit(
                         Resource.Error<WeatherDto>(
                             message = "Something went wrong",

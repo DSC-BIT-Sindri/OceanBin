@@ -3,6 +3,7 @@ package com.nipun.oceanbin.core
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto.WeatherDto
 import java.util.*
@@ -14,6 +15,7 @@ class PreferenceManager(private val context: Context) {
     companion object {
         const val IS_INSTALLED = "is_installed"
         const val HOURLY_KEY = "hourly_key"
+        const val CURRENT_LOCATION_KEY = "current_location_key"
     }
 
     private val sharedPreference = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
@@ -58,6 +60,25 @@ class PreferenceManager(private val context: Context) {
             return gson.fromJson(str, WeatherDto::class.java)
         } catch (e: Exception) {
             return null
+        }
+    }
+
+    fun saveCurrentLocation(key: String = CURRENT_LOCATION_KEY,value: LatLng){
+        with(sharedPreference.edit()) {
+            val gson = Gson()
+            putString(key, gson.toJson(value))
+            commit()
+        }
+    }
+
+    fun getCurrentLocation(key: String = CURRENT_LOCATION_KEY) : LatLng{
+        val gson = Gson()
+        val str = sharedPreference.getString(key, "")
+        try {
+            if (str.isNullOrEmpty()) return LatLng(0.0,0.0)
+            return gson.fromJson(str, LatLng::class.java)
+        } catch (e: Exception) {
+            return LatLng(0.0,0.0)
         }
     }
 

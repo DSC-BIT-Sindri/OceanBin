@@ -13,6 +13,9 @@ val CurveHeight = 80.dp
 val LogoSplashSize = 200.dp
 
 val ProfileImageSize = 120.dp
+val WeatherImageSizeInWeatherScreen = 120.dp
+val LocationIconSizeInWeatherScreen = 20.dp
+val SmallWeatherCardSize = 130.dp
 
 val DrawerHeight = 50.dp
 

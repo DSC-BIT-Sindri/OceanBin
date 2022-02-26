@@ -71,8 +71,7 @@ fun HomeScreenContent(
                 )
                 .fillMaxWidth()
                 .fillMaxHeight(size),
-            homeViewModel = homeViewModel,
-            offset = sizeState
+            homeViewModel = homeViewModel
         )
         Box(
             modifier = Modifier

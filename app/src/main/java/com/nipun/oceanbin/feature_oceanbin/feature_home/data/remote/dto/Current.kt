@@ -1,5 +1,6 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto
 
+import com.nipun.oceanbin.core.getTimeInString
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.WeatherModel
 
 data class Current(
@@ -24,7 +25,9 @@ data class Current(
         return WeatherModel(
             temperature = feels_like.toInt(),
             weather = weather[0].description,
-            iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg"
+            iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg",
+            sunSet = sunset.toInt().getTimeInString(),
+            sunRise = sunrise.toInt().getTimeInString()
         )
     }
 }

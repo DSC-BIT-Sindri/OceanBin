@@ -1,5 +1,7 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,8 +21,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
@@ -32,16 +36,32 @@ import com.nipun.oceanbin.ui.theme.*
 
 @Composable
 fun MapScreen(
-    navController: NavController
+    navController: NavController,
+    mapViewModel: MapViewModel = hiltViewModel()
 ) {
-    val location = PreferenceManager(LocalContext.current).getCurrentLocation()
+    val locationState = mapViewModel.location.value
+    val location = locationState.data
     var mapProperties by remember {
         mutableStateOf(
             MapProperties(maxZoomPreference = 20f, minZoomPreference = 2f)
         )
     }
+    var zoomState by remember {
+        mutableStateOf(11f)
+    }
+
+    val size by animateFloatAsState(
+        targetValue = zoomState,
+        tween(
+            durationMillis = 500,
+            delayMillis = 0
+        )
+    )
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 11f)
+        position = CameraPosition.fromLatLngZoom(
+            location,
+            size
+        )
     }
     Box(
         modifier = Modifier
@@ -62,12 +82,28 @@ fun MapScreen(
                 color2 = LightBgShade
             )
             Spacer(modifier = Modifier.size(BigSpacing))
-            SearchBox(
+            Box(
                 modifier = Modifier
                     .padding(horizontal = MediumSpacing)
                     .fillMaxWidth()
-                    .height(DrawerHeight)
-            )
+                    .aspectRatio(6.7f)
+            ) {
+                SearchBox(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    mapViewModel.searchLocation(it)
+                }
+                if(locationState.isLoading){
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(end = ExtraSmallSpacing)
+                            .fillMaxHeight()
+                            .aspectRatio(1f)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
         }
         GoogleMap(
             properties = mapProperties,
@@ -78,6 +114,11 @@ fun MapScreen(
                 .alpha(0.75f)
         ) {
             Marker(position = location)
+            cameraPositionState.move(
+                CameraUpdateFactory.newLatLngZoom(
+                    location, 14f
+                )
+            )
         }
 
         Icon(
@@ -91,8 +132,12 @@ fun MapScreen(
                 .background(color = MainBg)
                 .padding(SmallSpacing)
                 .noRippleClickable {
+
+                    zoomState = 16f
                     cameraPositionState.move(
-                        CameraUpdateFactory.zoomTo(16f)
+                        CameraUpdateFactory.newLatLngZoom(
+                            location, zoomState
+                        )
                     )
                 },
             tint = LightBg
@@ -139,7 +184,7 @@ fun SearchBox(
             keyboardActions = KeyboardActions(onSearch = {
                 onSearchClick(text)
             }),
-            textStyle = MaterialTheme.typography.h4,
+            textStyle = MaterialTheme.typography.body1,
             singleLine = true,
             maxLines = 1,
             leadingIcon = {

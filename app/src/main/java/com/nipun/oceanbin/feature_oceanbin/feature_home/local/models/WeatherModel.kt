@@ -11,7 +11,9 @@ data class WeatherModel(
     var location: String = "Bariatu, Ranchi",
     var temperature: Int = 25,
     var weather: String = "Shiny Day",
-    var iconId : String = ""
+    var iconId : String = "",
+    val sunRise : String = "04:00",
+    val sunSet : String = "17:30"
 ) {
     fun getCurrentDate(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

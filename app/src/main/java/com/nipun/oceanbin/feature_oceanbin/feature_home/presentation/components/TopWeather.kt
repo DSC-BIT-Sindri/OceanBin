@@ -3,6 +3,7 @@ package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -45,7 +46,6 @@ import com.nipun.oceanbin.ui.theme.*
 fun TopWeather(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    offset : Float,
 ) {
     val weatherState = homeViewModel.weatherState.value
     val weatherInfo = weatherState.data
@@ -126,12 +126,61 @@ fun TopWeather(
                 )
             }
         }
+        Spacer(modifier = Modifier.size(SmallSpacing))
+        Row(
+            modifier = Modifier
+                .padding(horizontal = MediumSpacing)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.sunrise),
+                    contentDescription = "Sunrise",
+                    modifier = Modifier
+                        .size(IconSize)
+                        .padding(ExtraSmallSpacing),
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center
+                )
+                Spacer(modifier = Modifier.size(ExtraSmallSpacing))
+                Text(
+                    text = weatherInfo.sunRise,
+                    style = MaterialTheme.typography.body1,
+                    color = MainBg
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.sunset),
+                    contentDescription = "Sunset",
+                    modifier = Modifier
+                        .size(IconSize)
+                        .padding(ExtraSmallSpacing),
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center
+                )
+                Spacer(modifier = Modifier.size(ExtraSmallSpacing))
+                Text(
+                    text = weatherInfo.sunSet,
+                    style = MaterialTheme.typography.body1,
+                    color = MainBg
+                )
+            }
+        }
         Spacer(modifier = Modifier.size(IconSize))
         HourlyComp(
             hourlyState = homeViewModel.hourlyState.value,
             dailyState = homeViewModel.dayState.value,
-            modifier = Modifier.fillMaxSize(),
-            offset = offset
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
@@ -140,35 +189,36 @@ fun TopWeather(
 fun HourlyComp(
     modifier: Modifier = Modifier,
     hourlyState: HourlyState,
-    dailyState: DayState,
-    offset: Float
+    dailyState: DayState
 ) {
     val hourlyInfo = hourlyState.data
     val dayValue = dailyState.data
-    val scrollState = rememberScrollState()
-    Column(
+    LazyColumn(
         modifier = modifier
-            .verticalScroll(state = scrollState, enabled = offset>=0.2f)
     ) {
-        LazyRow {
-            items(hourlyInfo) { hourlyModel: HourlyModel ->
-                SingleWeatherCard(
-                    hourlyModel = hourlyModel,
-                    modifier = Modifier
-                        .padding(
-                            start = MediumSpacing,
-                            end = SmallSpacing
-                        )
-                )
+        item {
+            LazyRow {
+                items(hourlyInfo) { hourlyModel: HourlyModel ->
+                    SingleWeatherCard(
+                        hourlyModel = hourlyModel,
+                        modifier = Modifier
+                            .padding(
+                                start = MediumSpacing,
+                                end = SmallSpacing
+                            )
+                    )
+                }
             }
         }
-        Spacer(modifier = Modifier.size(BigSpacing))
-        HorizontalLine()
-        Spacer(modifier = Modifier.size(SmallSpacing))
-        dayValue.forEachIndexed { index, dayModel ->
+        item {
+            Spacer(modifier = Modifier.size(BigSpacing))
+            HorizontalLine()
+            Spacer(modifier = Modifier.size(SmallSpacing))
+        }
+        items(dayValue.size){ index ->
             if (index > 0) Spacer(modifier = Modifier.size(SmallSpacing))
             SingleDayCard(
-                dayModel = dayModel, index = index,
+                dayModel = dayValue[index], index = index,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = SmallSpacing)

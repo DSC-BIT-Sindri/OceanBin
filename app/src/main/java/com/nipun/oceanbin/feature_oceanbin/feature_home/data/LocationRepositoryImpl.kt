@@ -4,8 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -13,14 +11,11 @@ import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.WeatherApi
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto.WeatherDto
-import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.HourlyDataModel
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.LocationRepository
-import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.WeatherModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.*
 
 @SuppressLint("MissingPermission")
 class LocationRepositoryImpl(
@@ -62,9 +57,9 @@ class LocationRepositoryImpl(
             val latitude = location?.latitude ?: 0.0
             if (data == null || data.isCallApi()) {
                 try {
-                    Log.e("Nipun", "Inside api call")
-                    val weatherDto = api.getWeather(latitude, longitude)
-                    Log.e("Nipun","Longitude -> ${weatherDto.lon}\nlatitude -> ${weatherDto.lat}")
+                    val weatherDto = api.getWeather(latitude, longitude).apply {
+                        timeStamp = System.currentTimeMillis()
+                    }
                     prefManager.saveWeather(value = weatherDto)
                     emit(
                         Resource.Success<WeatherDto>(

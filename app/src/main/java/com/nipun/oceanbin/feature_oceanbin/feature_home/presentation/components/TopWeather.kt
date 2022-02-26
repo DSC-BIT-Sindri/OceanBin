@@ -1,11 +1,13 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -14,6 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -27,8 +33,10 @@ import coil.transform.CircleCropTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.LogoWithText
+import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.DayModel
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.HourlyModel
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
+import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.DayState
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.HourlyState
 import com.nipun.oceanbin.ui.theme.*
 
@@ -37,6 +45,7 @@ import com.nipun.oceanbin.ui.theme.*
 fun TopWeather(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    offset : Float,
 ) {
     val weatherState = homeViewModel.weatherState.value
     val weatherInfo = weatherState.data
@@ -56,7 +65,7 @@ fun TopWeather(
                     add(SvgDecoder(LocalContext.current))
                 }
                 .build()
-            CompositionLocalProvider(LocalImageLoader provides imageLoader ) {
+            CompositionLocalProvider(LocalImageLoader provides imageLoader) {
                 Image(
                     painter = rememberImagePainter(
                         data = weatherInfo.iconId,
@@ -117,10 +126,12 @@ fun TopWeather(
                 )
             }
         }
-        Spacer(modifier = Modifier.size(MediumSpacing))
+        Spacer(modifier = Modifier.size(IconSize))
         HourlyComp(
             hourlyState = homeViewModel.hourlyState.value,
-            modifier = Modifier.fillMaxSize()
+            dailyState = homeViewModel.dayState.value,
+            modifier = Modifier.fillMaxSize(),
+            offset = offset
         )
     }
 }
@@ -128,17 +139,17 @@ fun TopWeather(
 @Composable
 fun HourlyComp(
     modifier: Modifier = Modifier,
-    hourlyState: HourlyState
+    hourlyState: HourlyState,
+    dailyState: DayState,
+    offset: Float
 ) {
     val hourlyInfo = hourlyState.data
-    Column(modifier = modifier) {
-        Text(
-            text = "Hourly Update",
-            style = MaterialTheme.typography.h3,
-            fontWeight = FontWeight.Bold,
-            color = MainBg
-        )
-        Spacer(modifier = Modifier.size(ExtraSmallSpacing))
+    val dayValue = dailyState.data
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = modifier
+            .verticalScroll(state = scrollState, enabled = offset>=0.2f)
+    ) {
         LazyRow {
             items(hourlyInfo) { hourlyModel: HourlyModel ->
                 SingleWeatherCard(
@@ -150,6 +161,78 @@ fun HourlyComp(
                         )
                 )
             }
+        }
+        Spacer(modifier = Modifier.size(BigSpacing))
+        HorizontalLine()
+        Spacer(modifier = Modifier.size(SmallSpacing))
+        dayValue.forEachIndexed { index, dayModel ->
+            if (index > 0) Spacer(modifier = Modifier.size(SmallSpacing))
+            SingleDayCard(
+                dayModel = dayModel, index = index,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SmallSpacing)
+            )
+        }
+    }
+}
+
+@Composable
+fun SingleDayCard(
+    dayModel: DayModel,
+    index: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (index == 0) "Today" else dayModel.getDay(),
+            style = MaterialTheme.typography.body1,
+            color = MainBg
+        )
+        val imageLoader = ImageLoader.Builder(LocalContext.current)
+            .componentRegistry {
+                add(SvgDecoder(LocalContext.current))
+            }
+            .build()
+        CompositionLocalProvider(LocalImageLoader provides imageLoader) {
+            Image(
+                painter = rememberImagePainter(
+                    data = dayModel.iconId,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                        crossfade(true)
+                    },
+                ),
+                contentDescription = "Cloud Image",
+                modifier = Modifier
+                    .height(DrawerHeight)
+                    .size(IconSize),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = dayModel.minTemp.toString(),
+                style = MaterialTheme.typography.body1,
+                fontWeight = FontWeight.Thin,
+                fontFamily = RobotoFamily,
+                color = MainBg
+            )
+            Spacer(modifier = Modifier.size(MediumSpacing))
+            Text(
+                text = dayModel.maxTemp.toString(),
+                style = MaterialTheme.typography.body1,
+                color = MainBg
+            )
         }
     }
 }
@@ -175,7 +258,7 @@ fun SingleWeatherCard(
                     add(SvgDecoder(LocalContext.current))
                 }
                 .build()
-            CompositionLocalProvider(LocalImageLoader provides imageLoader ) {
+            CompositionLocalProvider(LocalImageLoader provides imageLoader) {
                 Image(
                     painter = rememberImagePainter(
                         data = hourlyModel.iconId,
@@ -204,5 +287,22 @@ fun SingleWeatherCard(
                 color = MainBg
             )
         }
+    }
+}
+
+@Composable
+fun HorizontalLine() {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = ExtraBigSpacing)
+    ) {
+        drawLine(
+            color = LightBgShade,
+            start = Offset(0f, 0f),
+            end = Offset(this.size.width * 1f, 0f),
+            strokeWidth = 4f,
+            cap = StrokeCap.Round
+        )
     }
 }

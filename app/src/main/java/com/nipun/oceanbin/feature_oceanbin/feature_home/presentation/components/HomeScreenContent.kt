@@ -32,10 +32,10 @@ fun HomeScreenContent(
         EnableLocationBySetting()
     }
     val minOffSet = 0.13f
-    val maxOffset = 0.9f
+    val maxOffset = 0.94f
     val scrollOffset = 20f
     var sizeState by remember {
-        mutableStateOf(minOffSet)
+        mutableStateOf(0.25f)
     }
     val size by animateFloatAsState(
         targetValue = sizeState,
@@ -45,9 +45,6 @@ fun HomeScreenContent(
         )
     )
     val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(key1 = true){
-        sizeState = 0.25f
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +71,8 @@ fun HomeScreenContent(
                 )
                 .fillMaxWidth()
                 .fillMaxHeight(size),
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            offset = sizeState
         )
         Box(
             modifier = Modifier

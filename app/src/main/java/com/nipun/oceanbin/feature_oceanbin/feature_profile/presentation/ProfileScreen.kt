@@ -5,12 +5,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.room.PrimaryKey
 import com.nipun.oceanbin.core.LogoWithText
@@ -35,7 +34,7 @@ import org.intellij.lang.annotations.JdkConstants
 
 @Composable
 fun ProfileScreen(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     navController: NavController
 ) {
     ProfileScreenDetails(modifier)
@@ -45,45 +44,83 @@ fun ProfileScreen(
 @Composable
 fun ProfileScreenDetails(
     modifier: Modifier = Modifier
-){
+) {
     Scaffold(backgroundColor = TopbarLightBlue) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.size(BigSpacing))
-            LogoWithText(
-                modifier,
-                color1 = LogoDarkBlue,
-                color2 = LightBgShade
-            )
-            Spacer(modifier = Modifier.size(CurveHeight))
-
-            Image(
-                modifier = modifier
-                    .size(120.dp)
-                    .clip(CircleShape)
-                    .background(Color.LightGray)
-                    .border(3.dp, Color.White, CircleShape),
-                contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "Profile Picture"
-            )
+            Column(
+                modifier = Modifier
+                    .padding(top = BigSpacing)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.3f)
+                    .align(Alignment.TopCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                LogoWithText(
+                    modifier,
+                    color1 = LogoDarkBlue,
+                    color2 = LightBgShade
+                )
+                Box(
+                    modifier = Modifier
+                        .size(ProfileImageSize)
+                ) {
+                    Image(
+                        modifier = modifier
+                            .size(ProfileImageSize)
+                            .clip(CircleShape)
+                            .background(Color.LightGray)
+                            .border(3.dp, MainBg, CircleShape),
+                        contentScale = ContentScale.Crop,
+                        painter = painterResource(id = R.drawable.ic_profile),
+                        contentDescription = "Profile Picture"
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = "Edit profile",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .padding(
+                                bottom = ExtraSmallSpacing,
+                                end = ExtraSmallSpacing
+                            )
+                            .size(IconSize)
+                            .clip(CircleShape)
+                            .border(
+                                width = BigStroke,
+                                shape = CircleShape,
+                                color = Color.Gray
+                            )
+                            .background(MainBg)
+                            .padding(SmallSpacing)
+                            .align(Alignment.BottomEnd)
+                    )
+                }
+            }
             Card(
                 modifier = modifier
-                    .weight(2f),
-                shape = RoundedCornerShape(32.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.755f)
+                    .align(Alignment.BottomCenter)
+                    .zIndex(-1f),
+                shape = RoundedCornerShape(BigSpacing)
             ) {
-                Column(
+                LazyColumn(
                     modifier = modifier
                         .fillMaxSize()
-                        .padding(32.dp)
+                        .padding(BigSpacing)
                 ) {
-                    RecycledWasteCard(weight = 75)
-                    Spacer(modifier = Modifier.size(MediumSpacing))
-                    WalletDetailsCard(balance = 1000)
-                    
+                    item {
+                        Spacer(modifier = Modifier.height(DrawerHeight))
+                    }
+                    item {
+                        RecycledWasteCard(weight = 75)
+                        Spacer(modifier = Modifier.size(MediumSpacing))
+                        WalletDetailsCard(balance = 1000)
+                    }
                 }
             }
         }

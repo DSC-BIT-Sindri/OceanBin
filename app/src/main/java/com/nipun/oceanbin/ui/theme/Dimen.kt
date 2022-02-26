@@ -9,8 +9,10 @@ val MediumSpacing = 15.dp
 val BigSpacing = 20.dp
 val ExtraBigSpacing = 30.dp
 val IconSize = 35.dp
-val CurveHeight = 100.dp
+val CurveHeight = 80.dp
 val LogoSplashSize = 200.dp
+
+val ProfileImageSize = 120.dp
 
 val DrawerHeight = 50.dp
 

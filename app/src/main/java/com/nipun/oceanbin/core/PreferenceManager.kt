@@ -5,8 +5,6 @@ import android.location.Address
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto.WeatherDto
-import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.HourlyDataModel
-import com.nipun.oceanbin.feature_oceanbin.feature_home.local.models.WeatherModel
 import java.util.*
 
 /*
@@ -60,27 +58,6 @@ class PreferenceManager(private val context: Context) {
             return gson.fromJson(str, WeatherDto::class.java)
         } catch (e: Exception) {
             return null
-        }
-    }
-
-    fun saveHourlyUpdate(key: String = HOURLY_KEY,value: HourlyDataModel){
-        with(sharedPreference.edit()){
-            val gson = Gson()
-            putString(key, gson.toJson(value))
-            commit()
-        }
-    }
-
-    fun getHourlyUpdate(key: String = HOURLY_KEY) : HourlyDataModel {
-        val gson = Gson()
-        val str = sharedPreference.getString(key, "")
-        try {
-            if (str.isNullOrEmpty()) return HourlyDataModel(
-                emptyList()
-            )
-            return gson.fromJson(str, HourlyDataModel::class.java)
-        } catch (e: Exception) {
-            return HourlyDataModel(emptyList())
         }
     }
 

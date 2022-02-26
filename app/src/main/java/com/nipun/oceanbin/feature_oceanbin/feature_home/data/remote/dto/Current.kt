@@ -13,7 +13,7 @@ data class Current(
     val pressure: Int,
     val snow: Snow,
     val temp: Double,
-    val uvi: Int,
+    val uvi: Double,
     val visibility: Int,
     val weather: List<Weather>,
     val wind_deg: Int,
@@ -22,7 +22,7 @@ data class Current(
 ) {
     fun toWeatherModel() : WeatherModel{
         return WeatherModel(
-            temperature = temp.toInt(),
+            temperature = feels_like.toInt(),
             weather = weather[0].description,
             iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg"
         )

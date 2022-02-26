@@ -41,6 +41,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = MediumTextSize,
         color = Color.Black
+    ),h4 = TextStyle(
+        fontFamily = RobotoFamily,
+        fontWeight = FontWeight.Black,
+        fontSize = 20.sp,
+        color = Color.Black
     )
     /* Other default text styles to override
     button = TextStyle(

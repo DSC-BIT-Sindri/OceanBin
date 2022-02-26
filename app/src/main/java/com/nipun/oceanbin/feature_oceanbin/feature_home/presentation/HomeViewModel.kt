@@ -12,6 +12,7 @@ import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.core.getTimeInString
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.LocationRepository
+import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.DayState
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.HourlyState
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.WeatherState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +35,9 @@ class HomeViewModel @Inject constructor(
 
     private val _hourlyState = mutableStateOf(HourlyState())
     val hourlyState: State<HourlyState> = _hourlyState
+
+    private val _dayState = mutableStateOf(DayState())
+    val dayState: State<DayState> = _dayState
 
     val hasPermission = preferenceManager.getBoolean(Constant.Has_Location, false)
 
@@ -72,6 +76,14 @@ class HomeViewModel @Inject constructor(
                                 }
                             }
                         )
+                        _dayState.value = DayState(
+                            isLoading = true,
+                            data = data.daily.filterIndexed { index,_ ->
+                                index<7
+                            }.map {
+                                it.toDailyModel()
+                            }
+                        )
                     }
                 }
                 is Resource.Error -> {
@@ -99,6 +111,14 @@ class HomeViewModel @Inject constructor(
                                 }
                             }
                         )
+                        _dayState.value = DayState(
+                            isLoading = false,
+                            data = data.daily.filterIndexed { index,_ ->
+                                index<7
+                            }.map {
+                                it.toDailyModel()
+                            }
+                        )
                     }
                 }
                 is Resource.Success -> {
@@ -123,6 +143,14 @@ class HomeViewModel @Inject constructor(
                                     time = if (index == 0) "Now" else hourData.dt.toInt()
                                         .getTimeInString()
                                 }
+                            }
+                        )
+                        _dayState.value = DayState(
+                            isLoading = false,
+                            data = data.daily.filterIndexed { index,_ ->
+                                index<7
+                            }.map {
+                                it.toDailyModel()
                             }
                         )
                     }

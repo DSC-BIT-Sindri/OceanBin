@@ -10,10 +10,10 @@ data class WeatherDto(
     val lon: Double,
     val timezone: String,
     val timezone_offset: Int,
-    val timeStamp : Long = 0L
+    var timeStamp : Long = 0L
 ) : Serializable{
     fun isCallApi() : Boolean{
         val currentTime = System.currentTimeMillis()
-        return (currentTime>(timeStamp+3600000))
+        return (currentTime>=(timeStamp+3600000))
     }
 }

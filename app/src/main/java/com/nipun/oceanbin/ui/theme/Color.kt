@@ -19,3 +19,4 @@ val ShadowColor = Color(0x80bfafb2)
 // added by me
 val LogoDarkBlue = Color(0xFF0C4D8D)
 val TopbarLightBlue = Color(0xFFC6E9F7)
+val WeatherCardBorder = Color(0xFF3485C6)

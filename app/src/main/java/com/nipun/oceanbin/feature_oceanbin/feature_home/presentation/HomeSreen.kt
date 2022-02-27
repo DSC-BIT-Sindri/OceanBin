@@ -78,11 +78,11 @@ fun HomeScreen(
                     HomeScreenContent(navController = navController, homeViewModel)
                 }) {
             }
-        }else{
-            Log.e("NipunL","Set not show rational")
+        } else {
+            Log.e("NipunL", "Set not show rational")
             homeViewModel.setHasPermission(false)
             homeViewModel.setCount()
-            HomeScreenContent(navController = navController,homeViewModel)
+            HomeScreenContent(navController = navController, homeViewModel)
         }
     }
 }
@@ -106,7 +106,8 @@ fun ShowPermissionDialogue(
             text = {
                 Text(
                     text = stringResource(id = R.string.show_location_quote),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.body1
                 )
             },
             confirmButton = {

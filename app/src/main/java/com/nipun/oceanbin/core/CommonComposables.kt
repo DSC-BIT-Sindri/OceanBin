@@ -18,6 +18,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.ui.theme.IconSize
+import com.nipun.oceanbin.ui.theme.LargeTextSize
 import com.nipun.oceanbin.ui.theme.RobotoFamily
 
 @Composable
@@ -44,7 +45,7 @@ fun LogoWithText(
                     style = SpanStyle(
                         color = color1,
                         fontFamily = RobotoFamily,
-                        fontSize = 28.sp,
+                        fontSize = LargeTextSize,
                         fontWeight = FontWeight.Bold
                     )
                 ) {
@@ -54,7 +55,7 @@ fun LogoWithText(
                     style = SpanStyle(
                         color = color2,
                         fontFamily = RobotoFamily,
-                        fontSize = 28.sp,
+                        fontSize = LargeTextSize,
                         fontWeight = FontWeight.Normal
                     )
                 ) {

@@ -63,9 +63,10 @@ fun WeatherScreenDetails(
         ),
     )
 
-    Scaffold(backgroundColor = Color.LightGray) {
+    Scaffold(backgroundColor = MaterialTheme.colors.background) {
         Box(
             modifier = Modifier
+                .padding(bottom = DrawerHeight)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
@@ -142,9 +143,7 @@ fun DisplayWeatherRow(
         ) {
             Text(
                 text = weatherType,
-                fontFamily = RobotoFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                style = MaterialTheme.typography.subtitle1,
             )
             Spacer(modifier = Modifier.size(MediumSpacing))
             LazyRow(

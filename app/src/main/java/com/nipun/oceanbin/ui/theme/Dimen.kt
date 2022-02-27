@@ -24,4 +24,7 @@ val MediumStroke = 1.dp
 val SmallStroke = 0.5.dp
 
 val SplashTextSize = 36.sp
-val MediumTextSize = 24.sp
+val LargeTextSize = 26.sp
+val MediumTextSize = 20.sp
+val SmallTextSize = 18.sp
+val BodyTextSize = 16.sp

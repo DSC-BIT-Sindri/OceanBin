@@ -22,19 +22,19 @@ import java.security.AllPermission
 
 @Composable
 fun CurrentWeatherCard(
-    modifier : Modifier = Modifier,
-    date : String,
-    day : String,
-    temperature : Int,
-    temperatureDetail : String,
-    location : String,
-    imageId : Int
+    modifier: Modifier = Modifier,
+    date: String,
+    day: String,
+    temperature: Int,
+    temperatureDetail: String,
+    location: String,
+    imageId: Int
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(MediumSpacing)
-    ){
+    ) {
         Card(
             modifier = modifier
                 .fillMaxWidth(),
@@ -44,7 +44,7 @@ fun CurrentWeatherCard(
             Box(
                 modifier = modifier
                     .fillMaxWidth()
-            ){
+            ) {
                 Column(
                     modifier = modifier
                         .padding(top = BigSpacing, end = MediumSpacing)
@@ -117,15 +117,19 @@ fun CurrentWeatherCard(
 
 @Composable
 fun SmallWeatherCard(
-    modifier : Modifier = Modifier,
-    time : String,
-    percentage : Int,
+    modifier: Modifier = Modifier,
+    time: String,
+    percentage: Int,
     imageId: Int
 ) {
     Card(
         modifier = modifier
-            .border(2.dp, LogoDarkBlue, RoundedCornerShape(20.dp)),
-        shape = RoundedCornerShape(20.dp),
+            .border(
+                MediumStroke,
+                WeatherCardBorder,
+                RoundedCornerShape(MediumSpacing)
+            ),
+        shape = RoundedCornerShape(MediumSpacing),
         backgroundColor = TopbarLightBlue,
     ) {
         Column(

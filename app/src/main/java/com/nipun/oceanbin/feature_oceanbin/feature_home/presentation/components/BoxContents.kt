@@ -68,8 +68,7 @@ fun BoxContents(
             item {
                 Text(
                     text = "NEWS",
-                    style = MaterialTheme.typography.h3,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.subtitle1,
                     modifier = Modifier.padding(start = IconSize)
                 )
                 Spacer(modifier = Modifier.height(MediumSpacing))
@@ -105,7 +104,7 @@ fun BoxContents(
         ) {
             Text(
                 text = "Request",
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.h4,
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(ExtraSmallSpacing))
@@ -126,7 +125,7 @@ fun BoxContents(
                             style = SpanStyle(
                                 color = MainBg,
                                 fontFamily = RobotoFamily,
-                                fontSize = 24.sp,
+                                fontSize = MediumTextSize,
                                 fontWeight = FontWeight.Bold
                             )
                         ) {
@@ -136,7 +135,7 @@ fun BoxContents(
                             style = SpanStyle(
                                 color = MainBg,
                                 fontFamily = RobotoFamily,
-                                fontSize = 24.sp,
+                                fontSize = MediumTextSize,
                                 fontWeight = FontWeight.Normal
                             )
                         ) {
@@ -149,7 +148,9 @@ fun BoxContents(
                     modifier = Modifier.padding(
                         horizontal = BigSpacing,
                         vertical = ExtraSmallSpacing
-                    )
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Spacer(modifier = Modifier.size(DrawerHeight))

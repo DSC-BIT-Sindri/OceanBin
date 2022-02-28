@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
+import com.nipun.oceanbin.core.GpsProvider
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapRepository
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,21 @@ class MapRepositoryImpl(
         }catch (e : Exception){
             emit(Resource.Error<LatLng>(
                 message = "Something went wrong"
+            ))
+        }
+    }
+
+    override fun getInitLocation(): Flow<Resource<LatLng>> = flow{
+        emit(Resource.Loading<LatLng>(data = null))
+        val gpsProvider = GpsProvider(context)
+        if(gpsProvider.canGetLocation){
+            gpsProvider.getLocation()
+            emit(Resource.Success<LatLng>(
+                data = gpsProvider.latLang!!
+            ))
+        }else{
+            emit(Resource.Error<LatLng>(
+                message = "Location service is disabled"
             ))
         }
     }

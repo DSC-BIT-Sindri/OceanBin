@@ -2,6 +2,7 @@ package com.nipun.oceanbin.core
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
+import androidx.core.app.ActivityCompat
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -106,4 +108,18 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
         interactionSource = remember { MutableInteractionSource() }) {
         onClick()
     }
+}
+
+fun hasPermission(context: Context, permissions: List<String>): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        permissions.forEach { permission ->
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+                return false
+        }
+    }
+    return true
 }

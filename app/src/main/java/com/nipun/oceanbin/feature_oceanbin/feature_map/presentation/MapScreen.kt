@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,8 +34,11 @@ fun MapScreen(
     mapViewModel: MapViewModel = hiltViewModel()
 ) {
     val locationState = mapViewModel.location.value
-    val location = locationState.data
+    val location = locationState.data.latLang
     val mapState = mapViewModel.mapState.value
+    var address by remember {
+        mutableStateOf(locationState.data.address)
+    }
     var zoomState by remember {
         mutableStateOf(11f)
     }
@@ -61,6 +63,7 @@ fun MapScreen(
                 location, zoomState
             )
         )
+        address = locationState.data.address
     }
     val uiSettings = remember {
         MapUiSettings(
@@ -73,7 +76,7 @@ fun MapScreen(
             .padding(bottom = DrawerHeight)
             .fillMaxSize(),
         floatingActionButton = {
-            mapState.latLang?.let { currentLocation ->
+            mapState.data.latLang.let { currentLocation ->
                 FloatingActionButton(onClick = {
                     zoomState = 16f
                     coroutineScope.launch {
@@ -119,7 +122,8 @@ fun MapScreen(
                 ) {
                     SearchBox(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxSize(),
+                        location = address
                     ) {
                         mapViewModel.searchLocation(it)
                     }
@@ -143,15 +147,12 @@ fun MapScreen(
                     .zIndex(-1f)
                     .alpha(0.75f),
             ) {
-                mapState.latLang?.let { currentLocation ->
+                mapState.data.latLang.let { currentLocation ->
                     Circle(
                         center = currentLocation,
                         fillColor = WeatherCardBgLowAlpha,
                         strokeColor = WeatherCardBgLowAlpha,
                         radius = 2500.0,
-                    )
-                    val points = listOf(
-                        currentLocation, location
                     )
                 }
                 Marker(position = location)
@@ -160,7 +161,8 @@ fun MapScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .aspectRatio(1f)
+                    .aspectRatio(1f),
+                address = address
             )
         }
     }
@@ -169,10 +171,11 @@ fun MapScreen(
 @Composable
 fun SearchBox(
     modifier: Modifier = Modifier,
+    location : String = "",
     onSearchClick: (String) -> Unit = {}
 ) {
     var text by remember {
-        mutableStateOf("Nipun")
+        mutableStateOf(location)
     }
     Surface(
         modifier = modifier,
@@ -229,7 +232,8 @@ fun SearchBox(
 
 @Composable
 fun BottomDialogueForMap(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    address : String = ""
 ) {
     Surface(
         modifier = modifier
@@ -247,15 +251,16 @@ fun BottomDialogueForMap(
         ) {
             Spacer(modifier = Modifier.size(MediumSpacing))
             PickupTextField(
-                leadingIcon = R.drawable.ic_location,
+                leadingIcon = R.drawable.ic_carbon_map,
                 placeHolder = "Confirm your address",
+                startText = address,
                 modifier = Modifier
                     .padding(horizontal = BigSpacing)
                     .fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(MediumSpacing))
             PickupTextField(
-                leadingIcon = R.drawable.ic_location,
+                leadingIcon = R.drawable.ic_clock,
                 placeHolder = "Time",
                 modifier = Modifier
                     .padding(horizontal = BigSpacing)
@@ -263,7 +268,7 @@ fun BottomDialogueForMap(
             )
             Spacer(modifier = Modifier.size(MediumSpacing))
             PickupTextField(
-                leadingIcon = R.drawable.ic_location,
+                leadingIcon = R.drawable.ic_date_picker,
                 placeHolder = "Date",
                 modifier = Modifier
                     .padding(horizontal = BigSpacing)
@@ -295,12 +300,13 @@ fun BottomDialogueForMap(
 
 @Composable
 fun PickupTextField(
+    modifier: Modifier = Modifier,
     leadingIcon: Int,
     placeHolder: String,
-    modifier: Modifier = Modifier
+    startText : String = "",
 ) {
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(startText)
     }
     Card(
         modifier = modifier,

@@ -28,6 +28,7 @@ import androidx.room.PrimaryKey
 import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.ui.theme.*
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.PersonalDetails
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.RecycledWasteCard
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.WalletDetailsCard
 import org.intellij.lang.annotations.JdkConstants
@@ -45,7 +46,10 @@ fun ProfileScreen(
 fun ProfileScreenDetails(
     modifier: Modifier = Modifier
 ) {
-    Scaffold(backgroundColor = TopbarLightBlue) {
+    Scaffold(
+        backgroundColor = TopbarLightBlue,
+        modifier = modifier
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -108,18 +112,41 @@ fun ProfileScreenDetails(
                     .zIndex(-1f),
                 shape = RoundedCornerShape(BigSpacing)
             ) {
-                LazyColumn(
-                    modifier = modifier
+                Column(
+                    modifier = Modifier
                         .fillMaxSize()
-                        .padding(BigSpacing)
+                        .padding(vertical = BigSpacing)
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.height(DrawerHeight))
-                    }
-                    item {
-                        RecycledWasteCard(weight = 75)
-                        Spacer(modifier = Modifier.size(MediumSpacing))
-                        WalletDetailsCard(balance = 1000)
+                    Spacer(modifier = Modifier.height(DrawerHeight))
+                    LazyColumn(
+                        modifier = modifier
+                            .fillMaxSize()
+                            .padding(vertical = BigSpacing)
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(SmallSpacing))
+                            RecycledWasteCard(
+                                weight = 75,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.size(MediumSpacing))
+                            WalletDetailsCard(
+                                balance = 1000,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
+                        item {
+                            Spacer(modifier = Modifier.size(MediumSpacing))
+                            PersonalDetails(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        vertical = SmallSpacing
+                                    )
+                            )
+                        }
                     }
                 }
             }

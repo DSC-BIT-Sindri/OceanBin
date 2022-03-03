@@ -32,10 +32,10 @@ fun HomeScreenContent(
         EnableLocationBySetting()
     }
     val minOffSet = 0.13f
-    val maxOffset = 0.94f
+    val maxOffset = 0.87f
     val scrollOffset = 20f
     var sizeState by remember {
-        mutableStateOf(0.25f)
+        mutableStateOf(0.23f)
     }
     val size by animateFloatAsState(
         targetValue = sizeState,
@@ -83,7 +83,16 @@ fun HomeScreenContent(
                     .fillMaxSize(),
                 homeViewModel = homeViewModel,
                 navController = navController,
-            )
+                expanded = sizeState == maxOffset
+            ){
+                coroutineScope.launch {
+                    if(sizeState != maxOffset){
+                        sizeState = maxOffset
+                    }else{
+                        sizeState = minOffSet
+                    }
+                }
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = RobotoFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
+        fontSize = 35.sp,
         color = Color.White
     ),
     h2 = TextStyle(
@@ -68,6 +68,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = BodyTextSize,
         color = Color.White
+    ),
+    overline = TextStyle(
+        fontFamily = RobotoFamily,
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        color = Color.Gray
     )
     /* Other default text styles to override
     button = TextStyle(

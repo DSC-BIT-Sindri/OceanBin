@@ -1,9 +1,9 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.state
 
-import com.google.android.gms.maps.model.LatLng
+import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapModel
 
 data class LocationState(
     val isLoading : Boolean = false,
-    val data : LatLng = LatLng(0.0,0.0),
+    val data : MapModel = MapModel(),
     val message : String? = null
 )

@@ -1,12 +1,8 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.data
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.model.LatLng
 import com.nipun.oceanbin.core.GpsProvider
 import com.nipun.oceanbin.core.PreferenceManager
@@ -26,17 +22,6 @@ class LocationRepositoryImpl(
 ) : LocationRepository {
 
     private val prefManager = PreferenceManager(context)
-    private val data = prefManager.getWeather()
-
-    private fun hasPermission(): Boolean {
-        return !(ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED)
-    }
 
     override fun getLocation(): Flow<Resource<WeatherDto>> = flow {
         val data = prefManager.getWeather()

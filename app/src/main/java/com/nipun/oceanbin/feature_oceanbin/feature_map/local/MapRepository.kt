@@ -8,5 +8,5 @@ interface MapRepository {
 
     fun getLatLong(query : String) : Flow<Resource<LatLng>>
 
-    fun getInitLocation() : Flow<Resource<LatLng>>
+    fun getInitLocation() : Flow<Resource<MapModel>>
 }

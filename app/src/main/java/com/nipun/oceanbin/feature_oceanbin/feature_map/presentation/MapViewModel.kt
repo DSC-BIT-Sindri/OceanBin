@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapProperties
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
+import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapModel
 import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapRepository
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.state.LocationState
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.state.MapState
@@ -43,7 +44,7 @@ class MapViewModel @Inject constructor(
                             maxZoomPreference = 20f,
                             minZoomPreference = 2f
                         ),
-                        latLang = result.data
+                        data = result.data ?: MapModel()
                     )
                     _location.value = LocationState(
                         isLoading = false,
@@ -57,7 +58,7 @@ class MapViewModel @Inject constructor(
                             maxZoomPreference = 20f,
                             minZoomPreference = 2f
                         ),
-                        latLang = result.data
+                        data = result.data ?: MapModel()
                     )
                 }
                 is Resource.Error -> {
@@ -67,7 +68,7 @@ class MapViewModel @Inject constructor(
                             maxZoomPreference = 20f,
                             minZoomPreference = 2f
                         ),
-                        latLang = result.data
+                        data = result.data ?: MapModel()
                     )
                 }
             }
@@ -81,20 +82,44 @@ class MapViewModel @Inject constructor(
                 is Resource.Success -> {
                     _location.value = LocationState(
                         isLoading = false,
-                        data = result.data ?: location.value.data
+                        data = result.data?.let { latLng ->
+                            MapModel(
+                                latLang = latLng,
+                                preferenceManager.getAddress(
+                                    latitude = latLng.latitude,
+                                    longitude = latLng.longitude
+                                )
+                            )
+                        } ?: location.value.data
                     )
                 }
                 is Resource.Error -> {
                     _location.value = LocationState(
                         isLoading = false,
-                        data = result.data ?: location.value.data,
+                        data = result.data?.let { latLng ->
+                            MapModel(
+                                latLang = latLng,
+                                preferenceManager.getAddress(
+                                    latitude = latLng.latitude,
+                                    longitude = latLng.longitude
+                                )
+                            )
+                        } ?: location.value.data,
                         message = result.message
                     )
                 }
                 is Resource.Loading -> {
                     _location.value = LocationState(
                         isLoading = true,
-                        data = result.data ?: location.value.data
+                        data = result.data?.let { latLng ->
+                            MapModel(
+                                latLang = latLng,
+                                preferenceManager.getAddress(
+                                    latitude = latLng.latitude,
+                                    longitude = latLng.longitude
+                                )
+                            )
+                        } ?: location.value.data
                     )
                 }
             }

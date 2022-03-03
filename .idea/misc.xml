@@ -13,6 +13,12 @@
         <entry key="../../../../layout/compose-model-1645871057796.xml" value="0.2111111111111111" />
         <entry key="../../../../layout/compose-model-1645871215765.xml" value="0.25" />
         <entry key="../../../../layout/compose-model-1645883195761.xml" value="0.9" />
+        <entry key="../../../../layout/compose-model-1646322398623.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1646322433937.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1646323097115.xml" value="0.2964527027027027" />
+        <entry key="../../../../layout/compose-model-1646326224014.xml" value="0.2964527027027027" />
+        <entry key="../../../../layout/compose-model-1646328754477.xml" value="0.2972972972972973" />
+        <entry key="../../../../layout/compose-model-1646328779951.xml" value="0.2972972972972973" />
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/drawable/group.xml" value="0.1825" />
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/drawable/group_63.xml" value="0.1825" />
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/drawable/group_64.xml" value="0.1825" />
@@ -48,7 +54,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

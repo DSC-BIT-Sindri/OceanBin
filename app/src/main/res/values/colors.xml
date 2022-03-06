@@ -8,7 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_bg">#FF1BA5DE</color>
+    <color name="volunteer_onboarding_bg">#FFF5C2</color>
     <color name="light_bg_comp">#FF0DA0DF</color>
     <color name="light_bg_shade">#801BA5DE</color>
     <color name="transparent_color">#00000000</color>
+    <color name="beach_onboard_bg">#F1E2AA</color>
+    <color name="beach_onboard_light_bg">#FFF5C2</color>
+    <color name="transparent">#0000ffff </color>
 </resources>

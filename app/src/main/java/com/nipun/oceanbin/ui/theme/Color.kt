@@ -21,3 +21,12 @@ val ShadowColor = Color(0x80bfafb2)
 val LogoDarkBlue = Color(0xFF0C4D8D)
 val TopbarLightBlue = Color(0xFFC6E9F7)
 val WeatherCardBorder = Color(0xFF3485C6)
+
+//onboarding beach, who are you & login/signup resources
+val Background=Color(0xFF937020)
+val LightBackground=Color(0xFFFFF5C2)
+val Brown=Color(0xFF60311F)
+val LightBlue=Color(0xFFC6E9F7)
+val Purple=Color(0xFF3479BD)
+val GreenBorder=Color(0xFF009136)
+val TextLoginColor=Color(0xFF787878)

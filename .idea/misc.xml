@@ -50,11 +50,28 @@
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/drawable/vector__3_.xml" value="0.2385" />
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/drawable/vector__4_.xml" value="0.2385" />
         <entry key="..\:/Android_Project/OceanBin/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1655" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable-v24/ic_viewpager_bg2.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable-v24/ic_viewpager_bg_beach.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable-v24/who_are_you_bg.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/fisherman.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/group__1_.xml" value="0.1" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_boat.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_carbon_map.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_man.xml" value="0.1055" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_next.xml" value="0.1" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_splash_screen.xml" value="0.1" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_viewpager_bg.xml" value="0.134" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_viewpager_bg_beach.xml" value="0.1" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/ic_whoareyour_bg.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/object.xml" value="0.1" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/path_143.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/splash_bg.xml" value="0.1325" />
+        <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/volunteer.xml" value="0.1325" />
         <entry key="app/src/main/res/drawable/ic_cloud_icon.xml" value="0.3405" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

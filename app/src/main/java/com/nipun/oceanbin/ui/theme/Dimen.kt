@@ -7,6 +7,7 @@ val ExtraSmallSpacing = 5.dp
 val SmallSpacing = 10.dp
 val MediumSpacing = 15.dp
 val BigSpacing = 20.dp
+val BigSpacingBeach = 40.dp
 val ExtraBigSpacing = 30.dp
 val IconSize = 35.dp
 val CurveHeight = 80.dp
@@ -28,3 +29,5 @@ val LargeTextSize = 26.sp
 val MediumTextSize = 20.sp
 val SmallTextSize = 18.sp
 val BodyTextSize = 16.sp
+
+val WhoAreYouTextSize=40.sp

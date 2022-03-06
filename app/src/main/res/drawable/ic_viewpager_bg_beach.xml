@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="428dp"
+    android:height="926dp"
+    android:viewportWidth="428"
+    android:viewportHeight="926">
+    <group>
+        <clip-path
+            android:pathData="M0,0h428v926h-428z"/>
+        <path
+            android:pathData="M0,0h428v926h-428z"
+            android:fillColor="@color/beach_onboard_light_bg"/>
+        <group>
+            <clip-path
+                android:pathData="M-197,112h751.997v814.674h-751.997z"/>
+            <path
+                android:pathData="M-102.919,810.861C-194.874,756.694 -143.563,688.567 -141.051,604.802C-139.102,539.655 -193.265,481.823 -126.809,399.122C-105.734,372.891 -51.83,369.693 -25.879,339.95C8.003,301.119 12.684,216.283 52.202,190.397C96.383,161.453 185.019,189.413 230.891,177.864C324.021,154.415 397.717,83.433 462.634,139.597C509.385,180.044 488.967,292.36 496.411,356.483C504.345,424.839 552.039,510.421 517.054,584.641C496.761,627.685 424.107,655.641 389.857,694.887C350.537,739.949 333.221,814.059 286.762,841.588C239.046,869.858 167.158,838.699 118.65,846.961C64.212,856.231 35.88,931.639 -10.443,913.656C-34.651,904.256 -81.918,823.231 -102.919,810.861Z"
+                android:strokeAlpha="0.75"
+                android:fillColor="@color/beach_onboard_bg"
+                android:fillAlpha="1.0"/>
+        </group>
+        <path
+            android:pathData="M81,283h266v236h-266z"/>
+    </group>
+</vector>

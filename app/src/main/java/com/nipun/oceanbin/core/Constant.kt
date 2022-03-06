@@ -8,4 +8,5 @@ object Constant {
 
     const val API_KEY = "16f891a081653d2c21b4ec4e6ebaae3a"
     const val WEATHER_KEY = "weather_key"
+
 }

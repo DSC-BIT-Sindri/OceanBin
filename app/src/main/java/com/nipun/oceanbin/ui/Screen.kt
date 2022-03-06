@@ -10,6 +10,11 @@ package com.nipun.oceanbin.ui
  */
 sealed class Screen(val route : String,val label : String = ""){
     object SplashScreen : Screen(route = "splash")
-    object SplashViewPager : Screen(route = "splashViewPager")
+    object WhoAreYouScreen: Screen(route = "who are you?")
+    object SplashSeaViewPager : Screen(route = "splashseaviewpager")
+    object SplashBeachViewPager : Screen(route = "splashbviewpager")
+    object DoLoginSignup:Screen(route="dologinsignup")
+    object Login:Screen("login")
+    object Signup:Screen("signup")
     object BottomScreen : Screen(route = "home")
 }

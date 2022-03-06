@@ -629,7 +629,7 @@ fun DoLoginSignup(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LogoWithText(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top= MediumSpacing),
             color1 = LogoDarkBlue,
             color2 = LightBgShade
         )
@@ -704,7 +704,7 @@ fun Login(
                 .fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             LogoWithText(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top= ExtraBigSpacing),
                 color1 = LogoDarkBlue,
                 color2 = LightBgShade
             )
@@ -780,7 +780,7 @@ fun Signup(
                 .fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             LogoWithText(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top= ExtraBigSpacing),
                 color1 = LogoDarkBlue,
                 color2 = LightBgShade
             )

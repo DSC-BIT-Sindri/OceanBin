@@ -40,35 +40,11 @@ fun WeatherScreen(
 fun WeatherScreenDetails(
     modifier: Modifier = Modifier
 ) {
-    var temp = listOf<SmallWeatherCardDetails>(
-        SmallWeatherCardDetails(
-            imageId = R.drawable.ic_cloud_icon,
-            percentage = 25,
-            time = "12:00"
-        ),
-        SmallWeatherCardDetails(
-            imageId = R.drawable.ic_cloud_icon,
-            percentage = 25,
-            time = "12:00"
-        ),
-        SmallWeatherCardDetails(
-            imageId = R.drawable.ic_cloud_icon,
-            percentage = 25,
-            time = "12:00"
-        ),
-        SmallWeatherCardDetails(
-            imageId = R.drawable.ic_cloud_icon,
-            percentage = 25,
-            time = "12:00"
-        ),
-    )
-
-    Scaffold(backgroundColor = MaterialTheme.colors.background) {
+    Scaffold(backgroundColor = MaterialTheme.colors.primary) {
         Box(
             modifier = Modifier
                 .padding(bottom = DrawerHeight)
                 .fillMaxSize(),
-            contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = modifier
@@ -79,46 +55,40 @@ fun WeatherScreenDetails(
 
                 LogoWithText(
                     modifier,
-                    color1 = LogoDarkBlue,
-                    color2 = LightBgShade
+                    color1 = MainBg,
+                    color2 = MainBg
                 )
                 Spacer(modifier = Modifier.size(MediumSpacing))
-                
+
                 LazyColumn(
                     modifier = modifier
                         .fillMaxSize()
-                        .padding(top = BigSpacing)
-                ){
-                    item { 
+                ) {
+                    item {
                         CurrentWeatherCard(
                             date = "Feb 21, 2022",
-                            day = "Sunday" ,
-                            temperature = 25 ,
+                            day = "Sunday",
+                            temperature = 25,
                             temperatureDetail = "Shiny Day",
                             location = "Bariatu, Ranchi",
-                            imageId = R.drawable.ic_cloud_icon
+                            imageId = R.drawable.ic_cloud_icon,
+                            modifier = Modifier
+                                .fillMaxWidth()
                         )
                     }
-                    
                     item {
-                        DisplayWeatherRow(
-                            modifier = modifier,
-                            weatherType = "Hourly Weather",
-                            weathers = temp
+                        WeatherUpdate(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(
+                                    shape = RoundedCornerShape(
+                                        topStart = MediumSpacing,
+                                        topEnd = MediumSpacing
+                                    )
+                                )
+                                .background(color = WhiteShade)
                         )
                     }
-                    item{
-                        Spacer(modifier = Modifier.size(MediumSpacing))
-                    }
-                    item{
-                        DisplayWeatherRow(
-                            modifier = modifier,
-                            weatherType = "Daily Weather",
-                            weathers = temp
-                        )
-                    }
-
-
                 }
             }
         }
@@ -126,10 +96,60 @@ fun WeatherScreenDetails(
 }
 
 @Composable
+fun WeatherUpdate(
+    modifier: Modifier = Modifier
+) {
+    val temp = listOf<SmallWeatherCardDetails>(
+        SmallWeatherCardDetails(
+            imageId = R.drawable.ic_cloud_with_outline,
+            percentage = 25,
+            time = "12:00"
+        ),
+        SmallWeatherCardDetails(
+            imageId = R.drawable.ic_cloud_with_outline,
+            percentage = 25,
+            time = "12:00"
+        ),
+        SmallWeatherCardDetails(
+            imageId = R.drawable.ic_cloud_with_outline,
+            percentage = 25,
+            time = "12:00"
+        ),
+        SmallWeatherCardDetails(
+            imageId = R.drawable.ic_cloud_with_outline,
+            percentage = 25,
+            time = "12:00"
+        ),
+    )
+    Column(modifier = modifier) {
+        DisplayWeatherRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            weatherType = "Hourly Weather",
+            weathers = temp
+        )
+        Spacer(modifier = Modifier.size(SmallSpacing))
+        DisplayWeatherRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            weatherType = "Daily Weather",
+            weathers = temp
+        )
+        Spacer(modifier = Modifier.size(SmallSpacing))
+        DisplayWeatherRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            weatherType = "Weekly Weather",
+            weathers = temp
+        )
+    }
+}
+
+@Composable
 fun DisplayWeatherRow(
     modifier: Modifier = Modifier,
-    weatherType : String,
-    weathers : List<SmallWeatherCardDetails>
+    weatherType: String,
+    weathers: List<SmallWeatherCardDetails>
 ) {
     Card(
         modifier = modifier
@@ -148,8 +168,8 @@ fun DisplayWeatherRow(
             Spacer(modifier = Modifier.size(MediumSpacing))
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ){
-                items(weathers){ weather ->
+            ) {
+                items(weathers) { weather ->
                     SmallWeatherCard(
                         time = weather.time,
                         percentage = weather.percentage,

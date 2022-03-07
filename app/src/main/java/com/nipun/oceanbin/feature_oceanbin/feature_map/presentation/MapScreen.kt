@@ -1,5 +1,6 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -28,6 +29,7 @@ import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MapScreen(
     navController: NavController,
@@ -36,9 +38,7 @@ fun MapScreen(
     val locationState = mapViewModel.location.value
     val location = locationState.data.latLang
     val mapState = mapViewModel.mapState.value
-    var address by remember {
-        mutableStateOf(locationState.data.address)
-    }
+    val address = locationState.data.address
     var zoomState by remember {
         mutableStateOf(11f)
     }
@@ -57,13 +57,15 @@ fun MapScreen(
             size
         )
     }
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(BottomSheetValue.Expanded)
+    )
     LaunchedEffect(key1 = locationState) {
         cameraPositionState.animate(
             CameraUpdateFactory.newLatLngZoom(
                 location, zoomState
             )
         )
-        address = locationState.data.address
     }
     val uiSettings = remember {
         MapUiSettings(
@@ -71,7 +73,16 @@ fun MapScreen(
             myLocationButtonEnabled = false
         )
     }
-    Scaffold(
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            BottomDialogueForMap(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                address = address
+            )
+        },
+        sheetPeekHeight = ExtraBigSpacing,
         modifier = Modifier
             .padding(bottom = DrawerHeight)
             .fillMaxSize(),
@@ -157,13 +168,6 @@ fun MapScreen(
                 }
                 Marker(position = location)
             }
-            BottomDialogueForMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .aspectRatio(1f),
-                address = address
-            )
         }
     }
 }
@@ -236,10 +240,8 @@ fun BottomDialogueForMap(
     address : String = ""
 ) {
     Surface(
-        modifier = modifier
-            .offset(0.dp, MediumSpacing),
+        modifier = modifier,
         color = MaterialTheme.colors.background,
-        shape = RoundedCornerShape(BigSpacing),
         elevation = ExtraSmallSpacing
     ) {
         Column(
@@ -249,7 +251,6 @@ fun BottomDialogueForMap(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.size(MediumSpacing))
             PickupTextField(
                 leadingIcon = R.drawable.ic_carbon_map,
                 placeHolder = "Confirm your address",

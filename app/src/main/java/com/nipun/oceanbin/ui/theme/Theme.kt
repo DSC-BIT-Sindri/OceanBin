@@ -1,5 +1,6 @@
 package com.nipun.oceanbin.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -14,12 +15,15 @@ private val DarkColorPalette = darkColors(
     background = MainBg
 )
 
+@SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
+    primary = LightBg,
+    primaryVariant = LightBgShade,
     secondary = Teal200,
     background = MainBg,
-    surface = MainBg
+    surface = MainBg,
+    onBackground = Color.Black,
+    onPrimary = Color.Black
 
     /* Other default colors to override
     background = Color.White,

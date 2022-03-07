@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,88 +33,78 @@ fun CurrentWeatherCard(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(MediumSpacing)
     ) {
-        Card(
-            modifier = modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(BigSpacing),
-            backgroundColor = TopbarLightBlue
+        Column(
+            modifier = Modifier
+                .padding(top = BigSpacing, end = MediumSpacing)
+                .align(Alignment.TopEnd)
         ) {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
+            Text(
+                text = date,
+                fontFamily = RobotoFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                color = MainBg
+            )
+            Text(
+                text = day,
+                fontFamily = RobotoFamily,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                color = MainBg
+            )
+
+        }
+
+        Column(
+            modifier = modifier
+                .padding(top = SmallSpacing)
+                .align(Alignment.TopCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = imageId),
+                contentDescription = "Weather image",
+                Modifier.size(WeatherImageSizeInWeatherScreen)
+            )
+            Text(
+                text = "$temperature ℃",
+                fontFamily = RobotoFamily,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 40.sp,
+                color = MainBg
+            )
+            Text(
+                text = temperatureDetail,
+                fontFamily = RobotoFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                color = MainBg
+            )
+            Row(
+                modifier = modifier,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(
-                    modifier = modifier
-                        .padding(top = BigSpacing, end = MediumSpacing)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Text(
-                        text = date,
-                        fontFamily = RobotoFamily,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        text = day,
-                        fontFamily = RobotoFamily,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp,
-                        color = Color.Gray
-                    )
-
-                }
-
-                Column(
-                    modifier = modifier
-                        .padding(top = SmallSpacing)
-                        .align(Alignment.TopCenter),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(id = imageId),
-                        contentDescription = "Weather image",
-                        Modifier.size(WeatherImageSizeInWeatherScreen)
-                    )
-                    Text(
-                        text = "$temperature ^C",
-                        fontFamily = RobotoFamily,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 40.sp
-                    )
-                    Text(
-                        text = temperatureDetail,
-                        fontFamily = RobotoFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
-                    )
-                    Row(
-                        modifier = modifier,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_location),
-                            contentDescription = "Your location is $location",
-                            tint = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.size(SmallSpacing))
-                        Text(
-                            text = location,
-                            fontFamily = RobotoFamily,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 24.sp,
-                            color = Color.Gray
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(BigSpacing))
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_location),
+                    contentDescription = "Your location is $location",
+                    tint = MainBg
+                )
+                Spacer(modifier = Modifier.size(SmallSpacing))
+                Text(
+                    text = location,
+                    fontFamily = RobotoFamily,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 24.sp,
+                    color = MainBg
+                )
             }
+            Spacer(modifier = Modifier.size(BigSpacing))
         }
     }
 }
+
 
 @Composable
 fun SmallWeatherCard(
@@ -122,45 +113,40 @@ fun SmallWeatherCard(
     percentage: Int,
     imageId: Int
 ) {
-    Card(
+    Column(
         modifier = modifier
-            .border(
-                MediumStroke,
-                WeatherCardBorder,
-                RoundedCornerShape(MediumSpacing)
-            ),
-        shape = RoundedCornerShape(MediumSpacing),
-        backgroundColor = TopbarLightBlue,
+            .size(SmallWeatherCardSize)
+            .padding(SmallSpacing),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
     ) {
-        Column(
-            modifier = modifier
-                .size(SmallWeatherCardSize)
-                .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+        Image(
+            painter = painterResource(id = imageId),
+            contentDescription = "",
+            modifier = modifier.size(50.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = imageId),
-                contentDescription = "",
-                modifier = modifier.size(50.dp)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_humdity),
+                contentDescription = "Humidity",
+                modifier = Modifier
+                    .size(BigSpacing)
+                    .padding(ExtraSmallSpacing),
+                tint = Color.Black
             )
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "$percentage %",
-                    fontFamily = RobotoFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = time,
-                    fontFamily = RobotoFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp
-                )
-            }
+            Text(
+                text = "$percentage %",
+                style = MaterialTheme.typography.overline,
+                fontWeight = FontWeight.Normal
+            )
         }
+        Text(
+            text = time,
+            style = MaterialTheme.typography.h3,
+            fontWeight = FontWeight.Normal
+        )
     }
 }

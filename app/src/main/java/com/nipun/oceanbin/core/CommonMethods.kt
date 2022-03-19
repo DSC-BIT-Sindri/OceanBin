@@ -109,17 +109,3 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
         onClick()
     }
 }
-
-fun hasPermission(context: Context, permissions: List<String>): Boolean {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        permissions.forEach { permission ->
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            )
-                return false
-        }
-    }
-    return true
-}

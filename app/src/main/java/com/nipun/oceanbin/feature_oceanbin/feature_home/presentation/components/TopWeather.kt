@@ -120,7 +120,7 @@ fun TopWeather(
                 )
                 Spacer(modifier = Modifier.height(ExtraSmallSpacing))
                 Text(
-                    text = weatherInfo.getCurrentDate(),
+                    text = weatherInfo.getCurrentDay()+", "+weatherInfo.getCurrentDate(),
                     style = MaterialTheme.typography.h3,
                     color = MainBg
                 )
@@ -239,7 +239,7 @@ fun SingleDayCard(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = if (index == 0) "Today" else dayModel.getDay(),
+            text = dayModel.getDay(index),
             style = MaterialTheme.typography.body1,
             color = MainBg
         )

@@ -629,7 +629,9 @@ fun DoLoginSignup(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LogoWithText(
-            modifier = Modifier.fillMaxWidth().padding(top= MediumSpacing),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = MediumSpacing),
             color1 = LogoDarkBlue,
             color2 = LightBgShade
         )
@@ -704,7 +706,9 @@ fun Login(
                 .fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             LogoWithText(
-                modifier = Modifier.fillMaxWidth().padding(top= ExtraBigSpacing),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = ExtraBigSpacing),
                 color1 = LogoDarkBlue,
                 color2 = LightBgShade
             )
@@ -780,7 +784,9 @@ fun Signup(
                 .fillMaxSize(), contentAlignment = Alignment.TopCenter
         ) {
             LogoWithText(
-                modifier = Modifier.fillMaxWidth().padding(top= ExtraBigSpacing),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = ExtraBigSpacing),
                 color1 = LogoDarkBlue,
                 color2 = LightBgShade
             )
@@ -853,16 +859,30 @@ fun Field(identity: String, content: String, onValueChange: (String) -> Unit) {
             color = TextLoginColor,
             fontSize = SmallTextSize,
         )
-        BasicTextField(
-            value = content, onValueChange = onValueChange,
-            singleLine = true,
+        Surface(
+            shape = RoundedCornerShape(SmallSpacing),
+            border = BorderStroke(
+                width = MediumStroke,
+                color = GreenBorder
+            ),
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .height(40.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
-                .border(width = 1.dp, color = GreenBorder, shape = RoundedCornerShape(10.dp))
-
-        )
+                .aspectRatio(6.5f)
+        ) {
+            TextField(
+                value = content, onValueChange = onValueChange,
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxSize(),
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.Black,
+                    backgroundColor = Color.Transparent,
+                    cursorColor = LightBg,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+        }
     }
 }
 

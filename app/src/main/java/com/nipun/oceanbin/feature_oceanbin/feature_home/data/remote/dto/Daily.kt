@@ -28,7 +28,8 @@ data class Daily(
             timeStamp = dt,
             iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg",
             minTemp = temp.min.toInt(),
-            maxTemp = temp.max.toInt()
+            maxTemp = temp.max.toInt(),
+            humidity = humidity
         )
     }
 }

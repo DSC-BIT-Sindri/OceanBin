@@ -22,7 +22,8 @@ data class Hourly(
     fun toHourlyModel() : HourlyModel{
         return HourlyModel(
             iconId = "https://raw.githubusercontent.com/nipun2003/images/9340eb30c7096b1a010f4ea7b0a4b7afe7ce013d/${weather[0].icon}.svg",
-            temp = feels_like.toInt()
+            temp = feels_like.toInt(),
+            humidity = humidity
         )
     }
 }

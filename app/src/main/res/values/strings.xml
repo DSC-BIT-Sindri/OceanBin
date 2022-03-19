@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">OceanBin</string>
     <string name="location_permission">Location Permission</string>
-    <string name="show_location_quote">The app need the location permission to display the weather information your nearby.</string>
+    <string name="show_location_quote">Proceed to App Permission ?</string>
     <string name="location_service">Location Service</string>
-    <string name="setting_location_dialogue">The app requires Location permission to be able to read location and display accurate weather. \nPlease open settings and accept the permission</string>
+    <string name="setting_location_dialogue">The app requires Location permission to be able to read location and display accurate weather.
+        \nPlease open settings and accept the permission</string>
     <string name="API_KEY">AIzaSyCuDhthNYgyexUXQaoMDVKytRqqaz6Tpy8</string>
 </resources>

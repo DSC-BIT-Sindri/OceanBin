@@ -1,13 +1,9 @@
-package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation
+package com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation
 
-import android.location.Address
-import android.location.Geocoder
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nipun.oceanbin.core.Constant
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.core.getTimeInString
@@ -18,18 +14,13 @@ import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.Weath
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val preferenceManager: PreferenceManager,
-    private val locationRepository: LocationRepository
+class WeatherViewModel @Inject constructor(
+    private val locationRepository: LocationRepository,
+    private val preferenceManager: PreferenceManager
 ) : ViewModel() {
-
-    private val _shouldShowRational = mutableStateOf(true)
-    val shouldShowRational: State<Boolean> = _shouldShowRational
 
     private val _weatherState = mutableStateOf(WeatherState())
     val weatherState: State<WeatherState> = _weatherState
@@ -40,17 +31,11 @@ class HomeViewModel @Inject constructor(
     private val _dayState = mutableStateOf(DayState())
     val dayState: State<DayState> = _dayState
 
-    val hasPermission = preferenceManager.getBoolean(Constant.Has_Location, false)
-
-    var count: Int = 0
-
     init {
-        val key = preferenceManager.getBoolean(Constant.RATIONAL_KEY, true)
-        _shouldShowRational.value = key
-        count = preferenceManager.getInt(Constant.Count_Key, 0)
+        getLocation()
     }
 
-    fun getLocation() {
+    private fun getLocation(){
         locationRepository.getLocation().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -158,26 +143,5 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
-    }
-
-
-    fun setPermanentlyDenied() {
-        preferenceManager.saveBoolean(Constant.RATIONAL_KEY, false)
-        _shouldShowRational.value = false
-    }
-
-    fun setHasPermission(value: Boolean = true) {
-        preferenceManager.saveBoolean(Constant.Has_Location, value)
-    }
-
-    fun setCount() {
-        preferenceManager.saveInteger(
-            Constant.Count_Key,
-            if (count == Constant.Max_Count) 0 else count + 1
-        )
-    }
-
-    sealed class UIEvent {
-        data class ShowSnackBar(val message: String) : UIEvent()
     }
 }

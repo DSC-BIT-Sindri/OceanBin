@@ -9,14 +9,22 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.LocalImageLoader
+import coil.compose.rememberImagePainter
+import coil.decode.SvgDecoder
+import coil.transform.CircleCropTransformation
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.ui.theme.*
 import java.security.AllPermission
@@ -111,7 +119,7 @@ fun SmallWeatherCard(
     modifier: Modifier = Modifier,
     time: String,
     percentage: Int,
-    imageId: Int
+    imageId: String
 ) {
     Column(
         modifier = modifier
@@ -120,11 +128,27 @@ fun SmallWeatherCard(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Image(
-            painter = painterResource(id = imageId),
-            contentDescription = "",
-            modifier = modifier.size(50.dp)
-        )
+        val imageLoader = ImageLoader.Builder(LocalContext.current)
+            .componentRegistry {
+                add(SvgDecoder(LocalContext.current))
+            }
+            .build()
+        CompositionLocalProvider(LocalImageLoader provides imageLoader) {
+            Image(
+                painter = rememberImagePainter(
+                    data = imageId,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                        crossfade(true)
+                    },
+                ),
+                contentDescription = "Cloud Image",
+                modifier = Modifier
+                    .size(DrawerHeight),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center
+            )
+        }
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically

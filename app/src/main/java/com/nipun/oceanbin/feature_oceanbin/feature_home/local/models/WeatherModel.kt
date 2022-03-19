@@ -11,16 +11,16 @@ data class WeatherModel(
     var location: String = "Bariatu, Ranchi",
     var temperature: Int = 25,
     var weather: String = "Shiny Day",
-    var iconId : String = "",
-    val sunRise : String = "04:00",
-    val sunSet : String = "17:30"
+    var iconId: String = "",
+    val sunRise: String = "04:00",
+    val sunSet: String = "17:30"
 ) {
     fun getCurrentDate(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val currentTime = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
             val formatTime = currentTime.format(formatter).substring(0, 12)
-            LocalDateTime.now().dayOfWeek.name + ", " + if (formatTime.get(formatTime.lastIndex) == ',') formatTime.substring(
+           if (formatTime.get(formatTime.lastIndex) == ',') formatTime.substring(
                 0,
                 formatTime.lastIndex
             ) else formatTime
@@ -28,4 +28,15 @@ data class WeatherModel(
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         }
     }
+
+    fun getCurrentDay(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now().dayOfWeek.name
+        } else {
+            val sdf = SimpleDateFormat("EEEE")
+            val d = Date()
+            return sdf.format(d)
+        }
+    }
+
 }

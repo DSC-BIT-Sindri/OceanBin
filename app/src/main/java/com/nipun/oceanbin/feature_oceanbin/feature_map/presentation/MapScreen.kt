@@ -1,6 +1,5 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -17,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -175,7 +173,7 @@ fun MapScreen(
 @Composable
 fun SearchBox(
     modifier: Modifier = Modifier,
-    location : String = "",
+    location: String = "",
     onSearchClick: (String) -> Unit = {}
 ) {
     var text by remember {
@@ -237,7 +235,7 @@ fun SearchBox(
 @Composable
 fun BottomDialogueForMap(
     modifier: Modifier = Modifier,
-    address : String = ""
+    address: String = ""
 ) {
     Surface(
         modifier = modifier,
@@ -247,10 +245,14 @@ fun BottomDialogueForMap(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(SmallSpacing),
+                .padding(
+                    horizontal = ExtraBigSpacing,
+                    vertical = MediumSpacing
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Spacer(modifier = Modifier.size(SmallSpacing))
             PickupTextField(
                 leadingIcon = R.drawable.ic_carbon_map,
                 placeHolder = "Confirm your address",
@@ -292,7 +294,10 @@ fun BottomDialogueForMap(
                     text = "Request Pickup Vehicle",
                     style = MaterialTheme.typography.body1,
                     color = MainBg,
-                    modifier = Modifier.padding(horizontal = SmallSpacing, vertical = ExtraSmallSpacing)
+                    modifier = Modifier.padding(
+                        horizontal = SmallSpacing,
+                        vertical = ExtraSmallSpacing
+                    )
                 )
             }
         }
@@ -304,7 +309,7 @@ fun PickupTextField(
     modifier: Modifier = Modifier,
     leadingIcon: Int,
     placeHolder: String,
-    startText : String = "",
+    startText: String = "",
 ) {
     var text by remember {
         mutableStateOf(startText)

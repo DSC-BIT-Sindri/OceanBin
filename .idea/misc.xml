@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/compose-model-1647662838764.xml" value="0.30194256756756754" />
         <entry key="../../../../layout/compose-model-1645796134236.xml" value="1.0" />
         <entry key="../../../../layout/compose-model-1645796450584.xml" value="0.33" />
         <entry key="../../../../layout/compose-model-1645803981447.xml" value="0.2972972972972973" />
@@ -68,6 +69,8 @@
         <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/path_143.xml" value="0.1325" />
         <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/splash_bg.xml" value="0.1325" />
         <entry key="..\:/Users/anjal/OneDrive/Desktop/Android Project Github/OceanBin/app/src/main/res/drawable/volunteer.xml" value="0.1325" />
+        <entry key="app/src/main/res/drawable-v24/who_are_you_bg.xml" value="0.2985" />
+        <entry key="app/src/main/res/drawable/fisherman.xml" value="0.2985" />
         <entry key="app/src/main/res/drawable/ic_cloud_icon.xml" value="0.3405" />
       </map>
     </option>

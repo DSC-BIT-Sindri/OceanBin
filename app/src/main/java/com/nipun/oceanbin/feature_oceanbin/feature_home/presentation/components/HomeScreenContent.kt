@@ -5,23 +5,22 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nipun.oceanbin.core.Constant
 import com.nipun.oceanbin.core.openSettings
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
-import com.nipun.oceanbin.ui.theme.LightBg
-import com.nipun.oceanbin.ui.theme.MainBg
-import com.nipun.oceanbin.ui.theme.MediumSpacing
+import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreenContent(
     navController: NavController,
@@ -31,35 +30,55 @@ fun HomeScreenContent(
         homeViewModel.setCount()
         EnableLocationBySetting()
     }
-    val minOffSet = 0.13f
-    val maxOffset = 0.87f
-    val scrollOffset = 20f
-    var sizeState by remember {
-        mutableStateOf(0.23f)
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(
+            BottomSheetValue.Expanded
+        )
+    )
+    var size by remember {
+        mutableStateOf(0.78f)
     }
-    val size by animateFloatAsState(
-        targetValue = sizeState,
-        tween(
-            durationMillis = 500,
-            delayMillis = 0
+    val sizeAnimate by animateFloatAsState(
+        targetValue = size,
+        animationSpec = tween(
+            durationMillis = 250
         )
     )
     val coroutineScope = rememberCoroutineScope()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, _, _ ->
-                    val y = pan.y
-                    coroutineScope.launch {
-                        if (y >= scrollOffset) {
-                            sizeState = maxOffset
-                        } else if (y <= -scrollOffset) {
-                            sizeState = minOffSet
-                        }
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            BoxContents(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(sizeAnimate),
+                homeViewModel = homeViewModel,
+                navController = navController,
+                expanded = bottomSheetScaffoldState.bottomSheetState.isExpanded,
+                onDrag = {
+                    if (it > 0)
+                        size = 0.87f
+                }
+            ) {
+                coroutineScope.launch {
+                    if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+                        bottomSheetScaffoldState.bottomSheetState.animateTo(
+                            targetValue = BottomSheetValue.Collapsed
+                        )
+                    } else {
+                        bottomSheetScaffoldState.bottomSheetState.animateTo(
+                            targetValue = BottomSheetValue.Expanded
+                        )
                     }
                 }
             }
+        },
+        sheetPeekHeight = CurveHeight,
+        sheetBackgroundColor = Color.Transparent,
+        sheetElevation = 0.dp,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = DrawerHeight)
     ) {
         TopWeather(
             modifier = Modifier
@@ -69,31 +88,9 @@ fun HomeScreenContent(
                     end = MediumSpacing,
                     top = MediumSpacing
                 )
-                .fillMaxWidth()
-                .fillMaxHeight(size),
+                .fillMaxSize(),
             homeViewModel = homeViewModel
         )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LightBg)
-        ){
-            BoxContents(
-                modifier = Modifier
-                    .fillMaxSize(),
-                homeViewModel = homeViewModel,
-                navController = navController,
-                expanded = sizeState == maxOffset
-            ){
-                coroutineScope.launch {
-                    if(sizeState != maxOffset){
-                        sizeState = maxOffset
-                    }else{
-                        sizeState = minOffSet
-                    }
-                }
-            }
-        }
     }
 }
 

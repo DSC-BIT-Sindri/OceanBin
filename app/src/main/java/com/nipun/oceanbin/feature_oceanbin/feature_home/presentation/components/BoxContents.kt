@@ -1,10 +1,13 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -45,7 +49,8 @@ fun BoxContents(
     modifier: Modifier = Modifier,
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    expanded : Boolean,
+    expanded: Boolean,
+    onDrag: (Int) -> Unit,
     onClick: () -> Unit = {}
 ) {
     BoxWithConstraints(modifier = modifier) {
@@ -69,29 +74,37 @@ fun BoxContents(
 
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .zIndex(100f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val lazyListState = rememberLazyListState()
+            onDrag(lazyListState.firstVisibleItemScrollOffset)
+            Spacer(modifier = Modifier.size(MediumSpacing))
             Icon(
                 painter = painterResource(id = R.drawable.ic_next),
                 modifier = Modifier
                     .padding(top = SmallSpacing)
                     .size(IconSize)
-                    .rotate(if(expanded) -90f else 90f)
+                    .rotate(if (expanded) -90f else 90f)
                     .noRippleClickable {
                         onClick()
                     },
                 contentDescription = "Down",
                 tint = LightBg
             )
+            Spacer(modifier = Modifier.size(SmallSpacing))
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-            ){
+            ) {
                 LazyColumn(
-                    modifier = modifier
-                        .padding(top = CurveHeight)
+                    state = lazyListState,
+                    modifier = Modifier
+                        .padding(bottom = DrawerHeight)
+                        .fillMaxHeight()
                 ) {
+                    item { Spacer(modifier = Modifier.size(DrawerHeight)) }
                     item {
                         Text(
                             text = "NEWS",
@@ -109,23 +122,30 @@ fun BoxContents(
                         val coroutineScope = rememberCoroutineScope()
                         HorizontalPager(
                             state = pagerState,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = MediumSpacing)
                         ) {
                             SingleCard(
                                 modifier = Modifier
-                                    .padding(horizontal = MediumSpacing)
+                                    .padding(horizontal = MediumSpacing, vertical = SmallSpacing)
                                     .fillMaxWidth(0.6f)
                                     .aspectRatio(0.8f)
                             )
                         }
                     }
                 }
-
                 Column(
                     modifier = Modifier
+                        .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(SmallSpacing)
-                        .align(Alignment.BottomCenter),
+                        .animateContentSize()
+                        .graphicsLayer {
+                            translationY = if (lazyListState.firstVisibleItemIndex == 1) {
+                                lazyListState.firstVisibleItemScrollOffset * 1.2f
+                            } else if (lazyListState.firstVisibleItemIndex == 0) 0f else 100000f
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
@@ -180,8 +200,8 @@ fun BoxContents(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    Spacer(modifier = Modifier.size(DrawerHeight))
                 }
+
             }
         }
     }

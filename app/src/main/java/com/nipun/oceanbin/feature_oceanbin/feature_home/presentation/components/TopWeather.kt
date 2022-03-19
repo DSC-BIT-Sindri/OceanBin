@@ -224,6 +224,7 @@ fun HourlyComp(
                     .padding(horizontal = SmallSpacing)
             )
         }
+        item { Spacer(modifier = Modifier.size(CurveHeight)) }
     }
 }
 

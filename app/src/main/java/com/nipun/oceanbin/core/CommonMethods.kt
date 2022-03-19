@@ -40,7 +40,7 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
 fun getMainScreenCurve(width: Int, height: Int): Path {
     val point1 = Offset(-80f, height * 0.07f)
     val point2 = Offset(width * .2f, height * 0.09f)
-    val point3 = Offset(width * .5f, -(height*0.04f))
+    val point3 = Offset(width * .5f, -(height*0f))
     val point4 = Offset(width * 0.8f, height * 0.09f)
     val point5 = Offset(width * 1.2f + 50f, height * 0.05f)
     val point6 = Offset(width * 1.2f + 50f, height * 1.2f + 100f)

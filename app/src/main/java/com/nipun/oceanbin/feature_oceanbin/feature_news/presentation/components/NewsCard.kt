@@ -24,7 +24,7 @@ import com.nipun.oceanbin.ui.theme.MediumSpacing
 @Composable
 fun NewsCard(
     modifier : Modifier = Modifier,
-    image : Int,
+    image : String,
     heading : String,
     description : String,
     newsSource : String
@@ -38,7 +38,7 @@ fun NewsCard(
             modifier = modifier.fillMaxWidth()
         ) {
             Image(painter = painterResource(
-                id = image),
+                id = R.drawable.test),
                 contentDescription = heading,
                 modifier = modifier
                     .fillMaxWidth()

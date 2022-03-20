@@ -37,7 +37,7 @@ fun CurrentWeatherCard(
     temperature: Int,
     temperatureDetail: String,
     location: String,
-    imageId: Int
+    imageId: String
 ) {
     Box(
         modifier = modifier
@@ -70,11 +70,27 @@ fun CurrentWeatherCard(
                 .align(Alignment.TopCenter),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = imageId),
-                contentDescription = "Weather image",
-                Modifier.size(WeatherImageSizeInWeatherScreen)
-            )
+            val imageLoader = ImageLoader.Builder(LocalContext.current)
+                .componentRegistry {
+                    add(SvgDecoder(LocalContext.current))
+                }
+                .build()
+            CompositionLocalProvider(LocalImageLoader provides imageLoader) {
+                Image(
+                    painter = rememberImagePainter(
+                        data = imageId,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                            crossfade(true)
+                        },
+                    ),
+                    contentDescription = "Cloud Image",
+                    modifier = Modifier
+                        .size(WeatherImageSizeInWeatherScreen),
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.Center
+                )
+            }
             Text(
                 text = "$temperature ℃",
                 fontFamily = RobotoFamily,

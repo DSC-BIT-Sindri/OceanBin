@@ -1,43 +1,41 @@
 package com.nipun.oceanbin.feature_oceanbin
 
-import android.Manifest
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
-import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsScreen
-import com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation.WeatherScreen
+import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.nipun.oceanbin.core.Constant.LAT
+import com.nipun.oceanbin.core.Constant.LON
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
+import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.ProfileScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_search.presentation.SearchScreen
+import com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation.WeatherScreen
 import com.nipun.oceanbin.ui.theme.*
-import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BottomScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val bottomNavController = rememberNavController()
+    val bottomNavController = rememberAnimatedNavController()
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -75,26 +73,68 @@ fun BottomScreen(
             }
         }
     ) {
-        NavHost(
+        AnimatedNavHost(
             navController = bottomNavController,
             startDestination = BottomScreens.HomeScreen.route
         ) {
             composable(BottomScreens.HomeScreen.route) {
                 HomeScreen(navController = navController)
             }
-            composable(BottomScreens.NewsScreen.route){
+            composable(BottomScreens.NewsScreen.route) {
                 NewsScreen(navController = navController)
             }
-            composable(BottomScreens.MapScreen.route){
-                MapScreen(navController = navController)
+            composable(
+                route = BottomScreens.MapScreen.route + "?$LAT={$LAT}&$LON={$LON}",
+                arguments = listOf(
+                    navArgument(LAT) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
+                    navArgument(LON) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) {
+                MapScreen(
+                    navController = navController,
+                    bottomNavController = bottomNavController
+                )
             }
-            composable(BottomScreens.WeatherScreen.route){
+            composable(BottomScreens.WeatherScreen.route) {
                 WeatherScreen(navController = navController)
             }
             composable(BottomScreens.ProfileScreen.route) {
                 ProfileScreen(navController = navController)
             }
-
+            composable(
+                route = BottomScreens.SearchScreen.route+ "?$LAT={$LAT}&$LON={$LON}",
+                arguments = listOf(
+                    navArgument(LAT) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
+                    navArgument(LON) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                ),
+                enterTransition = {
+                    enterAnimation()
+                },
+                exitTransition = {
+                    exitAnimation()
+                },
+                popExitTransition = {
+                    exitAnimation()
+                }
+            ) {
+                SearchScreen(bottomNavController = bottomNavController)
+            }
         }
     }
 }
@@ -111,7 +151,7 @@ fun BottomBar(
         elevation = SmallSpacing
     ) {
         bottomItems.forEach { screen ->
-        val selected = currentRoute?.let { it == screen.route } == true
+            val selected = currentRoute?.let { it == screen.route } == true
             BottomNavigationItem(
                 icon = {
                     Icon(

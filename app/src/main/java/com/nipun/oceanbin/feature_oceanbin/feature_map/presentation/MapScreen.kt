@@ -1,5 +1,6 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -21,9 +22,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.Constant.LAT
+import com.nipun.oceanbin.core.Constant.LON
 import com.nipun.oceanbin.core.LogoWithText
+import com.nipun.oceanbin.core.noRippleClickable
+import com.nipun.oceanbin.feature_oceanbin.BottomScreens
+import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapModel
 import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.launch
 
@@ -31,12 +38,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun MapScreen(
     navController: NavController,
+    bottomNavController: NavController,
     mapViewModel: MapViewModel = hiltViewModel()
 ) {
     val locationState = mapViewModel.location.value
-    val location = locationState.data.latLang
-    val mapState = mapViewModel.mapState.value
-    val address = locationState.data.address
+    val destinationLatLng = locationState.data.latLang
+    val currentLocation = mapViewModel.currentLocation.value
+    val address = locationState.data.address.let { it.ifBlank { currentLocation.address } }
+
+    val markerLocation = destinationLatLng ?: currentLocation.latLang ?: LatLng(0.0, 0.0)
+
     var zoomState by remember {
         mutableStateOf(11f)
     }
@@ -51,18 +62,18 @@ fun MapScreen(
     )
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(
-            location,
+            markerLocation,
             size
         )
     }
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Expanded)
     )
-    LaunchedEffect(key1 = locationState) {
-        cameraPositionState.animate(
-            CameraUpdateFactory.newLatLngZoom(
-                location, zoomState
-            )
+    val mapProperties = remember {
+        MapProperties(
+            isMyLocationEnabled = true,
+            maxZoomPreference = 20f,
+            minZoomPreference = 2f
         )
     }
     val uiSettings = remember {
@@ -85,13 +96,13 @@ fun MapScreen(
             .padding(bottom = DrawerHeight)
             .fillMaxSize(),
         floatingActionButton = {
-            mapState.data.latLang.let { currentLocation ->
+            currentLocation.latLang?.let { latLng ->
                 FloatingActionButton(onClick = {
                     zoomState = 16f
                     coroutineScope.launch {
                         cameraPositionState.animate(
                             CameraUpdateFactory.newLatLngZoom(
-                                currentLocation, zoomState
+                                latLng, zoomState
                             )
                         )
                     }
@@ -129,12 +140,15 @@ fun MapScreen(
                         .fillMaxWidth()
                         .aspectRatio(6.7f)
                 ) {
-                    SearchBox(
+                    SearchButton(
                         modifier = Modifier
                             .fillMaxSize(),
                         location = address
                     ) {
-                        mapViewModel.searchLocation(it)
+                        bottomNavController.navigate(
+                            BottomScreens.SearchScreen.route
+                                    + "?$LAT=${markerLocation.latitude}&$LON=${markerLocation.longitude}"
+                        )
                     }
                     if (locationState.isLoading) {
                         CircularProgressIndicator(
@@ -148,7 +162,7 @@ fun MapScreen(
                 }
             }
             GoogleMap(
-                properties = mapState.mapProperties,
+                properties = mapProperties,
                 cameraPositionState = cameraPositionState,
                 uiSettings = uiSettings,
                 modifier = Modifier
@@ -156,79 +170,74 @@ fun MapScreen(
                     .zIndex(-1f)
                     .alpha(0.75f),
             ) {
-                mapState.data.latLang.let { currentLocation ->
+                currentLocation.latLang?.let { latLng ->
                     Circle(
-                        center = currentLocation,
+                        center = latLng,
                         fillColor = WeatherCardBgLowAlpha,
                         strokeColor = WeatherCardBgLowAlpha,
                         radius = 2500.0,
                     )
                 }
-                Marker(position = location)
+                Marker(position = markerLocation)
             }
         }
     }
+    LaunchedEffect(
+        key1 = markerLocation,
+        block = {
+            cameraPositionState.animate(
+                CameraUpdateFactory.newLatLngZoom(markerLocation, zoomState)
+            )
+        }
+    )
 }
 
 @Composable
-fun SearchBox(
+fun SearchButton(
     modifier: Modifier = Modifier,
     location: String = "",
-    onSearchClick: (String) -> Unit = {}
+    onSearchClick: () -> Unit
 ) {
-    var text by remember {
-        mutableStateOf(location)
-    }
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(MediumSpacing),
         elevation = ExtraSmallSpacing
     ) {
-        TextField(
-            value = text,
-            onValueChange = {
-                text = it
-            },
-            shape = RoundedCornerShape(SmallSpacing),
-            modifier = Modifier.fillMaxSize(),
-            placeholder = {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .noRippleClickable {
+                    onSearchClick()
+                },
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_leading_serach_icon),
+                contentDescription = "Leading Icon",
+                modifier = Modifier
+                    .padding(
+                        start = SmallSpacing,
+                        end = BigSpacing
+                    )
+                    .size(IconSize)
+                    .padding(ExtraSmallSpacing),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center
+            )
+            Spacer(modifier = Modifier.size(MediumSpacing))
+            if (location.isBlank()) {
                 Text(
-                    text = "Search for places",
+                    text = "Search for places...",
                     style = MaterialTheme.typography.body2
                 )
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MainBg,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = LightBg
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = true,
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(onSearch = {
-                onSearchClick(text)
-            }),
-            textStyle = MaterialTheme.typography.body1,
-            singleLine = true,
-            maxLines = 1,
-            leadingIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_leading_serach_icon),
-                    contentDescription = "Leading Icon",
-                    modifier = Modifier
-                        .padding(
-                            start = SmallSpacing,
-                            end = BigSpacing
-                        )
-                        .size(IconSize)
-                        .padding(ExtraSmallSpacing),
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center
+            } else {
+                Text(
+                    text = location,
+                    style = MaterialTheme.typography.body1
                 )
             }
-        )
+        }
     }
 }
 

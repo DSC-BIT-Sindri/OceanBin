@@ -19,20 +19,6 @@ class MapRepositoryImpl(
 ) : MapRepository{
     private val geocoder = Geocoder(context)
     private val prefManager = PreferenceManager(context)
-    override fun getLatLong(query: String): Flow<Resource<LatLng>> = flow{
-        emit(Resource.Loading<LatLng>())
-        try {
-            val addressList = geocoder.getFromLocationName(query, 1)
-            val address = addressList[0]
-            emit(Resource.Success<LatLng>(
-                data = LatLng(address.latitude, address.longitude)
-            ))
-        }catch (e : Exception){
-            emit(Resource.Error<LatLng>(
-                message = "Something went wrong"
-            ))
-        }
-    }
 
     override fun getInitLocation(): Flow<Resource<MapModel>> = flow{
         emit(Resource.Loading<MapModel>(data = null))

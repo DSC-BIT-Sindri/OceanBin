@@ -2,11 +2,9 @@ package com.nipun.oceanbin.core
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.location.Address
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -14,12 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
-import androidx.core.app.ActivityCompat
+import com.google.android.gms.maps.model.LatLng
+import com.nipun.oceanbin.feature_oceanbin.feature_search.model.SearchResultModel
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.abs
 
@@ -109,3 +104,24 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
         onClick()
     }
 }
+
+fun Address.toSearchModel() : SearchResultModel{
+    val latLng = LatLng(this.latitude,this.longitude)
+    return SearchResultModel(
+        latLng = latLng,
+        feature = featureName,
+        locality = locality,
+        subAdmin = subAdminArea,
+        addressLine = getAddressLine(0),
+        admin = adminArea
+    )
+}
+//
+//fun AutocompletePrediction.toAutocompletModel() : AutoCompleteModel{
+//    return AutoCompleteModel(
+//        id = placeId,
+//        dist = distanceMeters,
+//        primaryText = getPrimaryText(null).toString(),
+//        fullText = getFullText(null).toString()
+//    )
+//}

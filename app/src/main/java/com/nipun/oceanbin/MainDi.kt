@@ -7,6 +7,7 @@ import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.WeatherApi
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.LocationRepository
 import com.nipun.oceanbin.feature_oceanbin.feature_map.data.MapRepositoryImpl
 import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapRepository
+import com.nipun.oceanbin.feature_oceanbin.feature_search.repository.SearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +45,12 @@ object MainDi {
     fun provideMapRepo(
         @ApplicationContext context: Context
     ) : MapRepository = MapRepositoryImpl(context)
+
+    @Singleton
+    @Provides
+    fun provideSearchRepo(
+        @ApplicationContext context: Context
+    ) : SearchRepository = SearchRepository(context)
 
     @Provides
     @Singleton

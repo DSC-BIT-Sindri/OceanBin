@@ -212,7 +212,11 @@ fun HourlyComp(
         }
         item {
             Spacer(modifier = Modifier.size(BigSpacing))
-            HorizontalLine()
+            HorizontalLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = BigSpacing)
+            )
             Spacer(modifier = Modifier.size(SmallSpacing))
         }
         items(dayValue.size){ index ->
@@ -342,11 +346,11 @@ fun SingleWeatherCard(
 }
 
 @Composable
-fun HorizontalLine() {
+fun HorizontalLine(
+    modifier: Modifier = Modifier
+) {
     Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = ExtraBigSpacing)
+        modifier = modifier
     ) {
         drawLine(
             color = LightBgShade,

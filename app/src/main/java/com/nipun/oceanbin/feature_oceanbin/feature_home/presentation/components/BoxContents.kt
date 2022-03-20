@@ -200,6 +200,7 @@ fun BoxContents(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
+                    Spacer(modifier = Modifier.size(SmallSpacing))
                 }
 
             }

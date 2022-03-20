@@ -88,14 +88,7 @@ class PreferenceManager(private val context: Context) {
         return if (addressList.isNullOrEmpty()) ""
         else {
             val address: Address = addressList[0]
-            var res = ""
-            for (i in 0 until address.maxAddressLineIndex) {
-                res += address.getAddressLine(i) + "\n"
-            }
-            res += address.locality.capitalize(Locale.getDefault()) + ", " + address.subAdminArea.capitalize(
-                Locale.getDefault()
-            )
-            res
+            return address.toSearchModel().getName()
         }
     }
 }

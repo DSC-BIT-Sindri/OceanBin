@@ -72,7 +72,7 @@ fun WeatherScreen(
                     temperature = weatherModel.temperature,
                     temperatureDetail = weatherModel.weather,
                     location = weatherModel.location,
-                    imageId = R.drawable.ic_cloud_icon,
+                    imageId = weatherModel.iconId,
                     modifier = Modifier
                         .fillMaxWidth()
                 )

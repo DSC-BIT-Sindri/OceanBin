@@ -82,13 +82,13 @@ class PreferenceManager(private val context: Context) {
         }
     }
 
-    fun getAddress(longitude: Double, latitude: Double): String {
+    fun getAddress(longitude: Double, latitude: Double,isLine : Boolean = false): String {
         val geoCoder = Geocoder(context, Locale.getDefault())
         val addressList = geoCoder.getFromLocation(latitude, longitude, 1)
         return if (addressList.isNullOrEmpty()) ""
         else {
             val address: Address = addressList[0]
-            return address.toSearchModel().getName()
+            return if(isLine) address.toSearchModel().addressLine?:"" else address.toSearchModel().getName()
         }
     }
 }

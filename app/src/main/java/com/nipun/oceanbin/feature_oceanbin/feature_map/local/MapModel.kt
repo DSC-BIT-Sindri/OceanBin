@@ -4,5 +4,6 @@ import com.google.android.gms.maps.model.LatLng
 
 data class MapModel(
     val latLang : LatLng? = null,
-    val address : String = ""
+    val address : String = "",
+    val addressLine : String = ""
 )

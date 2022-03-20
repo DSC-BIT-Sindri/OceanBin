@@ -32,6 +32,11 @@ class MapRepositoryImpl(
                     prefManager.getAddress(
                         longitude = latLng.longitude,
                         latitude = latLng.latitude
+                    ),
+                    prefManager.getAddress(
+                        longitude = latLng.longitude,
+                        latitude = latLng.latitude,
+                        isLine = true
                     )
                 )
             ))

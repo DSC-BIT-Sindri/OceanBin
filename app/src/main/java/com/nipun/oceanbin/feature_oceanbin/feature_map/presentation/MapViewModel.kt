@@ -7,14 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.MapProperties
 import com.nipun.oceanbin.core.Constant
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapModel
 import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapRepository
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.state.LocationState
-import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.state.MapState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,7 +41,8 @@ class MapViewModel @Inject constructor(
                     val longitude = lon.toDouble()
                     val mapModel = MapModel(
                         latLang = LatLng(latitude,longitude),
-                        address = preferenceManager.getAddress(longitude = longitude, latitude = latitude)
+                        address = preferenceManager.getAddress(longitude = longitude, latitude = latitude),
+                        addressLine = preferenceManager.getAddress(longitude = longitude, latitude = latitude, isLine = true)
                     )
                     _location.value = LocationState(
                         isLoading = false,

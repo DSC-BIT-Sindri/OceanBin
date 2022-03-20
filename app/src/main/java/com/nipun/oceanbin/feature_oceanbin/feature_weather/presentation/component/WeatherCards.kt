@@ -1,10 +1,7 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_weather.presentation.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,8 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
@@ -27,7 +22,6 @@ import coil.decode.SvgDecoder
 import coil.transform.CircleCropTransformation
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.ui.theme.*
-import java.security.AllPermission
 
 @Composable
 fun CurrentWeatherCard(
@@ -82,6 +76,7 @@ fun CurrentWeatherCard(
                         builder = {
                             transformations(CircleCropTransformation())
                             crossfade(true)
+                            placeholder(R.drawable.ic_cloud_icon)
                         },
                     ),
                     contentDescription = "Cloud Image",

@@ -45,6 +45,7 @@ fun MapScreen(
     val destinationLatLng = locationState.data.latLang
     val currentLocation = mapViewModel.currentLocation.value
     val address = locationState.data.address.let { it.ifBlank { currentLocation.address } }
+    val addressLine = locationState.data.addressLine.let { it.ifBlank { currentLocation.addressLine } }
 
     val markerLocation = destinationLatLng ?: currentLocation.latLang ?: LatLng(0.0, 0.0)
 
@@ -62,7 +63,7 @@ fun MapScreen(
     )
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(
-            markerLocation,
+            currentLocation.latLang ?: LatLng(0.0, 0.0),
             size
         )
     }
@@ -88,7 +89,7 @@ fun MapScreen(
             BottomDialogueForMap(
                 modifier = Modifier
                     .fillMaxWidth(),
-                address = address
+                address = addressLine
             )
         },
         sheetPeekHeight = ExtraBigSpacing,
@@ -102,7 +103,7 @@ fun MapScreen(
                     coroutineScope.launch {
                         cameraPositionState.animate(
                             CameraUpdateFactory.newLatLngZoom(
-                                latLng, zoomState
+                                markerLocation, zoomState
                             )
                         )
                     }
@@ -170,6 +171,13 @@ fun MapScreen(
                     .zIndex(-1f)
                     .alpha(0.75f),
             ) {
+                destinationLatLng?.let { latLng ->
+                    coroutineScope.launch {
+                        cameraPositionState.animate(
+                            CameraUpdateFactory.newLatLngZoom(latLng, zoomState)
+                        )
+                    }
+                }
                 currentLocation.latLang?.let { latLng ->
                     Circle(
                         center = latLng,
@@ -182,14 +190,6 @@ fun MapScreen(
             }
         }
     }
-    LaunchedEffect(
-        key1 = markerLocation,
-        block = {
-            cameraPositionState.animate(
-                CameraUpdateFactory.newLatLngZoom(markerLocation, zoomState)
-            )
-        }
-    )
 }
 
 @Composable

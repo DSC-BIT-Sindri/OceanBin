@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "434022088963",
+    "project_id": "oceanbin-3f0a5",
+    "storage_bucket": "oceanbin-3f0a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434022088963:android:8c50e1bb50d40d2e26e936",
+        "android_client_info": {
+          "package_name": "com.nipun.oceanbin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434022088963-kpqehcc5i9jgqv319818mbibips840tk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nipun.oceanbin",
+            "certificate_hash": "b09a5e190123b0b1ba1bb289471cb21690658687"
+          }
+        },
+        {
+          "client_id": "434022088963-fjorvmtr2hqgneibju0u3rp037ouqdl9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvOTT_7kQvg8stkoFNqk22IteCq__RAEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434022088963-fjorvmtr2hqgneibju0u3rp037ouqdl9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

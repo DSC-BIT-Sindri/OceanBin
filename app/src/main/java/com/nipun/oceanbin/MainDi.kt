@@ -2,6 +2,7 @@ package com.nipun.oceanbin
 
 import android.content.Context
 import com.nipun.oceanbin.core.PreferenceManager
+import com.nipun.oceanbin.core.firebase.FireStoreManager
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.LocationRepositoryImpl
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.WeatherApi
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.LocationRepository
@@ -51,6 +52,12 @@ object MainDi {
     fun provideSearchRepo(
         @ApplicationContext context: Context
     ) : SearchRepository = SearchRepository(context)
+
+    @Singleton
+    @Provides
+    fun provideFireStoreManager(
+        @ApplicationContext context: Context
+    ) : FireStoreManager = FireStoreManager(context)
 
     @Provides
     @Singleton

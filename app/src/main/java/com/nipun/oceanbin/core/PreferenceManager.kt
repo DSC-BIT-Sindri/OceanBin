@@ -5,6 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.nipun.oceanbin.core.firebase.User
 import com.nipun.oceanbin.feature_oceanbin.feature_home.data.remote.dto.WeatherDto
 import java.util.*
 
@@ -16,9 +17,22 @@ class PreferenceManager(private val context: Context) {
         const val IS_INSTALLED = "is_installed"
         const val HOURLY_KEY = "hourly_key"
         const val CURRENT_LOCATION_KEY = "current_location_key"
+        private val USER_ID = "user_id"
+        private const val USER_DETAIL = "user_details"
     }
 
     private val sharedPreference = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
+
+    fun saveString(key : String = USER_ID,value: String ){
+        with(sharedPreference.edit()) {
+            putString(key, value)
+            apply()
+        }
+    }
+
+    fun getString(key: String = USER_ID) : String{
+        return sharedPreference.getString(key,"")?:""
+    }
 
     fun saveBoolean(key: String = IS_INSTALLED, value: Boolean) {
         with(sharedPreference.edit()) {
@@ -52,6 +66,25 @@ class PreferenceManager(private val context: Context) {
         }
     }
 
+    fun saveUser(key: String = USER_DETAIL,value: User){
+        with(sharedPreference.edit()) {
+            val gson = Gson()
+            putString(key, gson.toJson(value))
+            commit()
+        }
+    }
+
+    fun getUser() : User?{
+        val gson = Gson()
+        val str = sharedPreference.getString(USER_DETAIL, "")
+        try {
+            if (str.isNullOrEmpty()) return null
+            return gson.fromJson(str, User::class.java)
+        } catch (e: Exception) {
+            return null
+        }
+    }
+
     fun getWeather(key: String = Constant.WEATHER_KEY): WeatherDto? {
         val gson = Gson()
         val str = sharedPreference.getString(key, "")
@@ -68,17 +101,6 @@ class PreferenceManager(private val context: Context) {
             val gson = Gson()
             putString(key, gson.toJson(value))
             commit()
-        }
-    }
-
-    fun getCurrentLocation(key: String = CURRENT_LOCATION_KEY) : LatLng{
-        val gson = Gson()
-        val str = sharedPreference.getString(key, "")
-        try {
-            if (str.isNullOrEmpty()) return LatLng(0.0,0.0)
-            return gson.fromJson(str, LatLng::class.java)
-        } catch (e: Exception) {
-            return LatLng(0.0,0.0)
         }
     }
 

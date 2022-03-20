@@ -11,10 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
+import coil.compose.rememberImagePainter
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.ui.theme.BigSpacing
 import com.nipun.oceanbin.ui.theme.ExtraBigSpacing
@@ -23,11 +26,11 @@ import com.nipun.oceanbin.ui.theme.MediumSpacing
 
 @Composable
 fun NewsCard(
-    modifier : Modifier = Modifier,
-    image : String,
-    heading : String,
-    description : String,
-    newsSource : String
+    modifier: Modifier = Modifier,
+    image: String,
+    heading: String,
+    description: String,
+    newsSource: String
 ) {
     Card(
         modifier = modifier
@@ -37,8 +40,11 @@ fun NewsCard(
         Column(
             modifier = modifier.fillMaxWidth()
         ) {
-            Image(painter = painterResource(
-                id = R.drawable.test),
+            val painter = rememberImagePainter(image) {
+                placeholder(R.drawable.test)
+            }
+            Image(
+                painter = if (image.isBlank()) painterResource(id = R.drawable.test) else painter,
                 contentDescription = heading,
                 modifier = modifier
                     .fillMaxWidth()

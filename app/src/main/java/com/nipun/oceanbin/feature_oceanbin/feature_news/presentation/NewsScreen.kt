@@ -3,22 +3,16 @@ package com.nipun.oceanbin.feature_oceanbin.feature_news.presentation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsCard
-import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsDetails
 import com.nipun.oceanbin.ui.theme.*
 
 @Composable
@@ -37,8 +31,8 @@ fun NewsScreenDetails(
     modifier : Modifier = Modifier,
     newsViewModel: NewsViewModel = hiltViewModel()
 ) {
-    newsViewModel.getNews()
-    val newsList = newsViewModel.newsListState.value
+    val newsState = newsViewModel.newsState.value
+    val newsList = newsState.data
 
     Scaffold(backgroundColor = MaterialTheme.colors.background) {
         Box(
@@ -48,7 +42,7 @@ fun NewsScreenDetails(
             contentAlignment = Alignment.Center
         ){
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .padding(top = BigSpacing, start = SmallSpacing, end = SmallSpacing)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -74,6 +68,12 @@ fun NewsScreenDetails(
                         Spacer(modifier = Modifier.height(BigSpacing))
                     }
                 }
+            }
+            if(newsState.isLoading){
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
             }
         }
     }

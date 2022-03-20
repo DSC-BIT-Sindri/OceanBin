@@ -21,6 +21,8 @@ import com.nipun.oceanbin.core.Constant
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.feature_oceanbin.BottomScreen
 import com.nipun.oceanbin.firsttime_display.*
+import com.nipun.oceanbin.firsttime_display.feature_register.presntation.Signup
+import com.nipun.oceanbin.firsttime_display.feature_signi_in.presentation.Login
 import com.nipun.oceanbin.ui.theme.SplashScreenTutTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -75,10 +77,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(route = Screen.Login.route) {
-                            Login(navController = navController, mainViewModel = mainViewModel)
+                            Login(navController = navController)
                         }
                         composable(route = Screen.Signup.route) {
-                            Signup(navController = navController, mainViewModel = mainViewModel)
+                            Signup(navController = navController)
                         }
                         composable(route = Screen.BottomScreen.route) {
                             BottomScreen(navController = navController)

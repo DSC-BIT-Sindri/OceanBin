@@ -103,7 +103,7 @@ fun MapScreen(
                     coroutineScope.launch {
                         cameraPositionState.animate(
                             CameraUpdateFactory.newLatLngZoom(
-                                markerLocation, zoomState
+                                latLng, zoomState
                             )
                         )
                     }

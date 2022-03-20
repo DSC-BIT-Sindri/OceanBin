@@ -1,15 +1,20 @@
 package com.nipun.oceanbin.firsttime_display
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -18,6 +23,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +43,7 @@ import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.core.noRippleClickable
 import com.nipun.oceanbin.firsttime_display.component.*
+import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.TextState
 import com.nipun.oceanbin.ui.Screen
 import com.nipun.oceanbin.ui.theme.*
 import kotlinx.coroutines.delay
@@ -683,223 +693,85 @@ fun DoLoginSignup(
 }
 
 @Composable
-fun Login(
-    navController: NavController,
-    mainViewModel: MainViewModel = hiltViewModel()
+fun Field(
+    identity: String,
+    textState: TextState = TextState(),
+    isNumber: Boolean = false,
+    isPassword: Boolean = false,
+    isEmail: Boolean = false,
+    isDone: Boolean = false,
+    onValueChange: (String) -> Unit
 ) {
-    var emailValue by remember {
-        (mutableStateOf(""))
-    }
-    var passwordValue by remember {
-        (mutableStateOf(""))
-    }
-    val passwordVisibility by remember {
-        (mutableStateOf(false))
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(LightBlue), contentAlignment = Alignment.BottomCenter
-    ) {
-        Box(
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    Column {
+        OutlinedTextField(
+            value = textState.text, onValueChange = onValueChange,
+            singleLine = true,
             modifier = Modifier
-                .fillMaxSize(), contentAlignment = Alignment.TopCenter
-        ) {
-            LogoWithText(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = ExtraBigSpacing),
-                color1 = LogoDarkBlue,
-                color2 = LightBgShade
-            )
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth(.9f)
-                    .padding(top = 160.dp),
-                painter = painterResource(id = R.drawable.ic_leaf),
-                contentDescription = "Login"
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.60f)
-                .padding(top = 10.dp, start = 20.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .padding(20.dp)
-            )
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Field(identity = "Email", emailValue, onValueChange = {
-                    emailValue = it
-                })
-                Field(identity = "Password", passwordValue, onValueChange = {
-                    passwordValue = it
-                })
-                Spacer(modifier = Modifier.padding(BigSpacing))
-                CustomButton(text = "Sign In", navController =navController,mainViewModel)
-                Spacer(modifier = Modifier.padding(28.dp))
-                Text(
-                    text = "Forgot Password?", style = Typography.h3,
-                    modifier = Modifier.clickable(onClick = {})
-                )
-            }
-            Spacer(modifier = Modifier.padding(28.dp))
-        }
-
-    }
-}
-
-@Composable
-fun Signup(
-    navController: NavController,
-    mainViewModel: MainViewModel = hiltViewModel()
-) {
-    var emailValue by remember {
-        (mutableStateOf(""))
-    }
-    var passwordValue by remember {
-        (mutableStateOf(""))
-    }
-    var nameValue by remember {
-        (mutableStateOf(""))
-    }
-    var mobileValue by remember {
-        (mutableStateOf(""))
-    }
-    val passwordVisibility by remember {
-        (mutableStateOf(false))
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(LightBlue), contentAlignment = Alignment.BottomCenter
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(), contentAlignment = Alignment.TopCenter
-        ) {
-            LogoWithText(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = ExtraBigSpacing),
-                color1 = LogoDarkBlue,
-                color2 = LightBgShade
-            )
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth(.9f)
-                    .padding(top = 60.dp, bottom = 5.dp),
-                painter = painterResource(id = R.drawable.ic_pencil),
-                contentDescription = "Signup"
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.70f)
-                .padding(top = 10.dp, start = 20.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .padding(20.dp)
-            )
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Field(identity = "Name", nameValue, onValueChange = {
-                    nameValue = it
-                })
-                Field(identity = "Mobile", mobileValue, onValueChange = {
-                    mobileValue = it
-                })
-                Field(identity = "Email", emailValue, onValueChange = {
-                    emailValue = it
-                })
-                Field(identity = "Password", passwordValue, onValueChange = {
-                    passwordValue = it
-                })
-                Spacer(modifier = Modifier.padding(top = MediumSpacing))
-                CustomButton(text = "Sign Up", navController = navController,mainViewModel)
-                Spacer(modifier = Modifier.padding(top = BigSpacing))
-                Text(
-                    text = "By signing up, you agree to our",
-                    fontSize = SmallTextSize,
-                    color = TextLoginColor,
-                    modifier = Modifier.clickable(onClick = {})
-                )
-                Text(
-                    text = "Terms & Cookies Policy.",
-                    style = Typography.h3,
-                    color = TextLoginColor,
-                    modifier = Modifier.clickable(onClick = {})
-                )
-            }
-            Spacer(modifier = Modifier.padding(28.dp))
-        }
-
-    }
-}
-
-@Composable
-fun Field(identity: String, content: String, onValueChange: (String) -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxSize()
-    ) {
-        Text(
-            modifier = Modifier,
-            text = identity,
-            color = TextLoginColor,
-            fontSize = SmallTextSize,
-        )
-        Surface(
-            shape = RoundedCornerShape(SmallSpacing),
-            border = BorderStroke(
-                width = MediumStroke,
-                color = GreenBorder
+                .padding(bottom = SmallSpacing)
+                .fillMaxWidth(0.8f),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = Color.Black,
+                backgroundColor = Color.White,
+                cursorColor = LightBg,
+                focusedIndicatorColor = GreenBorder,
+                unfocusedIndicatorColor = GreenBorder
             ),
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .aspectRatio(6.5f)
-        ) {
-            TextField(
-                value = content, onValueChange = onValueChange,
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxSize(),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color.Black,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = LightBg,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+            visualTransformation = if (isPassword) {
+                if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+            } else VisualTransformation.None,
+            label = {
+                Text(
+                    text = identity,
+                    style = MaterialTheme.typography.overline
                 )
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = when {
+                    isNumber -> KeyboardType.Number
+                    isPassword -> KeyboardType.Password
+                    isEmail -> KeyboardType.Email
+                    else -> KeyboardType.Text
+                },
+                imeAction = if (isDone) ImeAction.Done else ImeAction.Next
+            ),
+            trailingIcon = {
+                if (isPassword) {
+                    val image = painterResource(
+                        if (passwordVisible)
+                            R.drawable.ic_visible
+                        else R.drawable.ic_not_visible
+                    )
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(painter = image, description)
+                    }
+                }
+            }
+        )
+        AnimatedVisibility(visible = textState.error != null) {
+            Text(
+                text = textState.error ?: "",
+                style = MaterialTheme.typography.body2,
+                color = Color.Red
             )
         }
     }
 }
 
 @Composable
-fun CustomButton(text:String, navController: NavController,mainViewModel:MainViewModel) {
+fun CustomButton(
+    text: String,
+    onButtonClick: () -> Unit = {},
+) {
     Button(
         modifier = Modifier
             .fillMaxWidth(.45f)
             .height(50.dp)
             .padding(top = 2.dp),
         onClick = {
-            mainViewModel.setSplashViewed()
-            navController.navigate(Screen.BottomScreen.route) {
-                popUpTo(Screen.SplashScreen.route) {
-                    inclusive = true
-                }
-            }
+            onButtonClick()
         },
         shape = RoundedCornerShape(ExtraBigSpacing),
         colors = ButtonDefaults.buttonColors(
@@ -910,7 +782,7 @@ fun CustomButton(text:String, navController: NavController,mainViewModel:MainVie
             defaultElevation = ExtraSmallSpacing
         ),
         contentPadding = PaddingValues(ExtraSmallSpacing)
-    ){
+    ) {
         Text(
             text = text,
             style = Typography.h4,

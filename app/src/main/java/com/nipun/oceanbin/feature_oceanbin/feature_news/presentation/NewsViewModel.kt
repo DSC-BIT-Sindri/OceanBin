@@ -4,38 +4,46 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsDetails
+import com.nipun.oceanbin.core.Resource
+import com.nipun.oceanbin.core.firebase.FireStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor() : ViewModel() {
-    val newsDb = Firebase.firestore.collection("News")
+class NewsViewModel @Inject constructor(
+    private val fireStoreManager: FireStoreManager
+) : ViewModel() {
+    private val _newsState = mutableStateOf(NewsState())
+    val newsState : State<NewsState> = _newsState
 
-    private val _newsListState = mutableStateOf(mutableListOf<NewsDetails>())
-    val newsListState : State<MutableList<NewsDetails>> = _newsListState
+    init {
+        getNews()
+    }
 
-    fun getNews() : List<NewsDetails> {
-        viewModelScope.launch {
-            newsDb.get()
-                .addOnSuccessListener { documents ->
-                for (document in documents){
-                    println("hello ${document.data}")
-                    val news = document.toObject(NewsDetails::class.java)
-                    newsListState.value.add(news)
-                    _newsListState.value = newsListState.value
+    private fun getNews()  {
+        fireStoreManager.getNews().onEach { result->
+            when(result){
+                is Resource.Loading -> {
+                    _newsState.value = NewsState(
+                        isLoading = true
+                    )
                 }
-            }.await()
-        }
-        return newsListState.value
+                is Resource.Error -> {
+                    _newsState.value = NewsState(
+                        isLoading = false,
+                        error = result.message
+                    )
+                }
+                is Resource.Success -> {
+                    _newsState.value = NewsState(
+                        isLoading = false,
+                        data = result.data?:newsState.value.data
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
 }

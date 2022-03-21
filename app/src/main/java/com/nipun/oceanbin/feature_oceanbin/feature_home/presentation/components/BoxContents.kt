@@ -99,7 +99,7 @@ fun BoxContents(
                 modifier = Modifier
                     .padding(top = SmallSpacing)
                     .size(IconSize)
-                    .rotate(if (expanded) -90f else 90f)
+                    .rotate(if (expanded) 90f else -90f)
                     .noRippleClickable {
                         onClick()
                     },

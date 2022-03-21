@@ -19,6 +19,7 @@ class PreferenceManager(private val context: Context) {
         const val CURRENT_LOCATION_KEY = "current_location_key"
         private val USER_ID = "user_id"
         private const val USER_DETAIL = "user_details"
+        const val READ_PREVIOUS_DENIED = "read_previous_denied"
     }
 
     private val sharedPreference = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)

@@ -21,8 +21,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.nipun.oceanbin.core.Constant.LAT
 import com.nipun.oceanbin.core.Constant.LON
 import com.nipun.oceanbin.core.Constant.NEWS
-import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
+import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.ProfileScreen
@@ -79,7 +79,10 @@ fun BottomScreen(
             startDestination = BottomScreens.HomeScreen.route
         ) {
             composable(BottomScreens.HomeScreen.route) {
-                HomeScreen(navController = navController, bottomNavController = bottomNavController)
+                HomeScreen(
+                    navController = navController,
+                    bottomNavController = bottomNavController
+                )
             }
             composable(
                 route = BottomScreens.NewsScreen.route + "?$NEWS={$NEWS}",
@@ -174,7 +177,7 @@ fun BottomBar(
                     )
                 },
                 selected = selected,
-                onClick = { onClick(screen.route) },
+                onClick = { if (!selected) onClick(screen.route) },
                 selectedContentColor = LightBg,
                 unselectedContentColor = Color.Gray
             )

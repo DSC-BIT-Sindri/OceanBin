@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OceanBin</string>
     <string name="location_permission">Location Permission</string>
-    <string name="show_location_quote">Proceed to App Permission ?</string>
+    <string name="show_location_quote">With location permission we can show weather and news your nearby. </string>
     <string name="location_service">Location Service</string>
     <string name="setting_location_dialogue">The app requires Location permission to be able to read location and display accurate weather.
         \nPlease open settings and accept the permission</string>
@@ -16,4 +16,7 @@
     <string name="invalid_mail">Email is not valid</string>
     <string name="password_verification_link">Password reset link send to your email </string>
     <string name="reset_password">Reset password</string>
+
+    <string name="read_storage_rational">Read storage permission is needed for access images on your device</string>
+    <string name="read_storage_permanent_deny">Read storage permission is permanently denied, allow permission from settings. </string>
 </resources>

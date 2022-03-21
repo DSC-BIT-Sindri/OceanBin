@@ -1,6 +1,7 @@
 package com.nipun.oceanbin.core.firebase
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -8,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
 import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsDetails
@@ -24,7 +26,34 @@ class FireStoreManager(
 
     private val newsCollection = Firebase.firestore.collection("News")
     private val userCollection = Firebase.firestore.collection("Users")
+    private val storageRef = FirebaseStorage.getInstance().reference
     private val mAuth = FirebaseAuth.getInstance()
+
+    fun uploadImage(user: User, uri: Uri): Flow<Resource<String>> = flow {
+        emit(Resource.Loading<String>())
+        try {
+            val imageRef = storageRef
+                .child("Profiles")
+                .child(user.id)
+            imageRef.putFile(uri).await()
+            val res = imageRef.downloadUrl.await()
+            val updateUser = user.copy(image = res.toString())
+            userCollection.document(user.id).set(updateUser).await()
+            preferenceManager.saveUser(value = updateUser)
+            emit(
+                Resource.Success<String>(
+                    data = "Image uploaded successfully"
+                )
+            )
+        } catch (e: Exception) {
+            Log.e("Upload", e.message.toString())
+            emit(
+                Resource.Error<String>(
+                    message = "Failed uploading image"
+                )
+            )
+        }
+    }
 
     fun getNews(): Flow<Resource<List<NewsDetails>>> = flow {
         emit(Resource.Loading<List<NewsDetails>>())
@@ -63,7 +92,7 @@ class FireStoreManager(
                     phone = phone,
                     image = "null"
                 )
-                userCollection.add(user).await()
+                userCollection.document(userId).set(user).await()
                 mAuth.signOut()
                 emit(
                     Resource.Success<Boolean>(
@@ -97,24 +126,21 @@ class FireStoreManager(
             mAuth.signInWithEmailAndPassword(email, password).await().user?.let { fUser ->
                 val userId = fUser.uid
                 if (fUser.isEmailVerified) {
-                    val userList = userCollection
-                        .whereEqualTo("id", userId)
-                        .get().await().toObjects(User::class.java)
-                    if (userList.isNotEmpty()) {
-                        preferenceManager.saveUser(value = userList[0])
+                    val user =
+                        userCollection.document(userId).get().await().toObject(User::class.java)
+                    user?.let { usr ->
+                        preferenceManager.saveUser(value = user)
                         preferenceManager.saveBoolean(value = false)
                         emit(
                             Resource.Success<Boolean>(
                                 data = true
                             )
                         )
-                    } else {
-                        emit(
-                            Resource.Error<Boolean>(
-                                message = context.getString(R.string.no_user_found)
-                            )
+                    } ?: emit(
+                        Resource.Error<Boolean>(
+                            message = context.getString(R.string.no_user_found)
                         )
-                    }
+                    )
                 } else {
                     fUser.sendEmailVerification().await()
                     mAuth.signOut()
@@ -154,17 +180,17 @@ class FireStoreManager(
     fun resetPassword(email: String): Flow<Resource<String>> = flow {
         emit(Resource.Loading<String>())
         try {
-            if(email.notValidEmail()){
+            if (email.notValidEmail()) {
                 emit(
                     Resource.Error<String>(
                         message = context.getString(R.string.invalid_mail)
                     )
                 )
-            }else {
+            } else {
                 mAuth.sendPasswordResetEmail(email).await()
                 emit(
                     Resource.Success<String>(
-                        data = context.getString(R.string.password_verification_link)  + email
+                        data = context.getString(R.string.password_verification_link) + email
                     )
                 )
             }

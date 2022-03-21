@@ -1,7 +1,5 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation
 
-import android.location.Address
-import android.location.Geocoder
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -20,7 +18,6 @@ import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +30,8 @@ class HomeViewModel @Inject constructor(
 
     private val _shouldShowRational = mutableStateOf(true)
     val shouldShowRational: State<Boolean> = _shouldShowRational
+
+
 
     private val _weatherState = mutableStateOf(WeatherState())
     val weatherState: State<WeatherState> = _weatherState
@@ -210,5 +209,12 @@ class HomeViewModel @Inject constructor(
 
     sealed class UIEvent {
         data class ShowSnackBar(val message: String) : UIEvent()
+    }
+
+    private val _showPermissionDialgoue = mutableStateOf(true)
+    val showPermissionDialogue : State<Boolean> = _showPermissionDialgoue
+
+    fun changeLocationPermissionDialogueValue(value : Boolean){
+        _showPermissionDialgoue.value = value
     }
 }

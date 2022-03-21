@@ -1,10 +1,13 @@
 package com.nipun.oceanbin.core
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Address
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
 import com.nipun.oceanbin.feature_oceanbin.feature_search.model.SearchResultModel
 import java.text.SimpleDateFormat
@@ -36,7 +41,7 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
 fun getMainScreenCurve(width: Int, height: Int): Path {
     val point1 = Offset(-80f, height * 0.07f)
     val point2 = Offset(width * .2f, height * 0.09f)
-    val point3 = Offset(width * .5f, -(height*0f))
+    val point3 = Offset(width * .5f, -(height * 0f))
     val point4 = Offset(width * 0.8f, height * 0.09f)
     val point5 = Offset(width * 1.2f + 50f, height * 0.05f)
     val point6 = Offset(width * 1.2f + 50f, height * 1.2f + 100f)
@@ -89,14 +94,14 @@ fun Context.openSettings() {
 
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    val uri = Uri.fromParts("package",packageName,null)
+    val uri = Uri.fromParts("package", packageName, null)
     intent.data = uri
     startActivity(intent)
 }
 
 fun Int.getTimeInString(): String {
-    val sdf = SimpleDateFormat("HH:mm:ss dd MMMM yyyy",Locale.ENGLISH)
-    return sdf.format(this*1000L).substring(0,5)
+    val sdf = SimpleDateFormat("HH:mm:ss dd MMMM yyyy", Locale.ENGLISH)
+    return sdf.format(this * 1000L).substring(0, 5)
 }
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
@@ -106,8 +111,8 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
     }
 }
 
-fun Address.toSearchModel() : SearchResultModel{
-    val latLng = LatLng(this.latitude,this.longitude)
+fun Address.toSearchModel(): SearchResultModel {
+    val latLng = LatLng(this.latitude, this.longitude)
     return SearchResultModel(
         latLng = latLng,
         feature = featureName,
@@ -118,15 +123,34 @@ fun Address.toSearchModel() : SearchResultModel{
     )
 }
 
-fun Context.showToast(message : String){
-    Toast.makeText(this,message,Toast.LENGTH_LONG).show()
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
-//
-//fun AutocompletePrediction.toAutocompletModel() : AutoCompleteModel{
-//    return AutoCompleteModel(
-//        id = placeId,
-//        dist = distanceMeters,
-//        primaryText = getPrimaryText(null).toString(),
-//        fullText = getFullText(null).toString()
-//    )
-//}
+
+fun Context.checkIfPermissionGranted(permission: String): Boolean =
+    ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+
+fun Context.checkMultiplePermissionGranted(permission: List<String>): Boolean {
+    permission.forEach {
+        if (!checkIfPermissionGranted(it)) return false
+    }
+    return true
+}
+
+fun Context.checkMultipleShouldShowRational(permission: List<String>): Boolean {
+    permission.forEach {
+        if (!checkShouldShowPermissionRational(it)) return false
+    }
+    return true
+}
+
+fun Context.checkShouldShowPermissionRational(permission: String): Boolean {
+    val activity = this as Activity?
+    if (activity == null)
+        Log.e("Nipun", "Activity is null")
+    return ActivityCompat.shouldShowRequestPermissionRationale(
+        activity!!,
+        permission
+    )
+}
+

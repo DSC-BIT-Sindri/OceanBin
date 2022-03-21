@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +20,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.core.UIEvent
+import com.nipun.oceanbin.core.showToast
 import com.nipun.oceanbin.firsttime_display.CustomButton
 import com.nipun.oceanbin.firsttime_display.Field
 import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.TextChangeEvent
@@ -33,6 +35,7 @@ fun Signup(
 ) {
     val scaffoldState = rememberScaffoldState()
     val showLoading = registerViewModel.showLoading.value
+    val context = LocalContext.current
 
     LaunchedEffect(
         key1 = true,
@@ -45,13 +48,12 @@ fun Signup(
                         )
                     }
                     is UIEvent.GoNext -> {
-                        scaffoldState.snackbarHostState.showSnackbar(
-                            message = event.name
-                        )
-                        navController.navigate(Screen.BottomScreen.route) {
-                            popUpTo(Screen.DoLoginSignup.route) {
-                                inclusive = true
-                            }
+//                        scaffoldState.snackbarHostState.showSnackbar(
+//                            message = event.name
+//                        )
+                        context.showToast(event.name)
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.DoLoginSignup.route)
                         }
                     }
                 }
@@ -109,7 +111,7 @@ fun Signup(
                     .align(Alignment.BottomCenter)
                     .verticalScroll(state = rememberScrollState(), enabled = true)
             ) {
-                Spacer(modifier = Modifier.height(RegisterImageSize+ BigSpacing))
+                Spacer(modifier = Modifier.height(RegisterImageSize + BigSpacing))
                 Field(
                     identity = "Name",
                     textState = registerViewModel.name.value
@@ -129,7 +131,7 @@ fun Signup(
                 }
                 Field(
                     identity = "Email",
-                    registerViewModel.email.value,
+                    textState = registerViewModel.email.value,
                     isEmail = true
                 ) {
                     registerViewModel.changeValue(

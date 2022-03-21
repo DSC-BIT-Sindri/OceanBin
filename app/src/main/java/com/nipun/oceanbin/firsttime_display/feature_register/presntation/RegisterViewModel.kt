@@ -101,7 +101,7 @@ class RegisterViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     _eventFlow.emit(UIEvent.GoNext(
-                        message = "User Created SuccessFully"
+                        message = "verification email sent to ${email.value.text}"
                     ))
                     _showLoading.value = false
                 }

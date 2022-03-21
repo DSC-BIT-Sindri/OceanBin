@@ -85,6 +85,13 @@ class PreferenceManager(private val context: Context) {
         }
     }
 
+    fun deleteUser(){
+        with(sharedPreference.edit()){
+            remove(USER_DETAIL)
+            commit()
+        }
+    }
+
     fun getWeather(key: String = Constant.WEATHER_KEY): WeatherDto? {
         val gson = Gson()
         val str = sharedPreference.getString(key, "")

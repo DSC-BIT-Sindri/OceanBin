@@ -19,4 +19,8 @@ class ProfileViewModel @Inject constructor(
     init {
         _user.value = profileRepository.getUser()
     }
+
+    fun logout(){
+        profileRepository.logout()
+    }
 }

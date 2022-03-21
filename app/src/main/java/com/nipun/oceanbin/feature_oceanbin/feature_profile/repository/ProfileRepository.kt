@@ -12,4 +12,8 @@ class ProfileRepository (
     fun getUser() : User{
         return preferenceManager.getUser()?: User()
     }
+
+    fun logout(){
+        preferenceManager.deleteUser()
+    }
 }

@@ -6,4 +6,14 @@
     <string name="setting_location_dialogue">The app requires Location permission to be able to read location and display accurate weather.
         \nPlease open settings and accept the permission</string>
     <string name="API_KEY">AIzaSyCuDhthNYgyexUXQaoMDVKytRqqaz6Tpy8</string>
+
+    <string name="something_went_wrong">Something Went Wrong</string>
+    <string name="incorrect_credential">Incorrect credential</string>
+    <string name="no_user_found">No user found with given email</string>
+    <string name="email_verification_sent">A verification link is send to your email</string>
+    <string name="open_link">open the link and then login to your account.</string>
+    <string name="user_already_exists">Email already exists.</string>
+    <string name="invalid_mail">Email is not valid</string>
+    <string name="password_verification_link">Password reset link send to your email </string>
+    <string name="reset_password">Reset password</string>
 </resources>

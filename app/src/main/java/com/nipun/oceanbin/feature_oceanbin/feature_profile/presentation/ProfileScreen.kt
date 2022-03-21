@@ -32,6 +32,7 @@ import com.nipun.oceanbin.R
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.PersonalDetails
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.RecycledWasteCard
 import com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation.components.WalletDetailsCard
+import com.nipun.oceanbin.ui.Screen
 import org.intellij.lang.annotations.JdkConstants
 
 @Composable
@@ -39,13 +40,13 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
-    ProfileScreenDetails(modifier)
+    ProfileScreenDetails(modifier,navController)
 }
 
-@Preview
 @Composable
 fun ProfileScreenDetails(
     modifier: Modifier = Modifier,
+    navController: NavController,
     profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val user = profileViewModel.user.value
@@ -150,6 +151,20 @@ fun ProfileScreenDetails(
                                         vertical = SmallSpacing
                                     )
                             )
+                        }
+
+                        item{
+                            Button(onClick = {
+                                profileViewModel.logout()
+                                navController.navigate(Screen.DoLoginSignup.route){
+                                    popUpTo(Screen.BottomScreen.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }) {
+                                Text(text = "Logout")
+                            }
+                            Spacer(modifier = Modifier.size(SmallSpacing))
                         }
                     }
                 }

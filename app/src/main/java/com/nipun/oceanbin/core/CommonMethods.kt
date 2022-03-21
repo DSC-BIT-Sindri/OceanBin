@@ -5,6 +5,7 @@ import android.content.Intent
 import android.location.Address
 import android.net.Uri
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -115,6 +116,10 @@ fun Address.toSearchModel() : SearchResultModel{
         addressLine = getAddressLine(0),
         admin = adminArea
     )
+}
+
+fun Context.showToast(message : String){
+    Toast.makeText(this,message,Toast.LENGTH_LONG).show()
 }
 //
 //fun AutocompletePrediction.toAutocompletModel() : AutoCompleteModel{

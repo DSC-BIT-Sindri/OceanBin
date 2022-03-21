@@ -26,6 +26,9 @@ class SignInViewModel @Inject constructor(
     private val _email = mutableStateOf(TextState())
     private val _password = mutableStateOf(TextState())
 
+    private val _resetPasswordDialogue = mutableStateOf(false)
+    val resetPasswordDialogue : State<Boolean> = _resetPasswordDialogue
+
     val email: State<TextState> = _email
     val password: State<TextState> = _password
 
@@ -78,6 +81,38 @@ class SignInViewModel @Inject constructor(
                 is Resource.Success -> {
                     _eventFlow.emit(
                         UIEvent.GoNext()
+                    )
+                    _showLoading.value = false
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun changePassWordVisibility(visible : Boolean){
+        _resetPasswordDialogue.value = visible
+    }
+
+    fun resetPassword(){
+        val tempMail = email.value.text
+        fireStoreManager.resetPassword(tempMail).onEach { result->
+            when (result) {
+                is Resource.Loading -> {
+                    _showLoading.value = true
+                }
+                is Resource.Error -> {
+                    _eventFlow.emit(
+                        UIEvent.ShowSnackbar(
+                            result.message ?: "Unknown Error"
+                        )
+                    )
+                    _showLoading.value = false
+                }
+                is Resource.Success -> {
+                    _resetPasswordDialogue.value = false
+                    _eventFlow.emit(
+                        UIEvent.ShowSnackbar(
+                            result.data ?: "Verification link send to your email"
+                        )
                     )
                     _showLoading.value = false
                 }

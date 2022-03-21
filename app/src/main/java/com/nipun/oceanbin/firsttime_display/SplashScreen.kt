@@ -697,6 +697,9 @@ fun DoLoginSignup(
 
 @Composable
 fun Field(
+    modifier: Modifier = Modifier
+        .padding(bottom = SmallSpacing)
+        .fillMaxWidth(0.8f),
     identity: String,
     textState: TextState = TextState(),
     isNumber: Boolean = false,
@@ -710,9 +713,7 @@ fun Field(
         OutlinedTextField(
             value = textState.text, onValueChange = onValueChange,
             singleLine = true,
-            modifier = Modifier
-                .padding(bottom = SmallSpacing)
-                .fillMaxWidth(0.8f),
+            modifier = modifier,
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.Black,
                 backgroundColor = Color.White,

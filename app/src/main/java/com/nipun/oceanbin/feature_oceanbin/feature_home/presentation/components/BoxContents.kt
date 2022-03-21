@@ -1,10 +1,10 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -29,33 +28,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.gson.Gson
 import com.nipun.oceanbin.R
-import com.nipun.oceanbin.core.LogoWithText
+import com.nipun.oceanbin.core.Constant.NEWS
 import com.nipun.oceanbin.core.getMainScreenCurve
 import com.nipun.oceanbin.core.noRippleClickable
+import com.nipun.oceanbin.feature_oceanbin.BottomScreens
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
+import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsDetails
 import com.nipun.oceanbin.ui.theme.*
+import java.net.URLEncoder
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BoxContents(
     modifier: Modifier = Modifier,
     navController: NavController,
+    bottomNavController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel(),
     expanded: Boolean,
     onDrag: (Int) -> Unit,
     onClick: () -> Unit = {}
 ) {
+    val newsState = homeViewModel.newsState.value
+    val news = newsState.data
     BoxWithConstraints(modifier = modifier) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
+        if(newsState.isLoading){
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .zIndex(100f)
+            )
+        }
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -75,7 +88,7 @@ fun BoxContents(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .zIndex(100f),
+                .zIndex(10f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val lazyListState = rememberLazyListState()
@@ -105,33 +118,48 @@ fun BoxContents(
                         .fillMaxHeight()
                 ) {
                     item { Spacer(modifier = Modifier.size(DrawerHeight)) }
-                    item {
-                        Text(
-                            text = "NEWS",
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier.padding(start = IconSize)
-                        )
-                        Spacer(modifier = Modifier.height(MediumSpacing))
-                        val pagerState = rememberPagerState(
-                            pageCount = 4,
-                            initialOffscreenLimit = 1,
-                            infiniteLoop = false,
-                            initialPage = 1
-                        )
-                        // A global coroutine for performing async task in composable function
-                        val coroutineScope = rememberCoroutineScope()
-                        HorizontalPager(
-                            state = pagerState,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = MediumSpacing)
-                        ) {
-                            SingleCard(
-                                modifier = Modifier
-                                    .padding(horizontal = MediumSpacing, vertical = SmallSpacing)
-                                    .fillMaxWidth(0.6f)
-                                    .aspectRatio(0.8f)
+                    if (news.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = "NEWS",
+                                style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.padding(start = IconSize)
                             )
+                            Spacer(modifier = Modifier.height(MediumSpacing))
+                            val pagerState = rememberPagerState(
+                                pageCount = news.size,
+                                initialOffscreenLimit = 1,
+                                infiniteLoop = false,
+                                initialPage = if (news.size > 1) 1 else 0
+                            )
+                            // A global coroutine for performing async task in composable function
+                            val coroutineScope = rememberCoroutineScope()
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = MediumSpacing)
+                            ) { index ->
+                                val newsDetail = news[index]
+                                SingleCard(
+                                    newsDetails = newsDetail,
+                                    modifier = Modifier
+                                        .padding(
+                                            horizontal = MediumSpacing,
+                                            vertical = SmallSpacing
+                                        )
+                                        .fillMaxWidth(0.6f)
+                                        .aspectRatio(0.8f)
+                                ){
+                                    val gson = Gson()
+                                    val param = URLEncoder.encode(
+                                        gson.toJson(newsDetail),"utf-8"
+                                    )
+                                    bottomNavController.navigate(BottomScreens.NewsScreen.route+"?$NEWS=$param"){
+                                        popUpTo(BottomScreens.HomeScreen.route)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -211,6 +239,8 @@ fun BoxContents(
 @Composable
 fun SingleCard(
     modifier: Modifier = Modifier,
+    newsDetails: NewsDetails,
+    onMoreClick : () -> Unit
 ) {
     Surface(
         modifier = modifier,
@@ -218,14 +248,16 @@ fun SingleCard(
         shape = RoundedCornerShape(MediumSpacing)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
+            val painter = rememberImagePainter(newsDetails.image) {
+                placeholder(R.drawable.test)
+            }
             Image(
-                painter = painterResource(id = R.drawable.test),
-                contentDescription = "Test",
+                painter = if (newsDetails.image.isBlank()) painterResource(id = R.drawable.test) else painter,
+                contentDescription = newsDetails.heading,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,
             )
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -237,12 +269,7 @@ fun SingleCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Israeli man grows heaviest strawberry weighing 289 gms," +
-                            "breaks world record\n" +
-                            "Israeli man grows heaviest strawberry weighing 289 gms,\" +\n" +
-                            "                            \"breaks world record\\n\"" +
-                            "Israeli man grows heaviest strawberry weighing 289 gms,\" +\n" +
-                            "                            \"breaks world record\\n\"",
+                    text = newsDetails.heading,
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.h4,
                     modifier = Modifier.fillMaxHeight(0.7f),
@@ -255,6 +282,9 @@ fun SingleCard(
                     modifier = Modifier
                         .fillMaxHeight()
                         .aspectRatio(1f)
+                        .clickable {
+                            onMoreClick()
+                        }
                         .clip(CircleShape)
                         .background(LightBg)
                         .padding(ExtraSmallSpacing),

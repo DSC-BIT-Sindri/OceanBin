@@ -13,12 +13,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.firebase.User
 import com.nipun.oceanbin.core.noRippleClickable
 import com.nipun.oceanbin.ui.theme.*
 
 @Composable
 fun PersonalDetails(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     Column(
         modifier = modifier
@@ -34,28 +36,28 @@ fun PersonalDetails(
             modifier = Modifier
                 .fillMaxWidth(),
             title = "Full Name",
-            value = "Nipun Kumar"
+            value = user.name
         )
         Spacer(modifier = Modifier.size(MediumSpacing))
         SingleDetail(
             modifier = Modifier
                 .fillMaxWidth(),
             title = "Email",
-            value = "nipunvirat0@gmail.com"
+            value = user.email
         )
         Spacer(modifier = Modifier.size(MediumSpacing))
         SingleDetail(
             modifier = Modifier
                 .fillMaxWidth(),
             title = "Mobile Number",
-            value = "9065814864"
+            value = user.phone
         )
         Spacer(modifier = Modifier.size(MediumSpacing))
         SingleDetail(
             modifier = Modifier
                 .fillMaxWidth(),
             title = "Password",
-            value = "nipunafdak"
+            value = "*****************"
         )
     }
 }

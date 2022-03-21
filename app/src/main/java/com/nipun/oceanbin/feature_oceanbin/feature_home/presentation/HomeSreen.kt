@@ -32,6 +32,7 @@ import com.nipun.oceanbin.ui.theme.MainBg
 @Composable
 fun HomeScreen(
     navController: NavController,
+    bottomNavController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val showPermissionDialogue = homeViewModel.shouldShowRational.value
@@ -44,7 +45,7 @@ fun HomeScreen(
     if (permissionState.allPermissionsGranted) {
         homeViewModel.setHasPermission()
         homeViewModel.getLocation()
-        HomeScreenContent(navController = navController, homeViewModel)
+        HomeScreenContent(navController = navController,bottomNavController, homeViewModel)
     } else {
         if (homeViewModel.shouldShowRational.value) {
             PermissionsRequired(
@@ -68,21 +69,21 @@ fun HomeScreen(
                         homeViewModel.setHasPermission(false)
                         homeViewModel.setCount()
                         homeViewModel.getLocation()
-                        HomeScreenContent(navController = navController, homeViewModel)
+                        HomeScreenContent(navController = navController,bottomNavController, homeViewModel)
                     }
                 },
                 permissionsNotAvailableContent = {
                     homeViewModel.setPermanentlyDenied()
                     homeViewModel.setHasPermission(false)
                     homeViewModel.setCount()
-                    HomeScreenContent(navController = navController, homeViewModel)
+                    HomeScreenContent(navController = navController,bottomNavController, homeViewModel)
                 }) {
             }
         } else {
             Log.e("NipunL", "Set not show rational")
             homeViewModel.setHasPermission(false)
             homeViewModel.setCount()
-            HomeScreenContent(navController = navController, homeViewModel)
+            HomeScreenContent(navController = navController,bottomNavController, homeViewModel)
         }
     }
 }

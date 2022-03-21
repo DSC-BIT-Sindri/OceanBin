@@ -17,6 +17,7 @@ val ProfileImageSize = 120.dp
 val WeatherImageSizeInWeatherScreen = 120.dp
 val LocationIconSizeInWeatherScreen = 20.dp
 val SmallWeatherCardSize = 130.dp
+val RegisterImageSize = 330.dp
 
 val DrawerHeight = 50.dp
 

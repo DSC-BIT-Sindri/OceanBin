@@ -1,10 +1,6 @@
 package com.nipun.oceanbin.ui
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -16,13 +12,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.nipun.oceanbin.R
-import com.nipun.oceanbin.core.Constant
-import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.feature_oceanbin.BottomScreen
 import com.nipun.oceanbin.firsttime_display.*
 import com.nipun.oceanbin.firsttime_display.feature_register.presntation.Signup
-import com.nipun.oceanbin.firsttime_display.feature_signi_in.presentation.Login
+import com.nipun.oceanbin.firsttime_display.feature_login.presentation.Login
 import com.nipun.oceanbin.ui.theme.SplashScreenTutTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,7 +49,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Screen.WhoAreYouScreen.route) {
                             // Who are you screen
-                            WhoAreYouScreen(navController = navController, mainViewModel)
+                            WhoAreYouScreen(navController = navController)
                         }
                         composable(route = Screen.SplashSeaViewPager.route) {
                             SplashViewPager(

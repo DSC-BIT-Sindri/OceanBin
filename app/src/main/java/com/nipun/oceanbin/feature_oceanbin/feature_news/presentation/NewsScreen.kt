@@ -28,7 +28,7 @@ fun NewsScreen(
 @Composable
 fun NewsScreenDetails(
     navController: NavController,
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     newsViewModel: NewsViewModel = hiltViewModel()
 ) {
     val newsState = newsViewModel.newsState.value
@@ -40,13 +40,13 @@ fun NewsScreenDetails(
                 .padding(bottom = DrawerHeight)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .padding(top = BigSpacing, start = SmallSpacing, end = SmallSpacing)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 LogoWithText(
                     modifier,
                     color1 = LogoDarkBlue,
@@ -58,18 +58,20 @@ fun NewsScreenDetails(
                     modifier = modifier
                         .fillMaxSize()
                         .padding(top = BigSpacing)
-                ){
-                    items(newsList){ news ->
+                ) {
+                    items(newsList) { news ->
                         NewsCard(
                             image = news.image,
                             heading = news.heading,
                             description = news.description,
-                            newsSource = news.newsSource)
+                            newsSource = news.newsSource,
+                            time = news.time
+                        )
                         Spacer(modifier = Modifier.height(BigSpacing))
                     }
                 }
             }
-            if(newsState.isLoading){
+            if (newsState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .align(Alignment.Center)

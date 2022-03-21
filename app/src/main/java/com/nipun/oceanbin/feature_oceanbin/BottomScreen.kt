@@ -20,6 +20,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.nipun.oceanbin.core.Constant.LAT
 import com.nipun.oceanbin.core.Constant.LON
+import com.nipun.oceanbin.core.Constant.NEWS
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeScreen
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
 import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.MapScreen
@@ -78,9 +79,18 @@ fun BottomScreen(
             startDestination = BottomScreens.HomeScreen.route
         ) {
             composable(BottomScreens.HomeScreen.route) {
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, bottomNavController = bottomNavController)
             }
-            composable(BottomScreens.NewsScreen.route) {
+            composable(
+                route = BottomScreens.NewsScreen.route + "?$NEWS={$NEWS}",
+                arguments = listOf(
+                    navArgument(NEWS) {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) {
                 NewsScreen(navController = navController)
             }
             composable(
@@ -110,7 +120,7 @@ fun BottomScreen(
                 ProfileScreen(navController = navController)
             }
             composable(
-                route = BottomScreens.SearchScreen.route+ "?$LAT={$LAT}&$LON={$LON}",
+                route = BottomScreens.SearchScreen.route + "?$LAT={$LAT}&$LON={$LON}",
                 arguments = listOf(
                     navArgument(LAT) {
                         type = NavType.StringType
@@ -151,7 +161,8 @@ fun BottomBar(
         elevation = SmallSpacing
     ) {
         bottomItems.forEach { screen ->
-            val selected = currentRoute?.let { it == screen.route } == true
+            val selected =
+                currentRoute?.let { route -> route.takeWhile { it != '?' } == screen.route } == true
             BottomNavigationItem(
                 icon = {
                     Icon(

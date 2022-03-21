@@ -1,4 +1,4 @@
-package com.nipun.oceanbin.firsttime_display.feature_signi_in.presentation
+package com.nipun.oceanbin.firsttime_display.feature_login.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

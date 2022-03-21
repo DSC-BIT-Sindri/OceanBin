@@ -11,5 +11,6 @@ object Constant {
 
     const val LAT = "lat"
     const val LON = "lon"
+    const val NEWS = "news"
 
 }

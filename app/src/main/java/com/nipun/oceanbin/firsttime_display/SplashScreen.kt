@@ -83,8 +83,9 @@ fun SplashViewPager(
                  * a preference that our app is visited first time buy simply put a boolean value
                  * in splash screen.
                  */
+                mainViewModel.setSplashViewed()
                 navController.navigate(Screen.DoLoginSignup.route) {
-                    popUpTo(Screen.SplashSeaViewPager.route) {
+                    popUpTo(Screen.WhoAreYouScreen.route) {
                         inclusive = true
                     }
                 }
@@ -127,8 +128,9 @@ fun SplashBeachViewPager(
                  * a preference that our app is visited first time buy simply put a boolean value
                  * in splash screen.
                  */
+                mainViewModel.setSplashViewed()
                 navController.navigate(Screen.DoLoginSignup.route) {
-                    popUpTo(Screen.SplashBeachViewPager.route) {
+                    popUpTo(Screen.WhoAreYouScreen.route) {
                         inclusive = true
                     }
                 }
@@ -452,6 +454,7 @@ fun SplashScreen(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val isInstalled = mainViewModel.isInstalled.value
+    val userId = mainViewModel.user.value.id
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -508,21 +511,27 @@ fun SplashScreen(
     }
     LaunchedEffect(key1 = true) {
         delay(1200L)
-        if (isInstalled) {
-//            navController.navigate(Screen.SplashViewPager.route) {
-//                popUpTo(Screen.SplashScreen.route) {
-//                    inclusive = true
-//                }
-//            }
-            navController.navigate(Screen.WhoAreYouScreen.route) {
-                popUpTo(Screen.SplashScreen.route) {
-                    inclusive = true
+        when {
+            isInstalled -> {
+                navController.navigate(Screen.WhoAreYouScreen.route) {
+                    popUpTo(Screen.SplashScreen.route) {
+                        inclusive = true
+                    }
                 }
             }
-        } else {
-            navController.navigate(Screen.BottomScreen.route) {
-                popUpTo(Screen.SplashScreen.route) {
-                    inclusive = true
+
+            !isInstalled && userId.isBlank() -> {
+                navController.navigate(Screen.DoLoginSignup.route) {
+                    popUpTo(Screen.SplashScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+            else -> {
+                navController.navigate(Screen.BottomScreen.route) {
+                    popUpTo(Screen.SplashScreen.route) {
+                        inclusive = true
+                    }
                 }
             }
         }
@@ -531,8 +540,7 @@ fun SplashScreen(
 
 @Composable
 fun WhoAreYouScreen(
-    navController: NavController,
-    mainViewModel: MainViewModel = hiltViewModel()
+    navController: NavController
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -603,14 +611,9 @@ fun Whom(
                 .width(170.dp)
                 .padding(top = 70.dp, start = 10.dp, end = 10.dp),
             onClick = {
-                if (identity.equals("VOLUNTEER")) {
-//                    navController.navigate(Screen.Home.route){
-//                        popUpTo(Screen.Home.route){
-//                            inclusive=true
-//                        }
-//                    }
+                if (identity == "VOLUNTEER") {
                     navController.navigate(route = Screen.SplashBeachViewPager.route)
-                } else if (identity.equals("FISHERMAN")) {
+                } else if (identity == "FISHERMAN") {
                     navController.navigate(route = Screen.SplashSeaViewPager.route)
                 }
             },

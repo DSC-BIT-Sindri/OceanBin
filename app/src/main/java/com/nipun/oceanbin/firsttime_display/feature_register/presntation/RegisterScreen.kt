@@ -1,8 +1,6 @@
 package com.nipun.oceanbin.firsttime_display.feature_register.presntation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -51,7 +49,8 @@ fun Signup(
                             message = event.name
                         )
                         navController.navigate(Screen.BottomScreen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.DoLoginSignup.route) {
+                                inclusive = true
                             }
                         }
                     }
@@ -79,6 +78,7 @@ fun Signup(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(RegisterImageSize)
                     .align(Alignment.TopCenter),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -92,21 +92,24 @@ fun Signup(
                 )
                 Image(
                     modifier = Modifier
-                        .fillMaxWidth(.9f)
-                        .padding(SmallSpacing),
+                        .padding(SmallSpacing)
+                        .fillMaxSize(),
                     painter = painterResource(id = R.drawable.ic_pencil),
                     contentDescription = "Signup",
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Inside,
                     alignment = Alignment.Center
                 )
+                Spacer(modifier = Modifier.size(BigSpacing))
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .align(Alignment.BottomCenter)
+                    .verticalScroll(state = rememberScrollState(), enabled = true)
             ) {
+                Spacer(modifier = Modifier.height(RegisterImageSize+ BigSpacing))
                 Field(
                     identity = "Name",
                     textState = registerViewModel.name.value

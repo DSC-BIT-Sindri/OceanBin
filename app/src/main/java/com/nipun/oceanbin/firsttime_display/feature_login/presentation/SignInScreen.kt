@@ -1,4 +1,4 @@
-package com.nipun.oceanbin.firsttime_display.feature_signi_in.presentation
+package com.nipun.oceanbin.firsttime_display.feature_login.presentation
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -45,7 +45,8 @@ fun Login(
                     }
                     is UIEvent.GoNext -> {
                         navController.navigate(Screen.BottomScreen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(Screen.DoLoginSignup.route) {
+                                inclusive = true
                             }
                         }
                     }
@@ -88,7 +89,7 @@ fun Login(
                     modifier = Modifier
                         .fillMaxWidth(.9f)
                         .padding(SmallSpacing),
-                    painter = painterResource(id = R.drawable.ic_pencil),
+                    painter = painterResource(id = R.drawable.ic_leaf),
                     contentDescription = "Signup",
                     contentScale = ContentScale.Fit,
                     alignment = Alignment.Center

@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreenContent(
     navController: NavController,
+    bottomNavController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     if (!homeViewModel.hasPermission && homeViewModel.count == Constant.Max_Count) {
@@ -52,6 +53,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(sizeAnimate),
+                bottomNavController = bottomNavController,
                 homeViewModel = homeViewModel,
                 navController = navController,
                 expanded = bottomSheetScaffoldState.bottomSheetState.isExpanded,

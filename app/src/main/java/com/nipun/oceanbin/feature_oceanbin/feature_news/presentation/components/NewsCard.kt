@@ -30,7 +30,8 @@ fun NewsCard(
     image: String,
     heading: String,
     description: String,
-    newsSource: String
+    newsSource: String,
+    time : String
 ) {
     Card(
         modifier = modifier
@@ -75,18 +76,45 @@ fun NewsCard(
                     )
                 }
             }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(MediumSpacing)
+                    .padding(MediumSpacing),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(text = "Source:")
-                Spacer(modifier = Modifier.size(MediumSpacing))
-                Text(text = newsSource)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Source:",
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                    Spacer(modifier = Modifier.size(MediumSpacing))
+                    Text(
+                        text = newsSource,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+                Spacer(modifier = Modifier.size(ExtraSmallSpacing))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Published on:",
+                        style = MaterialTheme.typography.subtitle2
+                    )
+                    Spacer(modifier = Modifier.size(MediumSpacing))
+                    Text(
+                        text = time,
+                        style = MaterialTheme.typography.overline
+                    )
+                }
             }
-
         }
     }
 }

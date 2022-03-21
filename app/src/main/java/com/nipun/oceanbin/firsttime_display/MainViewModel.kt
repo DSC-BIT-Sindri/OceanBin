@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nipun.oceanbin.core.PreferenceManager
+import com.nipun.oceanbin.core.firebase.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,6 +21,9 @@ class MainViewModel @Inject constructor(
     private val _isInstalled = mutableStateOf(true)
     val isInstalled : State<Boolean> = _isInstalled
 
+    private val _user = mutableStateOf(User())
+    val user : State<User> = _user
+
     init {
         /*
          * This block will execute when our app is launched and get the value from shared preference
@@ -31,6 +35,7 @@ class MainViewModel @Inject constructor(
     private fun getInstallDetail(){
         viewModelScope.launch {
             _isInstalled.value = sharedPref.getBoolean()
+            _user.value = sharedPref.getUser()?:User()
         }
     }
 

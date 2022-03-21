@@ -5,5 +5,7 @@ data class NewsDetails(
     var image : String = "",
     var heading : String = "",
     var description : String = "",
-    var newsSource : String = ""
+    var newsSource : String = "",
+    var time : String = ""
 )
+

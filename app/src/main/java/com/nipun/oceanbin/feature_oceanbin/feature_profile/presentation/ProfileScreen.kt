@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.room.PrimaryKey
 import com.nipun.oceanbin.core.LogoWithText
@@ -44,8 +45,10 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenDetails(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
+    val user = profileViewModel.user.value
     Scaffold(
         backgroundColor = TopbarLightBlue,
         modifier = modifier
@@ -140,6 +143,7 @@ fun ProfileScreenDetails(
                         item {
                             Spacer(modifier = Modifier.size(MediumSpacing))
                             PersonalDetails(
+                                user = user,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(

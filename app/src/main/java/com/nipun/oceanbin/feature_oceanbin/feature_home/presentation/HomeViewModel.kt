@@ -10,11 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.nipun.oceanbin.core.Constant
 import com.nipun.oceanbin.core.PreferenceManager
 import com.nipun.oceanbin.core.Resource
+import com.nipun.oceanbin.core.firebase.FireStoreManager
 import com.nipun.oceanbin.core.getTimeInString
 import com.nipun.oceanbin.feature_oceanbin.feature_home.local.LocationRepository
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.DayState
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.HourlyState
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.state.WeatherState
+import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.NewsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,7 +27,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val preferenceManager: PreferenceManager,
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val fireStoreManager: FireStoreManager
 ) : ViewModel() {
 
     private val _shouldShowRational = mutableStateOf(true)
@@ -44,10 +47,38 @@ class HomeViewModel @Inject constructor(
 
     var count: Int = 0
 
+    private val _newsState = mutableStateOf(NewsState())
+    val newsState : State<NewsState> = _newsState
+
     init {
         val key = preferenceManager.getBoolean(Constant.RATIONAL_KEY, true)
         _shouldShowRational.value = key
         count = preferenceManager.getInt(Constant.Count_Key, 0)
+        getNews()
+    }
+
+    private fun getNews()  {
+        fireStoreManager.getNews().onEach { result->
+            when(result){
+                is Resource.Loading -> {
+                    _newsState.value = NewsState(
+                        isLoading = true
+                    )
+                }
+                is Resource.Error -> {
+                    _newsState.value = NewsState(
+                        isLoading = false,
+                        error = result.message
+                    )
+                }
+                is Resource.Success -> {
+                    _newsState.value = NewsState(
+                        isLoading = false,
+                        data = result.data?:newsState.value.data
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun getLocation() {

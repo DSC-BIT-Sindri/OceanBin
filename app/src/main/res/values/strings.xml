@@ -3,7 +3,7 @@
     <string name="location_permission">Location Permission</string>
     <string name="show_location_quote">With location permission we can show weather and news your nearby. </string>
     <string name="location_service">Location Service</string>
-    <string name="setting_location_dialogue">The app requires Location permission to be able to read location and display accurate weather.
+    <string name="setting_location_dialogue">we need location for real time location tracking, so that we can show you the nearest pickup vehicle.
         \nPlease open settings and accept the permission</string>
     <string name="API_KEY">AIzaSyCuDhthNYgyexUXQaoMDVKytRqqaz6Tpy8</string>
 
@@ -16,6 +16,16 @@
     <string name="invalid_mail">Email is not valid</string>
     <string name="password_verification_link">Password reset link send to your email </string>
     <string name="reset_password">Reset password</string>
+    <string name="pickup_vehicle_scheduled">Pickup vehicle scheduled, be ready in given time.</string>
+    <string name="no_login">No login user found</string>
+    <string name="failed_upload_image">Image uploading failed</string>
+    <string name="failed_update_user">User updating failed, try again</string>
+    <string name="image_uploaded">Image uploaded successfully</string>
+    <string name="change_name">Change Name</string>
+    <string name="change_phone">Change Phone Number</string>
+    <string name="user_detail_update">User details updated successfully</string>
+    <string name="not_valid_name">User name length should greater than 3 </string>
+    <string name="not_valid_phone">Phone number is not valid</string>
 
     <string name="read_storage_rational">Read storage permission is needed for access images on your device</string>
     <string name="read_storage_permanent_deny">Read storage permission is permanently denied, allow permission from settings. </string>

@@ -112,6 +112,7 @@ fun LogoWithText(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PermissionUi(
     context: Context,
@@ -119,7 +120,7 @@ fun PermissionUi(
     permissionRational: String,
     permanentDenyMessage: String,
     permanentDeny : Boolean = false,
-    scaffoldState: ScaffoldState,
+    scaffoldState: BottomSheetScaffoldState,
     permissionAction: (PermissionAction) -> Unit
 ) {
     val permissionGranted = context.checkIfPermissionGranted(permission)

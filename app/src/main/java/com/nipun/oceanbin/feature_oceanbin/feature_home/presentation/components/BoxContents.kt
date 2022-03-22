@@ -43,6 +43,7 @@ import com.nipun.oceanbin.core.noRippleClickable
 import com.nipun.oceanbin.feature_oceanbin.BottomScreens
 import com.nipun.oceanbin.feature_oceanbin.feature_home.presentation.HomeViewModel
 import com.nipun.oceanbin.feature_oceanbin.feature_news.presentation.components.NewsDetails
+import com.nipun.oceanbin.ui.Screen
 import com.nipun.oceanbin.ui.theme.*
 import java.net.URLEncoder
 
@@ -62,7 +63,7 @@ fun BoxContents(
     BoxWithConstraints(modifier = modifier) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
-        if(newsState.isLoading){
+        if (newsState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -150,12 +151,12 @@ fun BoxContents(
                                         )
                                         .fillMaxWidth(0.6f)
                                         .aspectRatio(0.8f)
-                                ){
+                                ) {
                                     val gson = Gson()
                                     val param = URLEncoder.encode(
-                                        gson.toJson(newsDetail),"utf-8"
+                                        gson.toJson(newsDetail), "utf-8"
                                     )
-                                    bottomNavController.navigate(BottomScreens.NewsScreen.route+"?$NEWS=$param"){
+                                    bottomNavController.navigate(BottomScreens.NewsScreen.route + "?$NEWS=$param") {
                                         popUpTo(BottomScreens.HomeScreen.route)
                                     }
                                 }
@@ -184,7 +185,9 @@ fun BoxContents(
                     )
                     Spacer(modifier = Modifier.height(ExtraSmallSpacing))
                     Button(
-                        onClick = { },
+                        onClick = {
+                            bottomNavController.navigate(BottomScreens.MapScreen.route)
+                        },
                         shape = RoundedCornerShape(MediumSpacing),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = LightBg,
@@ -240,7 +243,7 @@ fun BoxContents(
 fun SingleCard(
     modifier: Modifier = Modifier,
     newsDetails: NewsDetails,
-    onMoreClick : () -> Unit
+    onMoreClick: () -> Unit
 ) {
     Surface(
         modifier = modifier,

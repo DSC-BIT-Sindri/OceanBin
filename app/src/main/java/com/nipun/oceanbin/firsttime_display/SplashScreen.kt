@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -676,14 +677,14 @@ fun DoLoginSignup(
         ) {
             Text(text = "Register", style = Typography.h3, color = Color.White)
         }
+        Spacer(modifier = Modifier.size(CurveHeight))
         Text(
             text = "Sign In",
             style = Typography.h3,
             color = Purple,
             modifier = Modifier
-                .weight(1f)
+                .padding(SmallSpacing)
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 100.dp)
                 .clickable {
                     navController.navigate(Screen.Login.route) {
                         popUpTo(Screen.SplashSeaViewPager.route) {
@@ -706,6 +707,7 @@ fun Field(
     isPassword: Boolean = false,
     isEmail: Boolean = false,
     isDone: Boolean = false,
+    onDoneClick :() -> Unit = {},
     onValueChange: (String) -> Unit
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -739,6 +741,11 @@ fun Field(
                 },
                 imeAction = if (isDone) ImeAction.Done else ImeAction.Next
             ),
+            keyboardActions = KeyboardActions(onDone = {
+                if(isDone){
+                    onDoneClick()
+                }
+            }),
             trailingIcon = {
                 if (isPassword) {
                     val image = painterResource(

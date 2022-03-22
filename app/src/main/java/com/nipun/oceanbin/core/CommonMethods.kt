@@ -6,9 +6,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -19,8 +21,11 @@ import androidx.compose.ui.graphics.Path
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.LatLng
+import com.nipun.oceanbin.feature_oceanbin.feature_map.local.DropDownData
 import com.nipun.oceanbin.feature_oceanbin.feature_search.model.SearchResultModel
 import java.text.SimpleDateFormat
+import java.time.*;
+import java.time.temporal.TemporalAdjusters
 import java.util.*
 import kotlin.math.abs
 
@@ -104,6 +109,11 @@ fun Int.getTimeInString(): String {
     return sdf.format(this * 1000L).substring(0, 5)
 }
 
+fun Long.toTimeWithDate() : String{
+    val sdf = SimpleDateFormat("HH:mm dd MMMM yyyy", Locale.ENGLISH)
+    return sdf.format(this * 1000L)
+}
+
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
@@ -152,5 +162,30 @@ fun Context.checkShouldShowPermissionRational(permission: String): Boolean {
         activity!!,
         permission
     )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getNextPickupDays(): List<DropDownData> {
+    val dt = LocalDate.now()
+    val nextFriday = dt.with(TemporalAdjusters.next(DayOfWeek.FRIDAY))
+    val nextThursday = dt.with(TemporalAdjusters.next(DayOfWeek.THURSDAY))
+    return listOf(
+        DropDownData(
+            showToUser = "Pick Date"
+        ),
+        DropDownData(
+            localDate = nextThursday,
+            showToUser = "Thu - $nextThursday"
+        ),
+        DropDownData(
+            localDate = nextFriday,
+            showToUser = "Fri - $nextFriday"
+        )
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.toTimeStamp() : Long{
+    return this.toEpochDay()*86400
 }
 

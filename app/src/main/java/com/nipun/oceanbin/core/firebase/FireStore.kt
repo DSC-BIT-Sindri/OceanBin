@@ -42,14 +42,50 @@ class FireStoreManager(
             preferenceManager.saveUser(value = updateUser)
             emit(
                 Resource.Success<String>(
-                    data = "Image uploaded successfully"
+                    data = context.getString(R.string.image_uploaded)
                 )
             )
         } catch (e: Exception) {
             Log.e("Upload", e.message.toString())
             emit(
                 Resource.Error<String>(
-                    message = "Failed uploading image"
+                    message = context.getString(R.string.failed_upload_image)
+                )
+            )
+        }
+    }
+
+    fun updateUser(user: User) : Flow<Resource<String>> = flow {
+        emit(Resource.Loading<String>())
+        if(user.name.notValidName()){
+            emit(
+                Resource.Error<String>(
+                    message = context.getString(R.string.not_valid_name)
+                )
+            )
+            return@flow
+        }
+        if(user.phone.notValidPhone()){
+            emit(
+                Resource.Error<String>(
+                    message = context.getString(R.string.not_valid_phone)
+                )
+            )
+            return@flow
+        }
+        try {
+            userCollection.document(user.id).set(user).await()
+            preferenceManager.saveUser(value = user)
+            emit(
+                Resource.Success<String>(
+                    data = context.getString(R.string.user_detail_update)
+                )
+            )
+        } catch (e: Exception) {
+            Log.e("Upload", e.message.toString())
+            emit(
+                Resource.Error<String>(
+                    message = context.getString(R.string.failed_update_user)
                 )
             )
         }
@@ -68,7 +104,7 @@ class FireStoreManager(
             Log.e("Nipun", e.message.toString())
             emit(
                 Resource.Error<List<NewsDetails>>(
-                    message = "Something went wrong"
+                    message = context.getString(R.string.something_went_wrong)
                 )
             )
         }

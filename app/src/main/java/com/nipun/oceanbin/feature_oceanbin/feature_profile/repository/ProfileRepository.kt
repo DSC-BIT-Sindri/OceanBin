@@ -36,7 +36,7 @@ class ProfileRepository(
         return fireStoreManager.uploadImage(user,uri)
     }
 
-    fun updateUser(user: User){
-
+    fun updateUser(user: User): Flow<Resource<String>> {
+        return fireStoreManager.updateUser(user)
     }
 }

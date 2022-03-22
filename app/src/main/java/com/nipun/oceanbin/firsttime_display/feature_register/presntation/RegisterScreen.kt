@@ -151,7 +151,10 @@ fun Signup(
                     identity = "Confirm Password",
                     textState = registerViewModel.confirmPassword.value,
                     isPassword = true,
-                    isDone = true
+                    isDone = true,
+                    onDoneClick = {
+                        registerViewModel.createUser()
+                    }
                 ) {
                     registerViewModel.changeValue(
                         TextChangeEvent.ConfirmPassword(it)

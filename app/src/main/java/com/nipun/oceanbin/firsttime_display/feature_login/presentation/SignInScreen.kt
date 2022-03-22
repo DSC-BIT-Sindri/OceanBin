@@ -1,15 +1,14 @@
 package com.nipun.oceanbin.firsttime_display.feature_login.presentation
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -19,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.nipun.oceanbin.R
 import com.nipun.oceanbin.core.LogoWithText
 import com.nipun.oceanbin.core.UIEvent
@@ -146,7 +144,10 @@ fun Login(
                     identity = "Password",
                     textState = signInViewModel.password.value,
                     isPassword = true,
-                    isDone = true
+                    isDone = true,
+                    onDoneClick = {
+                        signInViewModel.signInUser()
+                    }
                 ) {
                     signInViewModel.changeValue(
                         TextChangeEvent.Password(it)
@@ -173,18 +174,28 @@ fun Login(
 
 @Composable
 fun PasswordResetDialogue(
+    header: String = "Email",
     textState: TextState,
     showLoading: Boolean,
     onFieldValueChange: (String) -> Unit,
     onYesClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
+    val focusRequester = FocusRequester()
+    LaunchedEffect(
+        key1 = true,
+        block = {
+            focusRequester.requestFocus()
+        }
+    )
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         AlertDialog(
-            onDismissRequest = { },
+            onDismissRequest = {
+                onCancelClick()
+            },
             title = {
                 Column(
                     modifier = Modifier
@@ -205,7 +216,8 @@ fun PasswordResetDialogue(
                             onFieldValueChange(it)
                         },
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester = focusRequester),
                         textStyle = MaterialTheme.typography.body1,
                         colors = TextFieldDefaults.textFieldColors(
                             backgroundColor = Color.Transparent,
@@ -216,16 +228,11 @@ fun PasswordResetDialogue(
                         ),
                         label = {
                             Text(
-                                text = "Email",
+                                text = header,
                                 style = MaterialTheme.typography.overline,
                                 color = WhiteShade
                             )
                         }
-                    )
-                }
-                AnimatedVisibility(visible = showLoading) {
-                    CircularProgressIndicator(
-                        color = GreenBorder
                     )
                 }
             },
@@ -252,5 +259,12 @@ fun PasswordResetDialogue(
             backgroundColor = LightBg,
             contentColor = MainBg
         )
+        if (showLoading) {
+            CircularProgressIndicator(
+                color = GreenBorder,
+                modifier = Modifier
+                    .align(Alignment.Center)
+            )
+        }
     }
 }

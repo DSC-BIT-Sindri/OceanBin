@@ -1,6 +1,7 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_map.presentation
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.zIndex
@@ -25,15 +27,20 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.nipun.oceanbin.R
+import com.nipun.oceanbin.core.*
 import com.nipun.oceanbin.core.Constant.LAT
 import com.nipun.oceanbin.core.Constant.LON
-import com.nipun.oceanbin.core.LogoWithText
-import com.nipun.oceanbin.core.noRippleClickable
 import com.nipun.oceanbin.feature_oceanbin.BottomScreens
-import com.nipun.oceanbin.feature_oceanbin.feature_map.local.MapModel
+import com.nipun.oceanbin.feature_oceanbin.feature_map.local.DropDownData
+import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.components.PickupDropDown
+import com.nipun.oceanbin.feature_oceanbin.feature_map.presentation.components.timeAvailable
+import com.nipun.oceanbin.ui.Screen
 import com.nipun.oceanbin.ui.theme.*
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MapScreen(
@@ -45,13 +52,15 @@ fun MapScreen(
     val destinationLatLng = locationState.data.latLang
     val currentLocation = mapViewModel.currentLocation.value
     val address = locationState.data.address.let { it.ifBlank { currentLocation.address } }
-    val addressLine = locationState.data.addressLine.let { it.ifBlank { currentLocation.addressLine } }
+    val addressLine =
+        locationState.data.addressLine.let { it.ifBlank { currentLocation.addressLine } }
 
     val markerLocation = destinationLatLng ?: currentLocation.latLang ?: LatLng(0.0, 0.0)
 
     var zoomState by remember {
         mutableStateOf(11f)
     }
+    val context = LocalContext.current
 
     val coroutineScope = rememberCoroutineScope()
     val size by animateFloatAsState(
@@ -83,14 +92,43 @@ fun MapScreen(
             myLocationButtonEnabled = false
         )
     }
+
+    val showLoading = mapViewModel.showLoading.value
+
+    LaunchedEffect(
+        key1 = true,
+        block = {
+            mapViewModel.eventFlow.collectLatest { event ->
+                when (event) {
+                    is UIEvent.ShowSnackbar -> {
+                        context.showToast(event.message)
+                    }
+                }
+            }
+        }
+    )
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
             BottomDialogueForMap(
                 modifier = Modifier
                     .fillMaxWidth(),
-                address = addressLine
-            )
+                address = addressLine,
+                dateSelectedIndex = mapViewModel.dateIndex.value,
+                timeSelectedIndex = mapViewModel.timeIndex.value,
+                onDateSelected = { dt, index ->
+                    mapViewModel.changePickupDate(dt, index)
+                },
+                onTimeSelected = { dt, index ->
+                    mapViewModel.changePickupTime(
+                        timeMillis = dt.timeMillis,
+                        shift = dt.showToUser,
+                        index = index
+                    )
+                }
+            ) {
+                mapViewModel.requestSchedule()
+            }
         },
         sheetPeekHeight = ExtraBigSpacing,
         modifier = Modifier
@@ -188,6 +226,12 @@ fun MapScreen(
                 }
                 Marker(position = markerLocation)
             }
+
+            if (showLoading) {
+                CircularProgressIndicator(modifier = Modifier
+                    .align(Alignment.Center)
+                    .zIndex(101f))
+            }
         }
     }
 }
@@ -241,10 +285,16 @@ fun SearchButton(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomDialogueForMap(
     modifier: Modifier = Modifier,
-    address: String = ""
+    address: String = "",
+    dateSelectedIndex: Int,
+    timeSelectedIndex: Int,
+    onDateSelected: (LocalDate, Int) -> Unit,
+    onTimeSelected: (DropDownData, Int) -> Unit,
+    onPickupButtonClick: () -> Unit
 ) {
     Surface(
         modifier = modifier,
@@ -271,24 +321,33 @@ fun BottomDialogueForMap(
                     .fillMaxWidth()
             )
             Spacer(modifier = Modifier.size(MediumSpacing))
-            PickupTextField(
-                leadingIcon = R.drawable.ic_clock,
-                placeHolder = "Time",
+            PickupDropDown(
+                dropDown = getNextPickupDays(),
+                selectedIndex = dateSelectedIndex,
                 modifier = Modifier
-                    .padding(horizontal = BigSpacing)
                     .fillMaxWidth()
+                    .padding(horizontal = BigSpacing),
+                onDropDownItemClick = { dt, index ->
+                    onDateSelected(dt.localDate, index)
+                }
             )
             Spacer(modifier = Modifier.size(MediumSpacing))
-            PickupTextField(
-                leadingIcon = R.drawable.ic_date_picker,
-                placeHolder = "Date",
+            PickupDropDown(
+                dropDown = timeAvailable,
+                selectedIndex = timeSelectedIndex,
+                leadingIcon = R.drawable.ic_clock,
                 modifier = Modifier
-                    .padding(horizontal = BigSpacing)
                     .fillMaxWidth()
+                    .padding(horizontal = BigSpacing),
+                onDropDownItemClick = { dt, index ->
+                    onTimeSelected(dt, index)
+                }
             )
-            Spacer(modifier = Modifier.size(ExtraBigSpacing))
+            Spacer(modifier = Modifier.size(MediumSpacing))
             Button(
-                onClick = { },
+                onClick = {
+                    onPickupButtonClick()
+                },
                 shape = RoundedCornerShape(MediumSpacing),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = LightBg,

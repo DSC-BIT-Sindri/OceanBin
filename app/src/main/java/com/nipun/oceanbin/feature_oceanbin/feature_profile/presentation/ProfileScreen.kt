@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.provider.MediaStore
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +43,7 @@ import com.nipun.oceanbin.firsttime_display.feature_login.presentation.PasswordR
 import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.TextChangeEvent
 import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.TextState
 import com.nipun.oceanbin.ui.Screen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -253,6 +256,9 @@ fun ProfileBottomSheet(
     }
 
     val showSaveChangeValue = (nameState.text != user.name) || (phoneState.text != user.phone)
+    BackHandler(enabled = showSaveChangeValue) {
+        profileViewModel.reset()
+    }
 
     Box(modifier = modifier) {
         Surface(
@@ -437,6 +443,14 @@ fun FieldEditDialogue(
     val focusRequester = remember {
         FocusRequester()
     }
+    val inputService = LocalTextInputService.current
+    LaunchedEffect(
+        key1 = true,
+    ) {
+        delay(300)
+        inputService?.showSoftwareKeyboard()
+        focusRequester.requestFocus()
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -508,8 +522,9 @@ fun FieldEditDialogue(
                     Text("Cancel", color = Color.Red)
                 }
             },
-            backgroundColor = LightBg,
-            contentColor = MainBg
+            backgroundColor = LightBgShade.copy(0.95f),
+            contentColor = WhiteShade,
+            shape = RoundedCornerShape(SmallSpacing)
         )
         if (showLoading) {
             CircularProgressIndicator(
@@ -519,12 +534,6 @@ fun FieldEditDialogue(
             )
         }
     }
-    LaunchedEffect(
-        key1 = true,
-        block = {
-            focusRequester.requestFocus()
-        }
-    )
 }
 
 

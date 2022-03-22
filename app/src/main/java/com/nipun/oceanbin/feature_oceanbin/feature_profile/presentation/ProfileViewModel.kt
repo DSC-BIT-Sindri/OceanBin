@@ -56,6 +56,11 @@ class ProfileViewModel @Inject constructor(
         _mobile.value = TextState(text = user.value.phone)
     }
 
+    fun reset(){
+        _name.value = name.value.copy(text = user.value.name)
+        _mobile.value = phone.value.copy(text = user.value.phone)
+    }
+
     fun logout() {
         profileRepository.logout()
     }

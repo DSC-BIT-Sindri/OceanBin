@@ -3,6 +3,7 @@ package com.nipun.oceanbin.firsttime_display.feature_login.presentation
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +12,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +29,7 @@ import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.T
 import com.nipun.oceanbin.firsttime_display.feature_register.presntation.state.TextState
 import com.nipun.oceanbin.ui.Screen
 import com.nipun.oceanbin.ui.theme.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -181,13 +184,17 @@ fun PasswordResetDialogue(
     onYesClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
-    val focusRequester = FocusRequester()
+    val focusRequester = remember {
+        FocusRequester()
+    }
+    val inputService = LocalTextInputService.current
     LaunchedEffect(
         key1 = true,
-        block = {
-            focusRequester.requestFocus()
-        }
-    )
+    ) {
+        delay(300)
+        inputService?.showSoftwareKeyboard()
+        focusRequester.requestFocus()
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -242,7 +249,11 @@ fun PasswordResetDialogue(
                         onYesClick()
                     }
                 ) {
-                    Text("Send", color = Color.White)
+                    Text(
+                        "Send", color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = RobotoFamily
+                    )
                 }
             },
             dismissButton = {
@@ -253,11 +264,12 @@ fun PasswordResetDialogue(
                     }
                 ) {
                     // adding text to our button.
-                    Text("Cancel", color = Color.Red)
+                    Text("Cancel", color = Color.Red.copy(0.75f))
                 }
             },
-            backgroundColor = LightBg,
-            contentColor = MainBg
+            backgroundColor = LightBgShade.copy(0.95f),
+            contentColor = WhiteShade,
+            shape = RoundedCornerShape(SmallSpacing)
         )
         if (showLoading) {
             CircularProgressIndicator(

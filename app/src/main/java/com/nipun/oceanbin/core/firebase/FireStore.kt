@@ -226,7 +226,7 @@ class FireStoreManager(
                 mAuth.sendPasswordResetEmail(email).await()
                 emit(
                     Resource.Success<String>(
-                        data = context.getString(R.string.password_verification_link) + email
+                        data = context.getString(R.string.password_verification_link) + " $email"
                     )
                 )
             }

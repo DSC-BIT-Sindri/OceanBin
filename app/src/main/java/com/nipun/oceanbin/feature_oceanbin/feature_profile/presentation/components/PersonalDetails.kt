@@ -27,6 +27,7 @@ fun PersonalDetails(
     nameState: TextState,
     phoneState: TextState,
     onNameEditClick: () -> Unit,
+    onChangePasswordClick : () -> Unit,
     onPhoneEditClick: () -> Unit
 ) {
     Column(
@@ -69,7 +70,8 @@ fun PersonalDetails(
                 .fillMaxWidth(),
             title = "Password",
             value = "*****************",
-            isShowEdit = true
+            isShowEdit = true,
+            onEditClick = {onChangePasswordClick()}
         )
     }
 }

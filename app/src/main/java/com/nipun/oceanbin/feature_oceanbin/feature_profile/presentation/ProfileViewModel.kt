@@ -142,4 +142,31 @@ class ProfileViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+    fun changePassword(){
+        profileRepository.changePassword(user.value.email).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _showLoading.value = true
+                }
+                is Resource.Error -> {
+                    _user.value = profileRepository.getUser()
+                    _eventFlow.emit(
+                        UIEvent.ShowSnackbar(
+                            result.message ?: "Unknown Error"
+                        )
+                    )
+                    _showLoading.value = false
+                }
+                is Resource.Success -> {
+                    _eventFlow.emit(
+                        UIEvent.ShowSnackbar(
+                            result.data ?: "Email reset mail sent"
+                        )
+                    )
+                    _showLoading.value = false
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 }

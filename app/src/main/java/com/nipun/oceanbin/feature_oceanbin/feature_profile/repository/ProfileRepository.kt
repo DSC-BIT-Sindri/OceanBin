@@ -39,4 +39,8 @@ class ProfileRepository(
     fun updateUser(user: User): Flow<Resource<String>> {
         return fireStoreManager.updateUser(user)
     }
+
+    fun changePassword(email: String) : Flow<Resource<String>>{
+        return fireStoreManager.resetPassword(email)
+    }
 }

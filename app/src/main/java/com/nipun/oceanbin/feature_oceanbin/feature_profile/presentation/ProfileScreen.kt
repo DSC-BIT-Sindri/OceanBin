@@ -1,6 +1,9 @@
 package com.nipun.oceanbin.feature_oceanbin.feature_profile.presentation
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -66,9 +69,13 @@ fun ProfileScreenDetails(
     val profileImage = profileViewModel.user.value.image
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            profileViewModel.getBitMap(it)
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    profileViewModel.getBitMap(uri = uri)
+                }
+            }
         }
     )
     LaunchedEffect(
@@ -166,7 +173,14 @@ fun ProfileScreenDetails(
                             profileViewModel.changeLocationPermissionDialogueValue(false)
                         }
                         is PermissionAction.OnPermissionGranted -> {
-                            launcher.launch("image/*")
+                            Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                            ).apply {
+                                type = "image/*"
+                                launcher.launch(this)
+
+                            }
                             profileViewModel.changeLocationPermissionDialogueValue(false)
                         }
                         is PermissionAction.OnPreviouslyDenied -> {
@@ -230,6 +244,14 @@ fun ProfileBottomSheet(
         mutableStateOf(false)
     }
 
+    var changePasswordVisibility by remember {
+        mutableStateOf(false)
+    }
+
+    var logoutVisibility by remember {
+        mutableStateOf(false)
+    }
+
     val showSaveChangeValue = (nameState.text != user.name) || (phoneState.text != user.phone)
 
     Box(modifier = modifier) {
@@ -285,47 +307,32 @@ fun ProfileBottomSheet(
                         },
                         onPhoneEditClick = {
                             phoneEditVisible = true
+                        },
+                        onChangePasswordClick = {
+                            changePasswordVisibility = true
                         }
                     )
-                    Button(onClick = {
-                        profileViewModel.logout()
-                        navController.navigate(Screen.DoLoginSignup.route) {
-                            popUpTo(Screen.BottomScreen.route) {
-                                inclusive = true
-                            }
+                    if (!showSaveChangeValue) {
+                        CustomButton(
+                            title = R.string.logout,
+                            icon = R.drawable.ic_back,
+                            modifier = Modifier
+                                .padding(SmallSpacing)
+                        ) {
+                            logoutVisibility = true
                         }
-                    }) {
-                        Text(text = "Logout")
                     }
                 }
             }
         }
         if (showSaveChangeValue) {
-            Button(
-                onClick = {
-                    profileViewModel.changeUserDetail()
-                },
-                shape = RoundedCornerShape(MediumSpacing),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = LightBg,
-                    contentColor = MainBg
-                ),
-                elevation = ButtonDefaults.elevation(
-                    defaultElevation = ExtraSmallSpacing
-                ),
-                contentPadding = PaddingValues(ExtraSmallSpacing),
+            CustomButton(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(SmallSpacing)
+                    .padding(SmallSpacing),
+                title = R.string.save_changes
             ) {
-                Text(
-                    text = "Save Changes",
-                    style = MaterialTheme.typography.body1,
-                    color = MainBg,
-                    modifier = Modifier.padding(
-                        SmallSpacing
-                    )
-                )
+                profileViewModel.changeUserDetail()
             }
         }
 
@@ -347,6 +354,31 @@ fun ProfileBottomSheet(
                 scaffoldState.snackbarHostState.currentSnackbarData?.performAction()
             }
         )
+        if (changePasswordVisibility) {
+            CustomAlertDialogue(title = R.string.change_password,
+                text = R.string.change_password_text,
+                onYesClick = {
+                    profileViewModel.changePassword()
+                    changePasswordVisibility = false
+                }) {
+                changePasswordVisibility = false
+            }
+        }
+        if (logoutVisibility) {
+            CustomAlertDialogue(title = R.string.logout,
+                text = R.string.logout_dialogue,
+                onYesClick = {
+                    logoutVisibility = false
+                    profileViewModel.logout()
+                    navController.navigate(Screen.DoLoginSignup.route) {
+                        popUpTo(Screen.BottomScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }) {
+                logoutVisibility = false
+            }
+        }
         if (nameEditVisible) {
             FieldEditDialogue(
                 header = "Name",

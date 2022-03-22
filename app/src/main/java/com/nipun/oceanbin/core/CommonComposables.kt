@@ -10,25 +10,29 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.nipun.oceanbin.R
-import com.nipun.oceanbin.ui.theme.IconSize
-import com.nipun.oceanbin.ui.theme.LargeTextSize
-import com.nipun.oceanbin.ui.theme.RobotoFamily
+import com.nipun.oceanbin.ui.theme.*
 import java.security.Permission
 
 @Composable
@@ -119,7 +123,7 @@ fun PermissionUi(
     permission: String,
     permissionRational: String,
     permanentDenyMessage: String,
-    permanentDeny : Boolean = false,
+    permanentDeny: Boolean = false,
     scaffoldState: BottomSheetScaffoldState,
     permissionAction: (PermissionAction) -> Unit
 ) {
@@ -186,7 +190,7 @@ fun PermissionUi(
             }
         }
         else -> {
-            LaunchedEffect(key1 = permissionGranted ) {
+            LaunchedEffect(key1 = permissionGranted) {
                 launcher.launch(permission)
             }
         }
@@ -272,9 +276,118 @@ fun MultiplePermissionUi(
             }
         }
         else -> {
-            LaunchedEffect(key1 = permissionGranted ) {
+            LaunchedEffect(key1 = permissionGranted) {
                 launcher.launch(permission.toTypedArray())
             }
+        }
+    }
+}
+
+@Composable
+fun CustomAlertDialogue(
+    title: Int,
+    text: Int,
+    onYesClick: () -> Unit,
+    onCancelClick: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = {
+            onCancelClick()
+        },
+        title = {
+            Text(
+                text = stringResource(id = title),
+                style = MaterialTheme.typography.h3,
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        },
+        text = {
+            Text(
+                text = stringResource(id = text),
+                style = MaterialTheme.typography.body1,
+                color = Color.White,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onYesClick()
+                }
+            ) {
+                Text("Ok", color = Color.White)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                // adding on click listener for this button
+                onClick = {
+                    onCancelClick()
+                }
+            ) {
+                // adding text to our button.
+                Text("Cancel", color = Color.Red)
+            }
+        },
+        backgroundColor = LightBg,
+        contentColor = MainBg,
+        shape = RoundedCornerShape(SmallSpacing)
+    )
+}
+
+@Composable
+fun CustomButton(
+    modifier: Modifier = Modifier,
+    icon: Int? = null,
+    title: Int,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = {
+                onClick()
+            },
+            shape = RoundedCornerShape(MediumSpacing),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = LightBg,
+                contentColor = MainBg
+            ),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = ExtraSmallSpacing
+            ),
+            modifier = Modifier
+                .padding(
+                    vertical = ExtraSmallSpacing,
+                    horizontal = SmallSpacing
+                ),
+            contentPadding = PaddingValues(ExtraSmallSpacing),
+        ) {
+            icon?.let {
+                Icon(
+                    painter = painterResource(id = it),
+                    contentDescription = "Icon",
+                    modifier = Modifier
+                        .size(IconSize)
+                        .padding(ExtraSmallSpacing)
+                )
+                Spacer(modifier = Modifier.size(SmallSpacing))
+            }
+            Text(
+                text = stringResource(id = title),
+                style = MaterialTheme.typography.body1,
+                color = MainBg,
+                modifier = Modifier.padding(
+                    SmallSpacing
+                )
+            )
         }
     }
 }

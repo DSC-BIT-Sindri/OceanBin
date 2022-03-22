@@ -1,12 +1,20 @@
 <resources>
     <string name="app_name">OceanBin</string>
-    <string name="location_permission">Location Permission</string>
     <string name="show_location_quote">With location permission we can show weather and news your nearby. </string>
-    <string name="location_service">Location Service</string>
     <string name="setting_location_dialogue">we need location for real time location tracking, so that we can show you the nearest pickup vehicle.
         \nPlease open settings and accept the permission</string>
     <string name="API_KEY">AIzaSyCuDhthNYgyexUXQaoMDVKytRqqaz6Tpy8</string>
 
+             <!--    HEADINGS-->
+    <string name="change_name">Change Name</string>
+    <string name="change_phone">Change Phone Number</string>
+    <string name="change_password">Change Password</string>
+    <string name="location_permission">Location Permission</string>
+    <string name="location_service">Location Service</string>
+    <string name="logout">Logout</string>
+    <string name="save_changes">Save Changes</string>
+
+<!--                   BODY-->
     <string name="something_went_wrong">Something Went Wrong</string>
     <string name="incorrect_credential">Incorrect credential</string>
     <string name="no_user_found">No user found with given email</string>
@@ -21,8 +29,8 @@
     <string name="failed_upload_image">Image uploading failed</string>
     <string name="failed_update_user">User updating failed, try again</string>
     <string name="image_uploaded">Image uploaded successfully</string>
-    <string name="change_name">Change Name</string>
-    <string name="change_phone">Change Phone Number</string>
+    <string name="change_password_text">We will send you an email with password reset link\n\nDo you want to proceed?</string>
+    <string name="logout_dialogue">Do you want to logout?</string>
     <string name="user_detail_update">User details updated successfully</string>
     <string name="not_valid_name">User name length should greater than 3 </string>
     <string name="not_valid_phone">Phone number is not valid</string>

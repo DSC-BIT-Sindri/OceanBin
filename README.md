@@ -44,7 +44,7 @@
 ------------------------------------------
 
 ### Home Screen
-<img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-location-permission.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-screen-weather-update.jpeg" width ="250px" height ="450px">   <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-screen-weather-update.jpeg" width ="250px" height ="450px">
+<img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-location-permission.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home.jpeg" width ="250px" height ="450px">   <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-screen-weather-update.jpeg" width ="250px" height ="450px">
 
 ------------------------------------------
 
@@ -80,14 +80,15 @@ Along with the user’s account details, total trash sold and the profit margin/
 ### FUTURE SCOPE:-
 >
 >- In future, we also intend to implement multilingual support.
->- Wallet transaction/update feature using 3rd party payment gateway services like Payu, Razorpay etc. in the Admin Flow.
->- We all know recycled plastics reduce energy during manufacturing by 66%. That means less fuel burnt and less harm to the local environment. The collected marine plastic waste will be supplied to the nearest recycling industry.
+>- Wallet transaction/update feature using Google Pay API, in the Admin Flow.
+
+#### We all know recycled plastics reduce energy during manufacturing by 66%. That means less fuel burnt and less harm to the local environment. The collected marine plastic waste will be supplied to the nearest recycling industry.
 
 #### Our solution aims to solve the "Life Below Water" goal listed under "The 17 Sustainable Development Goals of the United Nations".
 
 
 ### Link to video
-Link 
+
 
 ### APK file
-Link https://drive.google.com/file/d/1GT0SuL3HmxlHlQe_ogATBKiw0yO4zCKn/view?usp=sharing
+https://drive.google.com/file/d/1GT0SuL3HmxlHlQe_ogATBKiw0yO4zCKn/view?usp=sharing

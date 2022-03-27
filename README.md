@@ -14,9 +14,9 @@
 
 ### Google Technologies Used:-
 >
->- Frontend - Jetpack Compose | Android | Kotlin
->- Backend - Firebase | Map SDK, Google Map API | OpenWeather API
->- Database - Firebase Firestore | Real-Time Database
+>- Frontend - Jetpack Compose Android, Kotlin
+>- Backend - Firebase, Map SDK of Google Map API, OpenWeather API
+>- Database - Firebase Firestore, Real-Time Database, Firebase Storage
 
 ## Related Screenshots!
 
@@ -44,7 +44,7 @@
 ------------------------------------------
 
 ### Home Screen
-<img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-location-permission.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home.jpeg" width ="250px" height ="450px">   <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-screen-weather-update.jpeg" width ="250px" height ="450px">
+<img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-location-permission.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home.jpeg" width ="250px" height ="450px">   <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/home-screen-weather-update.jpeg" width ="250px" height ="450px"> <img src="https://github.com/anjali1361/OceanBin/blob/main/OCEANBIN%20IMAGES/Screenshot_20220327-103320_OceanBin.jpg" width ="250px" height ="450px">
 
 ------------------------------------------
 

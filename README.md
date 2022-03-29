@@ -88,7 +88,7 @@ Along with the user’s account details, total trash sold and the profit margin/
 
 
 ### Link to video
-
+https://www.youtube.com/watch?v=XNENppleXpc
 
 ### APK file
 https://drive.google.com/file/d/1GT0SuL3HmxlHlQe_ogATBKiw0yO4zCKn/view?usp=sharing
